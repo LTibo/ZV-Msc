@@ -202,3 +202,280 @@ Példa: [Minimization of DFA (Example 2) - YouTube](https://www.youtube.com/watc
 - **Korrektség:** A Lemma 2.26 biztosítja, hogy az algoritmus a megfelelő ρ<sub>M</sub> relációt számolja ki, azaz megtalálja azon állapotekvivalenciákat, amelyek fenntartása mellett az automata ugyanazt a nyelvet ismeri fel.
 
 ## 2. Parikh tétele és következményei.
+
+![](assets/2024-05-17-23-05-48-image.png)
+
+![](assets/2024-05-17-23-08-56-image.png)
+
+![](assets/2024-05-17-23-09-17-image.png)
+
+![](assets/2024-05-17-23-09-46-image.png)
+
+![](assets/2024-05-17-23-10-16-image.png)
+
+![](assets/2024-05-17-23-10-43-image.png)
+
+![](assets/2024-05-17-23-11-18-image.png)
+
+![](assets/2024-05-17-23-11-46-image.png)
+
+## Lineáris programozás alkalmazásai
+
+##### Bevezető
+
+*Példa:*
+
+Az operációkutatás feladatának szemléltetéséhez tekintsük a következő gyakorlati
+problémát. Adott egy műhely, amely asztalokat, székeket és szekrényeket gyárt. A
+gyártás során kétféle anyagot használnak fel, egyfajta lemezt és egyfajta deszkát.
+Ezek korlátozott mennyiségben állnak rendelkezésre.
+A feladat: olyan termékösszetétel meghatározása, amely mellett a műhely nyeresége
+maximális.
+Ehhez egy matematikai modellt konstruálhatunk. Jelölje
+𝑥<sub>1</sub>, 𝑥<sub>2</sub>, 𝑥<sub>3</sub> a gyártásra kerülő asztalok, székek, szekrények számát,
+𝑙<sub>1</sub>, 𝑙<sub>2</sub>, 𝑙<sub>3</sub> egy asztal, egy szék, egy szekrény készítéséhez szükséges lemezek számát,
+𝑑<sub>1</sub>, 𝑑<sub>2</sub>, 𝑑<sub>3</sub> egy asztal, egy szék, egy szekrény készítéséhez szükséges deszkák
+számát,
+𝑐<sub>1</sub>, 𝑐<sub>2</sub>, 𝑐<sub>3</sub> egy asztal, egy szék, egy szekrény gyártásából származó nyereséget,
+𝑙, 𝑑 a rendelkezésre álló lemezek és deszkák számát.
+A tekintett probléma egy úgynevezett optimumszámítási modellel írható le. Amely
+matematikai szempontból egy feltételes szélsőérték feladat
+
+![](assets/2024-05-18-11-42-06-image.png)
+
+##### 1.2 A modellalkotás elemei
+
+A vizsgálat tárgyát képező tevékenységet felbontjuk véges sok, úgynevezett elemi
+tevékenységre. Elemi tevékenységen a teljes tevékenység azt a pontosan körülhatárolt
+részét értjük, amelyet tovább bontani már nem szándékozunk. Jelölje az elemi
+tevékenységeket 𝐸<sub>1</sub>, . . . , 𝐸<sub>𝑛</sub>
+
+Minden egyes 𝐸<sub>𝑖</sub> elemi tevékenységhez rendeljünk hozzá egy 𝑥<sub>𝑖</sub> valós változót, amely
+azt reprezentálja, hogy 𝐸<sub>𝑖</sub> milyen mértékben vesz részt a teljes tevékenységben. Az 𝒙<sub>𝒊</sub>
+változót az 𝐸<sub>𝑖</sub> elemi tevékenység szintjének, **intenzitásának** nevezzük. Példánkban a legyártandó termékek száma az illető elemi tevékenység intenzitása,
+amelyeket az (𝑥<sub>1</sub>, 𝑥<sub>2</sub>, 𝑥<sub>3</sub>) vektorral írhatjuk le.
+
+***Feltétel***: a döntési változókra vonatkozó  egyenletek vagy egyenlőtlenségek, amelyek korlátozzák azok lehetséges  értékeit.
+
+***Lehetséges megoldás:*** egyrészt az 𝑥<sub>𝑖</sub> változókra (𝑖 = 1, . . . , 𝑛), másrészt az (𝑥<sub>1</sub>, ..., 𝑥<sub>𝑛</sub>), vektorváltozóra vonatkozó feltételeket kell meghatározni. Egy (<u>𝑥</u><sub>1</sub>, . . . , <u>𝑥</u><sub>n</sub>) valós
+vektort a feladat lehetséges megoldásának nevezünk, ha 𝑥 az intenzitásértékekre
+vonatkozó összes, az előzőekben meghatározott feltételt kielégíti. A lehetséges
+megoldások halmazát a továbbiakban 𝐿-lel fogjuk jelölni.
+
+***Célfüggvény:*** Fogalmazzuk meg ezt a célt, azaz adjunk meg egy olyan 𝑧: 𝐿 → V valós függvényt, amely a lehetséges megoldások "értékét", "jóságát" jellemzi a kitűzött cél szempontjából. A függvényt célfüggvénynek nevezzük.1.3 Az optimumszámítási modellekkel megadott matematikai feladatok megoldására
+
+##### 1.3 Az optimumszámítási modellekkel megadott matematikai feladatok megoldására
+
+𝐿 halmazon keressük a célfüggvény szélsőértékét. Maximumkeresés esetén
+maximumfeladatról, minimumkeresésnél minimumfeladatról beszélünk.
+
+Maximum feladatnál egy maximumhelyet optimális megoldásnak, a maximum értékét
+pedig optimumnak nevezzük. (Ugyanezen elnevezéseket használjuk minimum feladat
+esetén is.) Tehát 𝐱̅ ∈ 𝐿 optimális megoldása egy maximum feladatnak, ha 𝑧(𝐱̅ ) ≥ 𝑧(𝐱)
+teljesül bármely 𝐱 ∈ 𝐿 lehetséges megoldásra, és ebben az esetben az optimum 𝑧(𝐱̅ ).
+
+##### 2.2. A lineáris programozás általános feladata, standard feladat
+
+# 
+
+##### Áttekintés
+
+A lineáris programozási feladat célja egy lineáris függvény maximumának vagy minimumának meghatározása adott lineáris feltételek mellett. Ezek a feltételek egyenlőségek vagy egyenlőtlenségek formájában jelennek meg. Mivel minden maximum probléma átalakítható egy minimum problémává (és fordítva), a továbbiakban csak minimum problémákkal foglalkozunk.
+
+##### Minimum feladat formája
+
+A lineáris programozási feladatok általános formája a következő:
+
+$$
+\begin{aligned}
+& a_{11}x_1 + \dots + a_{1m}x_m \leq b_1 \\
+& \vdots \\
+& a_{k1}x_1 + \dots + a_{km}x_m \leq b_k \\
+& a_{(k+1)1}x_1 + \dots + a_{(k+1)m}x_m = b_{k+1} \\
+& \vdots \\
+& a_{l1}x_1 + \dots + a_{lm}x_m = b_l \\
+& a_{(l+1)1}x_1 + \dots + a_{(l+1)m}x_m \geq b_{l+1} \\
+& \vdots \\
+& a_{n1}x_1 + \dots + a_{nm}x_m \geq b_n \\
+& \alpha + c_1x_1 + \dots + c_mx_m = z \rightarrow \min
+\end{aligned}
+
+$$
+
+##### Mátrixos formában
+
+Mátrixos és vektoros alakban a feladat a következőképpen írható fel:
+$
+\begin{aligned}
+& A_1x \leq b^{(1)} \\
+& A_2x = b^{(2)} \\
+& A_3x \geq b^{(3)} \\
+& \alpha + cx = z(x) \rightarrow \min
+\end{aligned}
+$
+ahol $ A_1 $, $A_2 $, $A_3$ mátrixok, és $ b^{(1)} $, $ b^{(2)} $, $ b^{(3)} $ vektorok, valamint $ c $ a célfüggvény együtthatóit tartalmazza.
+
+- $ A_1 $ mátrix: Ez a mátrix a $\leq$ típusú egyenlőtlenségek együtthatóit tartalmazza.
+  
+  Például, ha a feltételek a következők:
+  
+  $\begin{aligned}
+   2x_1 + 3x_2 &\leq 5 \\
+   4x_1 + x_2 &\leq 11
+   \end{aligned}$
+  
+  akkor az ( A_1 ) mátrix:
+  
+  $A_1 = \begin{pmatrix}
+   2 & 3 \\
+   4 & 1
+   \end{pmatrix}$
+  
+  és a ( b^{(1)} ) vektor:
+  
+  $b^{(1)} = \begin{pmatrix}
+   5 \\
+   11
+   \end{pmatrix}$
+
+- Többi ugyanígy, csak $\geq$ és $=$ tartamató feltételekkel
+
+##### Vektor és mátrix méretek
+
+Az egyes vektorokat és mátrixokat külön nem jelöljük meg sor- vagy oszlopvektorként, mivel a kontextusból ez egyértelmű. Például $ c = (c_1, ..., c_m) $ és $ x $ oszlopvektor, amelynek komponensei $ x_1, ..., x_m $. Az $ A_1 $ mátrix például $ k \times m $ méretű.
+
+##### Feltételek normalizálása
+
+Ha a feladatban az egyenlőségek vagy egyenlőtlenségek jobb oldala negatív, akkor ezeket megszorozhatjuk $-1$-gyel, hogy a feltételrendszer pozitív legyen. Ezáltal a feltételrendszerhez tartozó lehetséges megoldások halmaza nem változik, és a két feladat optimális megoldása megegyezik.
+
+##### Nemnegatív változók bevezetése
+
+A változók $ u $ és $ v $ nemnegatív különbségével újraírhatjuk a feladatot:
+$
+\begin{aligned}
+& A_1(u - v) \leq b^{(1)} \\
+& A_2(u - v) = b^{(2)} \\
+& A_3(u - v) \geq b^{(3)} \\
+& u \geq 0, v \geq 0 \\
+& \alpha + c(u - v) = \tilde{z}(u, v) \rightarrow \min
+\end{aligned}
+$
+Ez a formálás lehetővé teszi a lineáris programozási feladat megoldását nemnegatív változók használatával, ami egyszerűsíti a megoldási módszerek alkalmazását.
+
+##### Eljárás a Standard Feladatra Való Visszavezetésre
+
+1. lépés. Ha a megoldandó feladat maximum feladat, akkor szorozzuk meg a célfüggvényt −1-gyel, és keressük ennek az új célfüggvénynek a minimumát.
+2. lépés. Ha szerepel negatív mennyiség a jobboldalon, akkor szorozzuk meg a megfelelő egyenlőséget vagy egyenlőtlenséget −1-gyel.
+3. lépés. Ha szerepelnek olyan változók a feladatban, amelyekre nincs előírva
+   nemnegativitási feltétel, akkor helyettesítsük rendre ezeket a változókat két nemnegatív változó különbségével.
+4. lépés. Minden egyes egyenlőtlenség baloldalához adjunk hozzá illetve vonjunk ki egy nemnegatív változót attól függően, hogy a tekintett egyenlőtlenségben ≤ illetve ≥ szerepel, és változtassuk az egyenlőtlenségeket egyenlőségekre.
+
+Két standard feladatot ekvivalensnek nevezünk, ha a lehetséges megoldások halmazai egybeesnek, és ezen a közös L halmazon a két célfüggvény megegyezik.
+
+***Standard alak:***
+
+$\begin{aligned}
+& Ax = b \\
+& x \geq 0 \\
+& \alpha + cx = z(x) \rightarrow \min
+\end{aligned}$
+
+**Kanonikus alak:**
+
+$\begin{aligned}
+& A_1x \leq b^{(1)} \\
+& A_2x = b^{(2)} \\
+& A_3x \geq b^{(3)} \\
+& x \geq 0 \\
+& \alpha + cx = z(x) \rightarrow \min
+\end{aligned}$
+
+##### Szimplex Algoritmus
+
+A szimplex algoritmus a lineáris programozási feladatok megoldására használt eljárás, amelyet George B. Dantzig fejlesztett ki. Az algoritmus lépésről lépésre javítja a célfüggvény értékét, amíg el nem éri az optimális megoldást. Az alábbiakban részletesen bemutatom a szimplex algoritmus lépéseit:
+
+##### 1. lépés: Optimális megoldás ellenőrzése
+
+- **Feltétel:** Ha a kanonikus alakú feladat célfüggvénye nem tartalmaz negatív együtthatót, akkor a bázismegoldás már optimális.
+- **Teendő:** Ha nincs negatív együttható a célfüggvényben, az eljárás véget ér, és a jelenlegi megoldás optimális. Ha van negatív együttható, folytatjuk a 2. lépéssel.
+
+##### 2. lépés: Belépő változó kiválasztása
+
+- **Feltétel:** Vegyük a célfüggvény negatív együtthatói közül a legkisebbet (legnagyobb abszolút értékű negatív együttható). Jelölje $ c_j $ ezt az együtthatót.
+- **Teendő:** 
+  - Ha minden $ a_{rj} \leq 0 $ (ahol $ r = 1, ..., n $), akkor a célfüggvény alulról nem korlátos, és az eljárás véget ér, mert nincs optimális megoldás. 
+  - Ellenkező esetben folytassuk a 3. lépéssel.
+
+##### 3. lépés: Kilépő változó kiválasztása és generáló elem meghatározása
+
+- **Feltétel:** Határozzuk meg a következő hányadosok minimumát: $ \min \{ b_r / a_{rj} : a_{rj} > 0, 1 \leq r \leq n \} $. Jelölje $ b_{k1} / a_{k1j}, ..., b_{ks} / a_{ksj} $ a minimummal egyenlő értékeket.
+- **Teendő:** 
+  - Válasszuk a legkisebb sorindexű $ a_{ktj} $ elemet generáló elemként (ahol $ t = 1, ..., s $).
+  - Hajtsuk végre az alábbi átalakításokat:
+    - Az $ r_k $ egyenlet új formája: $ r_k' = \frac{1}{a_{kj}} r_k $
+    - Az összes többi egyenlet új formája: $ r_i' = r_i - \frac{a_{ij}}{a_{kj}} r_k $ (ahol $ 1 \leq i \leq n, i \neq k $)
+    - A célfüggvény új formája: $ z' = z - \frac{c_j}{a_{kj}} r_k $
+  - Folytassuk az eljárást az 1. lépéssel a kapott új kanonikus alakú feladattal.
+
+**Lehetséges kanonikus alakú feladat:**
+
+Egy standard feladatot lehetséges kanonikus alakú feladatnak nevezünk, ha sor- és oszlopcserékkel, valamint a változók átjelölésével az alábbi formában írható fel:
+
+
+$\begin{aligned}
+& x_1 + a_{1, n+1}x_{n+1} + \ldots + a_{1, n+m}x_{n+m} = b_1 \\
+& x_2 + a_{2, n+1}x_{n+1} + \ldots + a_{2, n+m}x_{n+m} = b_2 \\
+& \vdots \\
+& x_n + a_{n, n+1}x_{n+1} + \ldots + a_{n, n+m}x_{n+m} = b_n \\
+& x_j \geq 0 \quad (j = 1, \ldots, n + m), \quad b_i \geq 0 \quad (i = 1, \ldots, n) \\
+& \alpha + c_{n+1}x_{n+1} + \ldots + c_{n+m}x_{n+m} = z(x) \rightarrow \min
+\end{aligned}
+$
+
+Mitől lesz lehetséges kanonikus alakú?
+
+1. **Egyenletek szerkezete**: Minden egyenletben a $ x_i $ változók különállóan szerepelnek az $ a_{i, n+1}x_{n+1}, \ldots, a_{i, n+m}x_{n+m} $ kifejezésekkel együtt. Ez azt jelenti, hogy a bal oldalon minden egyenlet egy változót tartalmaz az  $ x_1, x_2, \ldots, x_n $ közül, és minden ilyen változó együtthatója 1.
+
+2. **Nemnegativitási feltételek**: Az összes változóra ($ x_j $) és az egyenletek jobb oldali értékeire ($ b_i $) nemnegativitási feltételek vonatkoznak.
+
+3. **Célfüggvény**: A célfüggvény $ \alpha + c_{n+1}x_{n+1} + \ldots + c_{n+m}x_{n+m} $ formában van felírva, ahol a $ c $ együtthatók a célfüggvény együtthatói.
+
+#### Példa átalakításra
+
+Tegyük fel, hogy van egy standard lineáris programozási feladatunk:
+$
+\begin{aligned}
+& 2x_1 + 3x_2 + x_3 = 5 \\
+& x_1 + 2x_2 + 4x_3 = 6 \\
+& x_1, x_2, x_3 \geq 0 \\
+& z = x_1 + 4x_2 + 3x_3 \rightarrow \min
+\end{aligned}
+$
+
+Ahhoz, hogy ezt lehetséges kanonikus alakú feladattá alakítsuk, szükség lehet sor- és oszlopcserékre, valamint a változók átjelölésére. Tegyük fel, hogy a jelenlegi formát át tudjuk alakítani úgy, hogy az egyenletek bal oldalán lévő változók mindegyikének együtthatója 1 legyen, és ezek különállóan szerepeljenek.
+
+Az átalakítás után a lehetséges kanonikus alakú feladat így nézhet ki:
+
+$\begin{aligned}
+& x_1 + \frac{3}{2}x_2 + \frac{1}{2}x_3 = \frac{5}{2} \\
+& x_2 + \frac{1}{2}x_1 + 2x_3 = 3 \\
+& x_1, x_2, x_3 \geq 0 \\
+& z = x_1 + 4x_2 + 3x_3 \rightarrow \min
+\end{aligned}
+$
+
+##### Részletes Példa
+
+![](assets/2024-05-18-22-02-27-image.png)
+
+![](assets/2024-05-18-22-02-51-image.png)
+
+![](assets/2024-05-18-22-03-30-image.png)
+
+![](assets/2024-05-18-22-03-44-image.png)
+
+![](assets/2024-05-18-22-03-59-image.png)
+
+![](assets/2024-05-18-22-04-27-image.png)
+
+![](assets/2024-05-18-22-05-20-image.png)
