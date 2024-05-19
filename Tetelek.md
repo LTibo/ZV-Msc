@@ -421,7 +421,6 @@ A szimplex algoritmus a lineáris programozási feladatok megoldására használ
 
 Egy standard feladatot lehetséges kanonikus alakú feladatnak nevezünk, ha sor- és oszlopcserékkel, valamint a változók átjelölésével az alábbi formában írható fel:
 
-
 $\begin{aligned}
 & x_1 + a_{1, n+1}x_{n+1} + \ldots + a_{1, n+m}x_{n+m} = b_1 \\
 & x_2 + a_{2, n+1}x_{n+1} + \ldots + a_{2, n+m}x_{n+m} = b_2 \\
@@ -464,6 +463,12 @@ $\begin{aligned}
 \end{aligned}
 $
 
+**Bázisváltozó:** az egyenletek bal oldalán lévő változók
+
+**Nem bázis változók:** a célfüggvényben lévő változók
+
+**Degenerált bázismegoldás:** a bázisváltozók közük legalább az egyiknek értéke 0
+
 ##### Részletes Példa
 
 ![](assets/2024-05-18-22-02-27-image.png)
@@ -476,6 +481,200 @@ $
 
 ![](assets/2024-05-18-22-03-59-image.png)
 
+Magyarázat a $+9/2$-re a jobb oldalon: $-((2/2)*-(7/2))$. Minden lépésnél a jobb oldalt is figyelembe kell venni!
+
 ![](assets/2024-05-18-22-04-27-image.png)
 
 ![](assets/2024-05-18-22-05-20-image.png)
+
+# 3. Dualitás, duális szimplex algoritmus. Egészértékű programozás
+
+### Dualitás
+
+A "dualizmus" rész részletesen tárgyalja a lineáris programozási feladatok közötti kapcsolatot. Minden lineáris programozási feladathoz hozzárendelhető egy másik, úgynevezett duális feladat, amely a következő tulajdonságokkal rendelkezik:
+
+1. A duális feladat ugyanazokat a paramétereket tartalmazza, mint az eredeti (prímál) feladat.
+2. A duális feladat duálisa megegyezik az eredeti feladattal.
+
+##### Prímál és Duál Feladatok
+
+A prímál feladat általános alakja:
+$ Ax \leq b, \quad x \geq 0 $
+$ cx = z(x) \to \max $
+
+A hozzá tartozó duális feladat:
+$ yA \geq c, \quad y \geq 0 $
+$ yb = w(y) \to \min $
+
+##### Dualitási Tételek
+
+- **Gyenge dualitási tétel:** Ha \( x \) a prímál feladat lehetséges megoldása és $ y $ a duális feladat lehetséges megoldása, akkor $ z(x) \leq w(y) $.
+- **Erős dualitási tétel:** Ha bármelyik feladatnak (prímál vagy duál) létezik optimális megoldása, akkor mindkettőnek létezik, és az optimumértékek megegyeznek.
+- **Komplementaritási tétel:** $ x $ és $ y $ akkor és csak akkor optimális megoldások, ha $ y_i (b_i - \sum a_{it}x_t) = 0 $ minden $ i $-re és $ x_t (\sum a_{it} y_i - c_t) = 0 $ minden $ t $-re.
+
+##### Következmények
+
+- Ha a duális feladat célfüggvénye alulról nem korlátos, akkor a prímál feladatnak nincs lehetséges megoldása.
+- A szimplex módszer használatával a prímál feladat megoldásának utolsó iterációjában kiolvasható a duális feladat egy optimális megoldása.
+
+##### Példa primál és duál párra
+
+A prímál feladat:
+$ x_1 + x_2 \leq 5 $
+$ x_1 + 3x_2 \leq 7 $
+$ x \geq 0 $
+$ 2x_1 + x_2 \to \max \]
+
+A duális feladat:
+$ y_1 + y_2 \geq 2 $
+$ y_1 + 3y_2 \geq 1 $
+$ y \geq 0 $
+$ 5y_1 + 7y_2 \to \min $
+
+A fenti példák és tételek bemutatják, hogy a lineáris programozásban a prímál és duális feladatok hogyan kapcsolódnak egymáshoz, és hogyan lehet ezeket felhasználni optimális megoldások megtalálására.
+
+##### Komplementaritási tétel használata ellenőrzésre
+
+![](assets/2024-05-19-17-34-56-image.png)
+
+Kiegészítés:
+
+$\begin{aligned}
+2(2) - 6(4) + 2(0) + 7(0) + 3(7) + 8(0) &= 4 - 24 + 0 + 0 + 21 + 0 = 1 \\
+-3(2) - 1(4) + 4(0) - 3(0) + 1(7) + 2(0) &= -6 - 4 + 0 - 0 + 7 + 0 = -3 \quad (*) \\
+8(2) - 3(4) + 5(0) - 2(0) + 2(0) &= 16 - 12 + 0 - 0 + 0 = 4 \\
+4(2) + 8(0) + 7(0) - 1(7) + 3(0) &= 8 + 0 + 0 - 7 + 0 = 1 \\
+5(2) + 2(4) - 3(0) + 6(0) - 2(7) - 1(0) &= 10 + 8 - 0 + 0 - 14 - 0 = 4 \quad (*) \\
+\end{aligned}$
+
+Megjegyzés: a primál feladat 1., 2. és 3. sorai lettek transzponálva a duális feladathoz, mivel az $x$ vektorban (a tippelt megoldásban) azok az értékek nem nullák
+
+![](assets/2024-05-19-17-41-26-image.png)
+
+Megjegyzés: nem feltétlen kell elég az $y_2=0$ feltétel.
+
+**Mikor lehet érdemes áttérni a duális feladatra és azt megoldani?**
+
+- Tapasztalati megfigyelés. A szimplex algoritmus megoldása során az iterációszám a sorok (korlátozó feltételek) 𝑛 számával arányos. Így, ha egyébként más nem motivál minket, választhatjuk a kevesebb sorból álló (kevesebb korlátozó feltételt tartalmazó) feladatot.
+
+- Ha primál feladatban negatív jobboldalak vannak, és kétfázisú szimplex módszert kellene használni, a duális feladatban meg nem, ez is indokolhatja, hogy inkább a duál feladat megoldását választjuk.
+
+- Ha új sorokat (korlátozó feltételeket) kell hozzáadni a primál feladat feltételrendszeréhez. Egy gyakorlati feladatnál ez nem ritka, hogy menet közben új feltételeket kell hozzávenni az LP-hez.
+
+##### Árnyékár
+
+A **dualitás** gazdasági értelmezése során a primál probléma egy gyártási terv modellje, ahol m terméket állítanak elő n erőforrás felhasználásával. A cél a profit maximalizálása az erőforrások korlátozott rendelkezésre állása mellett. 
+
+###### Primál Probléma
+
+A primál probléma a következő egyenletekből áll:
+
+- $ A x \leq b $
+- $ x \geq 0 $
+- $ z = c^T x \rightarrow \max $
+
+###### Duális Probléma
+
+A duális probléma ehhez kapcsolódva:
+
+- $ A^T y \geq c $
+- $ y \geq 0 $
+- $ b^T y = w(y) \rightarrow \min $
+
+###### Árnyékár (Marginal Price)
+
+Az árnyékár, más néven marginális ár, egy erőforrás értékét jelenti a gyártó számára, és kifejezi, hogy mennyivel nő a profit, ha egy egységgel növeljük az adott erőforrás mennyiségét. Ezt Paul Samuelson nevezte el árnyékárnak, és ez a primál-duál optimális megoldások közötti kapcsolat révén értelmezhető.
+
+###### Gazdasági Következmények
+
+- Az árnyékár az az ár, amelyet a gyártó maximálisan megfizethet egy erőforrásért.
+- Ha az erőforrás piaci ára alacsonyabb, mint az árnyékár, érdemes megvásárolni azt a termelés bővítéséhez.
+- Ha a piaci ár magasabb, akkor érdemes eladni az erőforrást vagy csökkenteni a termelést.
+
+###### Érzékenységvizsgálat
+
+Az érzékenységvizsgálat elemzi, hogy az LP feladat paramétereinek változása hogyan befolyásolja az optimális megoldást és az optimális értéket. Ez különösen fontos lehet új tevékenységek bevezetésekor vagy meglévő paraméterek módosításakor.
+
+###### Fontos Megjegyzések
+
+- Az árnyékár fogalma csak addig érvényes, amíg az adott bázis optimális marad.
+- Az optimális megoldás szerkezete és értékei változhatnak a paraméterek változásával.
+
+### Duális szimplex algoritmus
+
+A duális szimplex algoritmus olyan típusú feladatok megoldására alkalmazható, amelyek az alábbi formában adottak:
+$ E y + A x = b, \, x \geq 0, \, y \geq 0 \, (c \geq 0) $
+$ c^T x = z \rightarrow \min $
+
+**Lépések**:
+
+1. **Első lépés**: Ha a feladat egyenleteinek jobboldalai nemnegatívak, az eljárás véget ér (STOP1), a feladat bázismegoldása optimális megoldás.
+2. **Második lépés**: Válasszuk ki a negatív $ b_t $-k minimumát (a jobboldalon), és jelölje \( b_k \) a minimummal megegyező $ b_t $-k közül a legkisebb indexűt. Ha $ a_{ks} \geq 0 \, (s = 1, \ldots, m) $, az eljárás véget ér (STOP2), mivel a feladatnak nincs lehetséges megoldása. Ellenkező esetben a harmadik lépés következik.
+3. **Harmadik lépés**: Ha $ \min \left\{ \frac{c_s}{-a_{ks}} \colon a_{ks} < 0, \, 1 \leq s \leq m \right\} = \frac{c_{j1}}{-a_{kj1}} = \ldots = \frac{c_{jr}}{-a_{kjr}} $, akkor válasszuk az $ a_{kjt} $ elemek közül a legkisebb oszlopindexűt generáló elemnek, majd hajtsuk végre az előírt átalakításokat (képen lentebb). Az új feladattal folytassuk az eljárást az első lépéssel (GOTO 1).
+   
+   ![](assets/2024-05-19-22-10-27-image.png)
+   
+   ![](assets/2024-05-19-22-09-23-image.png)
+
+#### Példa
+
+![](assets/2024-05-19-22-12-03-image.png)
+
+![](assets/2024-05-19-22-12-50-image.png)
+
+![](assets/2024-05-19-22-13-08-image.png)
+
+**Algoritmus előnyei:**
+
+1. **Jobboldali vektorral szembeni rugalmasság**: Az algoritmus alkalmazható olyan esetekben is, amikor a jobboldali $ b $ vektor nemnegativitása nincs biztosítva, hanem a célfüggvény-együtthatók $ c $ vektorának nemnegativitása a kritérium.
+
+2. **Optimális megoldás leolvasása**: A duális szimplex algoritmus végén kapott szimplex táblázatból közvetlenül leolvasható az eredeti feladat optimális megoldása, mivel a szimplex táblázatok csak elrendezési és előjelbeli különbségeket mutatnak.
+
+3. **Kétfázisú módszer helyett egyszerűbb megoldás**: Bizonyos esetekben, például amikor a (3.2.1) primál feladatban negatív jobboldali elemek vannak, a kétfázisú szimplex módszer alkalmazása helyett a duális szimplex algoritmus egyszerűbb megoldást kínál.
+
+4. **Iterációszám csökkentése**: Tapasztalati megfigyelések szerint a szimplex algoritmus iterációszáma arányos a sorok (korlátozó feltételek) számával. Ha a primál feladatnak több korlátozó feltétele van, mint a duál feladatnak, akkor érdemes lehet a duál feladatot megoldani, amely kevesebb iterációt igényel.
+
+
+
+### Egészértékű programozás, Gomory-módszer (cutting plane method – metsző sík módszer, Ralph Gomory – 1958)
+
+#### Az alapfeladat és relaxációja
+
+Az egészértékű programozás (ILP - Integer Linear Programming) lineáris programozási változatával foglalkozik a dokumentum. Az alábbi típusú feladatokat vizsgálja:
+
+![](assets/2024-05-19-22-45-07-image.png)
+
+Feltételezzük, hogy $\mathbf{A}$, $\mathbf{b}$, $\mathbf{c}$, és $\alpha$ egész számok, $\mathbf{b} \geq 0$, és a lehetséges megoldások halmaza korlátos.
+
+#### Gomory-módszer
+
+A Gomory-módszer egy metszési eljárás, amelynek célja az ILP feladat megoldása a következő módon:
+
+1. **Relaxáció:** A probléma egészértékűségi feltételének elhagyása után oldjuk meg a relaxált LP feladatot. Ha az optimális megoldás egész, akkor ez az ILP megoldása is.
+2. **Metszési síkok bevezetése:** Ha a relaxált LP megoldása nem egész, akkor további feltételekkel bővítjük a feladatot. Ezeket a feltételeket metszési síkoknak nevezik, amelyek nem vágnak le egész megoldásokat.
+3. **Iteráció:** A metszési síkokat addig adjuk hozzá, amíg az aktuális relaxált feladat optimális megoldása egész lesz.
+
+#### Gomory-féle metszési eljárás lépései:
+
+1. **Előkészítő rész:** Oldjuk meg a relaxált feladatot a szimplex algoritmussal. Ha az optimális megoldás egész, akkor vége az eljárásnak. Ellenkező esetben az iterációs eljárás következik.
+2. **Iterációs rész:** Vegyük az első olyan egyenletet, amelyben a bázisváltozó nem egész. Ebből az egyenletből képezzünk egyenlőtlenséget, és vegyük ennek a Gomory-metszetét. Szorozzuk az egyenlőtlenséget −1-gyel, és vezessünk be egy új változót. Az így kapott egyenlettel bővítsük a feladatot, majd oldjuk meg a duális szimplex algoritmussal. Ha az optimális megoldás egész, akkor vége az eljárásnak. Ellenkező esetben folytatjuk az iterációt.
+
+#### Példa az eljárásra:
+
+Az egyik példában, amikor a szimplex táblázat egy változója nem egész, például $ x_2 $, a következő metszési feltételt kapjuk:
+
+
+$x_2 - \frac{1}{2}u_1 + \frac{1}{2}y_2 \geq \frac{1}{2}
+$
+
+Az iteráció során ezeket a feltételeket bevezetve és a duális szimplex algoritmust alkalmazva végül egy egész megoldáshoz jutunk.
+
+#### Hátrányok:
+
+- Nagy iterációs lépésszám, amely a feladat méreteitől függően növekszik.
+- A feladat méretének növekedése minden egyes lépésben.
+- Számítástechnikai nehézségek, mint például a kerekítési hibák, amelyek az együtthatók egész vagy nem egész voltának eldöntését komplikálják.
+
+A Gomory-módszer jelentős hozzájárulás az egészértékű programozás területén, különösen a metszési síkok módszerének kidolgozása révén.
+
+# 4. Hozzárendelési és szállítási feladat
