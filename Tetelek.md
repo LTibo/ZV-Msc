@@ -508,7 +508,7 @@ $ yb = w(y) \to \min $
 
 ##### Dualitási Tételek
 
-- **Gyenge dualitási tétel:** Ha \( x \) a prímál feladat lehetséges megoldása és $ y $ a duális feladat lehetséges megoldása, akkor $ z(x) \leq w(y) $.
+- **Gyenge dualitási tétel:** Ha $ x$ a prímál feladat lehetséges megoldása és $ y $ a duális feladat lehetséges megoldása, akkor $ z(x) \leq w(y) $.
 - **Erős dualitási tétel:** Ha bármelyik feladatnak (prímál vagy duál) létezik optimális megoldása, akkor mindkettőnek létezik, és az optimumértékek megegyeznek.
 - **Komplementaritási tétel:** $ x $ és $ y $ akkor és csak akkor optimális megoldások, ha $ y_i (b_i - \sum a_{it}x_t) = 0 $ minden $ i $-re és $ x_t (\sum a_{it} y_i - c_t) = 0 $ minden $ t $-re.
 
@@ -609,7 +609,9 @@ $ c^T x = z \rightarrow \min $
 **Lépések**:
 
 1. **Első lépés**: Ha a feladat egyenleteinek jobboldalai nemnegatívak, az eljárás véget ér (STOP1), a feladat bázismegoldása optimális megoldás.
-2. **Második lépés**: Válasszuk ki a negatív $ b_t $-k minimumát (a jobboldalon), és jelölje \( b_k \) a minimummal megegyező $ b_t $-k közül a legkisebb indexűt. Ha $ a_{ks} \geq 0 \, (s = 1, \ldots, m) $, az eljárás véget ér (STOP2), mivel a feladatnak nincs lehetséges megoldása. Ellenkező esetben a harmadik lépés következik.
+
+2. **Második lépés**: Válasszuk ki a negatív $ b_t $-k minimumát (a jobboldalon), és jelölje $ b_k $ a minimummal megegyező $ b_t $-k közül a legkisebb indexűt. Ha $ a_{ks} \geq 0 \, (s = 1, \ldots, m) $, az eljárás véget ér (STOP2), mivel a feladatnak nincs lehetséges megoldása. Ellenkező esetben a harmadik lépés következik.
+
 3. **Harmadik lépés**: Ha $ \min \left\{ \frac{c_s}{-a_{ks}} \colon a_{ks} < 0, \, 1 \leq s \leq m \right\} = \frac{c_{j1}}{-a_{kj1}} = \ldots = \frac{c_{jr}}{-a_{kjr}} $, akkor válasszuk az $ a_{kjt} $ elemek közül a legkisebb oszlopindexűt generáló elemnek, majd hajtsuk végre az előírt átalakításokat (képen lentebb). Az új feladattal folytassuk az eljárást az első lépéssel (GOTO 1).
    
    ![](assets/2024-05-19-22-10-27-image.png)
@@ -633,8 +635,6 @@ $ c^T x = z \rightarrow \min $
 3. **Kétfázisú módszer helyett egyszerűbb megoldás**: Bizonyos esetekben, például amikor a (3.2.1) primál feladatban negatív jobboldali elemek vannak, a kétfázisú szimplex módszer alkalmazása helyett a duális szimplex algoritmus egyszerűbb megoldást kínál.
 
 4. **Iterációszám csökkentése**: Tapasztalati megfigyelések szerint a szimplex algoritmus iterációszáma arányos a sorok (korlátozó feltételek) számával. Ha a primál feladatnak több korlátozó feltétele van, mint a duál feladatnak, akkor érdemes lehet a duál feladatot megoldani, amely kevesebb iterációt igényel.
-
-
 
 ### Egészértékű programozás, Gomory-módszer (cutting plane method – metsző sík módszer, Ralph Gomory – 1958)
 
@@ -663,7 +663,6 @@ A Gomory-módszer egy metszési eljárás, amelynek célja az ILP feladat megold
 
 Az egyik példában, amikor a szimplex táblázat egy változója nem egész, például $ x_2 $, a következő metszési feltételt kapjuk:
 
-
 $x_2 - \frac{1}{2}u_1 + \frac{1}{2}y_2 \geq \frac{1}{2}
 $
 
@@ -678,3 +677,434 @@ Az iteráció során ezeket a feltételeket bevezetve és a duális szimplex alg
 A Gomory-módszer jelentős hozzájárulás az egészértékű programozás területén, különösen a metszési síkok módszerének kidolgozása révén.
 
 # 4. Hozzárendelési és szállítási feladat
+
+## Hozzárendelési feladat
+
+A hozzárendelési feladat egy speciális egészértékű lineáris programozási probléma, amely számos gyakorlati alkalmazással rendelkezik. A legismertebb feladat a munkák optimális kiosztása adott számú dolgozó és ugyanennyi munka között, ahol minden dolgozó különböző költségekkel tudja elvégezni a feladatokat. A cél, hogy minden dolgozó pontosan egy munkát kapjon, az összes munkát kiosszák, és a munkavégzés összköltsége minimális legyen.
+
+#### Formális Modell
+
+Jelölések:
+
+- $ n $ a dolgozók száma.
+- $ c_{ij} $ az $ i $-edik dolgozó által végzett $ j $-edik munka költsége.
+- $ x_{ij} = \begin{cases} 
+  1, & \text{ha az } i \text{-edik dolgozó hajtja végre a } j \text{-edik munkát,} \\
+  0, & \text{különben.}
+  \end{cases} $
+
+#### Észrevételek
+
+- Minden dolgozó pontosan egy munkát fog végrehajtani, és minden munka kiosztásra kerül.
+- A probléma megoldásai olyan 0 és 1 elemekből álló mátrixok, amelyek minden sora és oszlopa pontosan egy 1-est tartalmaz.
+- Az ilyen mátrixok száma $ n! $, ami biztosítja, hogy mindig létezik optimális megoldás.
+- A feladat költségmátrixa $ C $, amelyet $ H(C) $-vel jelölünk.
+
+#### Magyar Módszer
+
+A magyar módszer H. W. Kuhn által 1955-ben publikált algoritmus, amely lényegesen hatékonyabb a lehetséges mátrixok előállításánál és vizsgálatánál. Kuhn algoritmusa Egerváry Jenő és König munkáján alapul, akik a páros gráfok maximális párosítási problémáit vizsgálták.
+
+#### Iterációs Eljárás
+
+A magyar módszer iterációs eljárásának célja egy olyan mátrixsorozat előállítása, amely rendelkezik a következő tulajdonságokkal:
+
+1. $ C \sim C(0) $
+
+2. $ C(t) \sim C(t+1) $ minden $ t = 0, \ldots, k-1 $
+
+3. $ C(t) \geq 0 $ minden $ t = 0, \ldots, k $
+
+4. $ C(k) $-ban ki van jelölve egy $ n $-elemű független 0-rendszer.
+- Egy mátrix valamely sorát (oszlopát) kötött sornak (oszlopnak) nevezzük, ha
+  mellette (felette) egy „+” jel áll.
+
+- A mátrix valamely elemét szabad elemnek nevezzük, ha nincs semmiféle jellel
+  ellátva, és sem a sora, sem az oszlopa nincsen lekötve.
+
+- Speciálisan, ha az illető (szabad) elem 𝟎, akkor szabad 𝟎-ról beszélünk.
+
+- Végül használni fogjuk a 𝐂 ≥ 𝟎 jelölést, ha a C mátrix minden eleme nemnegatív.
+
+A $ \mathbf{C} \sim \mathbf{D} $ jelölés azt jelenti, hogy a $\mathbf{C}$ és $\mathbf{D}$ mátrixok ekvivalensek. Két mátrix ekvivalens, ha léteznek olyan $\alpha_i$ (sor állandók) és $\beta_j$ (oszlop állandók) valós számok, amelyek kielégítik a következő feltételt minden $ 1 \leq i \leq n $ és $ 1 \leq j \leq m $ indexpárra:
+
+$ c_{ij} = d_{ij} + \alpha_i + \beta_j $
+
+Ez azt jelenti, hogy a $\mathbf{C}$ mátrix elemei az $\mathbf{D}$ mátrix elemeiből úgy állíthatók elő, hogy hozzáadunk egy-egy állandót minden sor és minden oszlop elemeihez.
+
+### Alkalmazás
+
+Az ekvivalencia reláció $( \mathbf{C} \sim \mathbf{D} )$ használata lehetővé teszi, hogy a hozzárendelési feladat különböző költségmátrixokkal is megoldható legyen, ugyanazon eljárás alapján. Az ekvivalencia segít az optimalizálási folyamatban, mivel egyszerűsíthetjük a mátrixot anélkül, hogy megváltoztatnánk az eredeti probléma megoldását.
+
+#### Lépések
+
+1. Előkészítés: Minden sorból és oszlopból vonjuk ki a minimum értéket, hogy $ C(0) $-t kapjuk.
+2. Iteráció: 
+   - Független 0-rendszert jelölünk ki.
+   - Ha nincs elég független 0, akkor redukciós lépést alkalmazunk.
+   - Megállás akkor, ha az \( n \) elemű független 0-rendszer kialakul.
+
+![](assets/2024-05-20-14-18-46-image.png)
+
+![](assets/2024-05-20-14-36-06-image.png)
+
+![](assets/2024-05-20-14-36-18-image.png)
+
+**Példa:**
+
+![](assets/2024-05-20-14-39-05-image.png)
+
+![](assets/2024-05-20-14-39-23-image.png)
+
+![](assets/2024-05-20-14-39-37-image.png)
+
+![](assets/2024-05-20-14-39-49-image.png)
+
+![](assets/2024-05-20-14-40-01-image.png)
+
+![](assets/2024-05-20-14-40-15-image.png)
+
+![](assets/2024-05-20-14-40-28-image.png)
+
+## Szállítási feladat
+
+A szállítási probléma egy klasszikus optimalizálási probléma, amelynek célja a termékek egy vagy több forrásból egy vagy több célba történő szállításának költségminimalizálása. A feladat során figyelembe kell venni a források kapacitásait és a célok igényeit, valamint a szállítási költségeket.
+
+A feladat megoldása lineáris programozási módszerekkel történik, és gyakran használnak különböző algoritmusokat, mint például a szimplex módszert vagy a speciális szállítási algoritmusokat, hogy megtalálják a legkisebb költséggel járó megoldást.
+
+A feltöltött képen egy példafeladat látható. Nézzük meg részletesen ezt a példát:
+
+### Példafeladat
+
+A Powercónak 3 erőműtelepe van, amelyek 4 város szükségletét látják el. Az egyes erőművek adott mennyiségű (kWh) elektromos energiát képesek szolgáltatni. Adott az egyszerre megjelenő csúcsfogyasztási igény ezekben a városokban. 1 millió kWh áram szállítása egy erőműből egy városba a távolságuktól függ.
+
+#### Adatok:
+
+- 1. erőmű: 35 millió kWh
+- 2. erőmű: 50 millió kWh
+- 3. erőmű: 40 millió kWh
+
+#### Városok csúcsigényei (millió kWh):
+
+- 1. város: 45
+- 2. város: 20
+- 3. város: 30
+- 4. város: 30
+
+#### Szállítási költségek (1 millió kWh-ra, adott városba):
+
+| Honnan/Város | 1. város | 2. város | 3. város | 4. város |
+| ------------ | -------- | -------- | -------- | -------- |
+| 1. erőmű     | 8        | 6        | 10       | 9        |
+| 2. erőmű     | 9        | 12       | 13       | 7        |
+| 3. erőmű     | 14       | 9        | 16       | 5        |
+
+#### Feladat
+
+Adjuk meg egy lineáris programozási feladatot (LP), ami minimalizálja a költséget, és a városok csúcsigényeit kielégíti!
+
+### Matematikai Formuláció
+
+#### Döntési változók
+
+Legyen $ x_{ij} $ az a mennyiség, amelyet az $ i $-edik erőműből az $ j $-edik városba szállítanak.
+
+#### Célfüggvény
+
+Minimalizáljuk a teljes szállítási költséget:
+$ \text{Minimize} \quad \sum_{i=1}^{3} \sum_{j=1}^{4} c_{ij} x_{ij} $
+ahol $ c_{ij} $ az egységnyi költség az $ i $-edik erőműből az $ j $-edik városba szállítani.
+
+#### Korlátok
+
+1. Az erőművek kapacitásának korlátai:
+   $ \sum_{j=1}^{4} x_{ij} \leq \text{Erőmű}_i \quad \forall i $
+- 1. erőmű: $ x_{11} + x_{12} + x_{13} + x_{14} \leq 35 $
+
+- 2. erőmű: $x_{21} + x_{22} + x_{23} + x_{24} \leq 50$
+
+- 3. erőmű: $x_{31} + x_{32} + x_{33} + x_{34} \leq 40$
+2. A városok igényeinek kielégítése:
+   $\sum_{i=1}^{3} x_{ij} = \text{Város}_j \quad \forall j$
+- 1. város: $ x_{11} + x_{21} + x_{31} = 45$
+
+- 2. város: $x_{12} + x_{22} + x_{32} = 20$
+
+- 3. város: $x_{13} + x_{23} + x_{33} = 30$
+
+- 4. város: $x_{14} + x_{24} + x_{34} = 30$
+3. Nemnegativitási feltételek:
+    $x_{ij} \geq 0 \quad \forall i, j$ 
+
+Ezekkel a korlátokkal és célfüggvénnyel megadható a szállítási probléma lineáris programozási modellje.
+
+![](assets/2024-05-20-15-09-54-image.png)
+
+- Kétfázisú szimplex módszerrel megoldható, de degenerált a feladat a sok 0 miatt, így egyszerűbb módszer is adható.
+
+- Ez lesz a disztribúciós módszer, vagy más néven szállítási szimplex módszer.
+
+**Disztribúciós módszer**
+
+A disztribúciós módszer, más néven a MODI (Modified Distribution) módszer, egy hatékony algoritmus a szállítási problémák optimalizálására. A módszer a kezdeti megoldás optimalizálását célozza, hogy elérjük a minimális költséget. A disztribúciós módszer a szállítási táblázatban történő allokációk elosztásának módosításával dolgozik.
+
+### Lépések a Disztribúciós módszerhez
+
+1. **Kezdeti megoldás meghatározása**:
+   
+   - Használjunk egy kezdeti megoldási módszert, mint például az Északi-sarkpont módszer, a Legkisebb költség módszer vagy a Vogel-approximitás módszer, hogy meghatározzuk a kezdeti alapvető megoldást.
+
+2. **Potenciálok (u és v értékek) kiszámítása**:
+   
+   - A potenciálok $u_i$ és $v_j$ értékek segítségével kiszámítjuk az egyes cellák csökkentett költségeit. Kezdjük egy tetszőleges $u_i$ vagy $v_j$ értékkel, általában 0 -val.
+   - Az összes potenciál értéket úgy kell meghatározni, hogy a foglalt cellák esetén teljesüljön a $ u_i + v_j = c_{ij} $ egyenlet, ahol $c_{ij}$ az adott cella költsége.
+
+3. **Csökkentett költségek ($\Delta_{ij}$) kiszámítása**:
+   
+   - A csökkentett költséget a következőképpen számoljuk ki minden üres cellára: $ \Delta_{ij} = c_{ij} - (u_i + v_j) $.
+   - Ha minden $\Delta_{ij} \geq 0$, akkor a jelenlegi megoldás optimális.
+
+4. **Optimalizációs lépések végrehajtása**:
+   
+   - Ha van olyan cella, ahol $\Delta_{ij} < 0$, akkor egy zárt hurkot (loopot) keresünk, amely az üres cellából indul és visszatér oda.
+   - Az egyes irányokban váltakozó \(+\) és \(-\) jelekkel végrehajtjuk a szükséges módosításokat, hogy csökkentsük a költségeket.
+
+5. **Új megoldás kiszámítása**:
+   
+   - Frissítjük az allokációkat a zárt hurok mentén és újra számoljuk a potenciálokat.
+   - Ismételjük meg a csökkentett költségek számítását és ellenőrizzük az optimalitást.
+
+6. **Iteráció folytatása**:
+   
+   - A fenti lépéseket addig ismételjük, amíg minden $\Delta_{ij} \geq 0$ nem lesz, jelezve, hogy elértük az optimális megoldást.
+
+### Példa a disztribúciós módszer alkalmazására
+
+A feltöltött kép alapján a következő kezdeti megoldást kaphatjuk a Vogel-approximitás módszerrel:
+
+#### Kezdeti megoldás (példa)
+
+|          | 1. város | 2. város | 3. város | 4. város | Készlet |
+| -------- | -------- | -------- | -------- | -------- | ------- |
+| 1. erőmű | 20       | 0        | 0        | 15       | 35      |
+| 2. erőmű | 25       | 20       | 0        | 5        | 50      |
+| 3. erőmű | 0        | 0        | 30       | 10       | 40      |
+| Igény    | 45       | 20       | 30       | 30       |         |
+
+### Potenciálok kiszámítása
+
+Legyen $ u_1 = 0 $.
+
+- $ u_1 + v_1 = 8 $ ⇒ $ v_1 = 8 $
+- $ u_1 + v_4 = 9 $ ⇒ $ v_4 = 9 $
+- $ u_2 + v_1 = 9 $ ⇒ $ u_2 = 1 $
+- $ u_2 + v_2 = 12 $ ⇒ $ v_2 = 11 $
+- $ u_2 + v_4 = 7 $ ⇒ $ v_4 = 6 $ (de $ v_4 $ már 9, így ellenőrizzük az összes potenciált)
+- $ u_3 + v_3 = 16 $ ⇒ $ u_3 = -3 $
+- $ u_3 + v_4 = 5 $ ⇒ $ v_4 = 8 $ (javítjuk: $ v_4 = 9 $)
+
+### Csökkentett költségek
+
+Kiszámoljuk az $\Delta_{ij}$-ket, majd megkeressük a legkisebb $\Delta_{ij}$-t, és frissítjük az allokációt a zárt hurok alapján.
+
+Ez a folyamat folytatódik addig, amíg minden csökkentett költség nem lesz nem negatív. Az így kapott megoldás lesz a költségminimalizáló megoldás.
+
+A disztribúciós módszer segítségével tehát megtalálhatjuk a legolcsóbb szállítási tervet a kezdeti megoldás optimalizálásával.
+
+![](assets/2024-05-20-15-23-52-image.png)
+
+![](assets/2024-05-20-15-24-08-image.png)
+
+![](assets/2024-05-22-21-05-47-image.png)
+
+![](assets/2024-05-22-21-06-03-image.png)
+
+![](assets/2024-05-22-21-07-10-image.png)
+
+![](assets/2024-05-22-21-08-34-image.png)
+
+# 5. Generikus programozás, sablonok, kifejezés sablonok, metaprogramozás.
+
+[Generics in C++ 1 - Templates Introduction | Modern Cpp Series - YouTube](https://www.youtube.com/watch?v=S2OFJe73fxA&ab_channel=MikeShah)
+
+### Generikus programozás
+
+A generika az az ötlet, hogy a típusok (Integer, String, ... stb. és a felhasználó által definiált típusok) paraméterei lehetnek metódusoknak, osztályoknak és interfészeknek. Például olyan osztályok, mint a tömb, map, stb., amelyek a generikumok segítségével nagyon hatékonyan használhatók. Bármilyen típushoz használhatjuk őket.
+
+A generikus programozás módszerét a kód hatékonyságának növelése érdekében hajtják végre. A generikus programozás lehetővé teszi a programozó számára, hogy általános algoritmust írjon, amely minden adattípussal működik. Ez kiküszöböli a különböző algoritmusok létrehozásának szükségességét, ha az adattípus egész szám, karakterlánc vagy karakter.
+
+Az általános programozás előnyei a következők:
+
+- Kód újrafelhasználhatósága
+
+- Függvény overload elkerülése
+
+- Egyszer megírt függvény többször és több esetben is használható.
+
+A generikus programozás a C++-ban sablonok segítségével valósítható meg. A sablon egy egyszerű és mégis nagyon hatékony eszköz a C++-ban. Az egyszerű ötlet az adattípus paraméterként való átadása, így nem kell ugyanazt a kódot írni különböző adattípusokhoz. Például egy szoftvercégnek szüksége lehet sort() funkcióra különböző adattípusokhoz. Ahelyett, hogy több kódot írnánk és karbantartanánk, írhatunk egy sort()-t, és paraméterként átadhatjuk az adattípust. 
+
+A compiler fogja a kódot generálni
+
+### Sablonok (Templates)
+
+A sablonok olyan mechanizmusok, amelyek lehetővé teszik a generikus kód írását. Két fő típusa van:
+
+1. **Függvény sablonok (Function Templates):**
+   Ezek lehetővé teszik, hogy függvényeket írjunk típusparaméterekkel. Így egyetlen függvény definíció számos különböző típusú adatot képes kezelni.
+   
+   ```cpp
+   template<typename T>
+   T max(T a, T b) {
+       return (a > b) ? a : b;
+   }
+   ```
+
+2. **Osztály sablonok (Class Templates):**
+   Ezek lehetővé teszik, hogy osztályokat írjunk típusparaméterekkel. Így egyetlen osztály definíció különböző típusú adattagokat és tagfüggvényeket tartalmazhat.
+   
+   ```cpp
+   template<typename T>
+   class Stack {
+   private:
+       std::vector<T> elems;
+   public:
+       void push(T const& elem);
+       void pop();
+       T top() const;
+   };
+   ```
+   
+   ### Sablonspecializáció (Template Specialization)
+   
+   A sablonspecializáció lehetővé teszi, hogy egy általános sablonhoz speciális viselkedést definiáljunk bizonyos típusokhoz. Ez hasznos lehet, ha az általános eset nem működik megfelelően bizonyos típusoknál.
+   
+   #### Teljes Specializáció (Full Specialization)
+   
+   Ez azt jelenti, hogy egy sablon minden paraméterére meghatározunk egy konkrét implementációt.
+   
+   ```cpp
+   template <>
+   class Pair<bool> {
+   private:
+       bool first, second;
+   public:
+       Pair(bool a, bool b) : first(a), second(b) {}
+       bool getFirst() const { return first; }
+       bool getSecond() const { return second; }
+   
+       bool bothTrue() const { return first && second; }
+   };
+   ```
+   
+   #### Részleges Specializáció (Partial Specialization)
+   
+   Ez azt jelenti, hogy egy sablon egyes paramétereire meghatározunk egy konkrét implementációt, de a többi paraméter általános marad.
+   
+   ```cpp
+   template <typename T>
+   class Array {
+       // Általános implementáció
+   };
+   
+   template <typename T>
+   class Array<T*> {
+       // Pointer típusokhoz specifikus implementáció
+   };
+   ```
+   
+   #### Traits
+   
+   - Típus-függő deklarációk egybecsomagolása
+   
+   - Típusokat és értékeket lehet egymáshoz rendelni
+     különböző összefüggésekben
+   
+   - A kód tisztább és karbantarthatóbb marad
+   
+   ![](assets/2024-05-23-22-22-24-image.png)
+   
+   - **Viz osztály**:
+     
+     - Definiál egy `Viz` nevű struktúrát.
+     - Barátként definiálja az `operator<<` függvényt, amely lehetővé teszi, hogy az `ostream` objektumra kiírjuk a "viz" szöveget, amikor egy `Viz` típusú objektumot írunk ki. (többi osztály ugyanígy)
+   
+   ![](assets/2024-05-23-22-23-00-image.png)
+   
+   ![](assets/2024-05-23-22-23-21-image.png)
+   
+   Typedef: meglévő típusnak új nevet ad
+   
+   ![](assets/2024-05-23-22-23-40-image.png)
+   
+   **typedef typename Traits::ital_tipus ital_tipus**: Ez a typedef a `Traits` osztályban definiált `ital_tipus` típusra mutat, amely a szereplő kedvenc italának típusát határozza meg.
+   
+   #### Policy
+   
+   - Funkcionalitás hozzárendelése sablon argumentumhoz
+   
+   - Kliens programozók személyre szabhatják a sablon osztályunkat
+   
+   ![](assets/2024-05-23-22-56-11-image.png)
+   
+   ![](assets/2024-05-23-22-56-28-image.png)
+   
+   #### Curiously recurring template pattern
+   
+   - Közös ősosztály helyett „szokatlan módon ismétlődő” saját ősosztály
+   
+   - Jim Coplien nevéhez fűződik
+   
+   ![](assets/2024-05-23-23-06-19-image.png)
+   
+   ![](assets/2024-05-23-23-07-26-image.png)
+   
+   ![](assets/2024-05-23-23-08-31-image.png)
+   
+   **CountedClass** és **CountedClass2** két különböző típusú osztály, amelyek mindegyike a `Counted` sablonból származik. Mindkettő saját számlálóval rendelkezik, mivel különböző típusok.
+
+### Kifejezés sablonok (Expression Templates)
+
+A kifejezés sablonok egy speciális technika, amely optimalizálja a sablonalapú kódot, különösen a numerikus számítások terén. Lehetővé teszik a kifejezések reprezentálását és értékelését anélkül, hogy szükségtelen ideiglenes objektumokat hoznánk létre. Ez javítja a teljesítményt azáltal, hogy a kifejezéseket csak egyszer értékeljük ki.
+
+Például, a lineáris algebrai műveletek során:
+
+```cpp
+template<typename T>
+class Matrix {
+    // ...
+};
+
+template<typename T>
+Matrix<T> operator+(Matrix<T> const& lhs, Matrix<T> const& rhs) {
+    // Kifejezés sablonokat használva a matrix összeadás optimalizálható
+}
+```
+
+### Metaprogramozás
+
+A metaprogramozás olyan programozási technika, amely lehetővé teszi a programok számára, hogy programokat írjanak vagy manipuláljanak. C++-ban a metaprogramozás általában sablonok használatával történik, és gyakran a fordítási időben történő számításokat és optimalizációkat jelent.
+
+#### Template Metaprogramozás (TMP)
+
+A TMP technika segítségével számításokat végezhetünk a fordítási idő alatt. Ez lehetővé teszi az optimalizált kód generálását anélkül, hogy futásidőben kellene számításokat végezni. Például a faktoriális számítása TMP segítségével:
+
+```cpp
+template<int N>
+struct Factorial {
+    static const int value = N * Factorial<N - 1>::value;
+};
+
+template<>
+struct Factorial<0> {
+    static const int value = 1;
+};
+
+int main() {
+    std::cout << Factorial<5>::value << std::endl; // 120
+}
+// azért static értékek hogy pédányosítás nélkül 
+// is hozzáférhessen a fordító
+```
+
+A C++11 óta számos új eszköz és technika érhető el a metaprogramozáshoz, például a variadic sablonok, constexpr, és a template aliasok, amelyek megkönnyítik és erőteljesebbé teszik a metaprogramozást.
+
+Ezek a technikák együttesen lehetővé teszik a C++ számára, hogy nagyon rugalmas és hatékony kódot írjunk, amely különböző típusú adatokat és számításokat képes kezelni fordítási és futásidőben egyaránt.
