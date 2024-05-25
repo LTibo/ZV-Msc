@@ -1079,6 +1079,162 @@ Matrix<T> operator+(Matrix<T> const& lhs, Matrix<T> const& rhs) {
 }
 ```
 
+Sure, I'd be happy to explain expression templates in C++ in detail.
+
+### What are Expression Templates?
+
+Expression templates are a C++ programming technique used to improve the performance of mathematical expressions involving operator overloading, especially in the context of linear algebra libraries. They allow the compiler to optimize out temporary objects that would otherwise be created during the evaluation of complex expressions.
+
+### Why Use Expression Templates?
+
+1. **Performance**: By avoiding the creation of intermediate temporary objects, expression templates can significantly reduce the overhead associated with multiple operations. This is particularly important in scientific computing and numerical applications where performance is critical.
+
+2. **Readability and Maintainability**: They allow developers to write mathematical expressions in a natural and readable form without sacrificing performance.
+
+### Basic Concept
+
+Consider a simple example where you have a vector class with overloaded operators for addition and multiplication:
+
+```cpp
+#include <vector>
+
+class Vector {
+    std::vector<double> data;
+public:
+    Vector(size_t size) : data(size) {}
+
+    // Overloaded operator for vector addition
+    Vector operator+(const Vector& other) const {
+        Vector result(data.size());
+        for (size_t i = 0; i < data.size(); ++i) {
+            result.data[i] = data[i] + other.data[i];
+        }
+        return result;
+    }
+
+    // Overloaded operator for scalar multiplication
+    Vector operator*(double scalar) const {
+        Vector result(data.size());
+        for (size_t i = 0; i < data.size(); ++i) {
+            result.data[i] = data[i] * scalar;
+        }
+        return result;
+    }
+
+    double& operator[](size_t index) { return data[index]; }
+    const double& operator[](size_t index) const { return data[index]; }
+};
+```
+
+Using this class, an expression like `a + b + c` would create multiple temporary `Vector` objects, resulting in unnecessary memory allocations and copies.
+
+### Introducing Expression Templates
+
+Expression templates address this issue by constructing an abstract syntax tree (AST) of the expression at compile time and evaluating the entire expression in a single pass.
+
+#### Step 1: Define Expression Template Classes
+
+First, we define template classes to represent different kinds of expressions:
+
+```cpp
+template <typename L, typename R>
+class AddExpr {
+    const L& lhs;
+    const R& rhs;
+public:
+    AddExpr(const L& lhs, const R& rhs) : lhs(lhs), rhs(rhs) {}
+
+    double operator[](size_t i) const {
+        return lhs[i] + rhs[i];
+    }
+
+    size_t size() const { return lhs.size(); }
+};
+
+template <typename Vec, typename Scalar>
+class MulExpr {
+    const Vec& vec;
+    Scalar scalar;
+public:
+    MulExpr(const Vec& vec, Scalar scalar) : vec(vec), scalar(scalar) {}
+
+    double operator[](size_t i) const {
+        return vec[i] * scalar;
+    }
+
+    size_t size() const { return vec.size(); }
+};
+```
+
+#### Step 2: Modify the Vector Class
+
+Next, we modify the `Vector` class to return expression templates instead of `Vector` objects for operator overloads:
+
+```cpp
+class Vector {
+    std::vector<double> data;
+public:
+    Vector(size_t size) : data(size) {}
+
+    template <typename Expr>
+    Vector(const Expr& expr) : data(expr.size()) {
+        for (size_t i = 0; i < data.size(); ++i) {
+            data[i] = expr[i];
+        }
+    }
+
+    template <typename R>
+    AddExpr<Vector, R> operator+(const R& other) const {
+        return AddExpr<Vector, R>(*this, other);
+    }
+
+    MulExpr<Vector, double> operator*(double scalar) const {
+        return MulExpr<Vector, double>(*this, scalar);
+    }
+
+    double& operator[](size_t index) { return data[index]; }
+    const double& operator[](size_t index) const { return data[index]; }
+};
+```
+
+#### Step 3: Using Expression Templates
+
+Now, when you write an expression like `a + b + c`, it will construct an AST and evaluate the expression in a single pass without creating intermediate `Vector` objects:
+
+```cpp
+int main() {
+    Vector a(10), b(10), c(10);
+
+    // Fill vectors with some values
+    for (size_t i = 0; i < 10; ++i) {
+        a[i] = i;
+        b[i] = i * 2;
+        c[i] = i * 3;
+    }
+
+    Vector result = a + b + c;
+
+    for (size_t i = 0; i < 10; ++i) {
+        std::cout << result[i] << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+```
+
+### Key Points
+
+1. **Template Metaprogramming**: Expression templates rely heavily on template metaprogramming to construct the AST and defer evaluation until the entire expression is known.
+
+2. **Lazy Evaluation**: By constructing an expression tree, the evaluation of the expression is deferred until necessary, allowing the compiler to optimize the entire expression as a whole.
+
+3. **Flexibility**: The technique can be extended to handle more complex expressions, including those involving different types of operations and combinations of scalars and vectors.
+
+### Conclusion
+
+Expression templates are a powerful technique in C++ that enable the efficient evaluation of complex expressions involving overloaded operators. They leverage template metaprogramming to construct and evaluate expressions at compile time, eliminating the need for temporary objects and improving runtime performance. This approach is widely used in high-performance computing libraries, particularly those dealing with linear algebra and numerical computations.
+
 ### Metaprogramozás
 
 A metaprogramozás olyan programozási technika, amely lehetővé teszi a programok számára, hogy programokat írjanak vagy manipuláljanak. C++-ban a metaprogramozás általában sablonok használatával történik, és gyakran a fordítási időben történő számításokat és optimalizációkat jelent.
@@ -1108,3 +1264,699 @@ int main() {
 A C++11 óta számos új eszköz és technika érhető el a metaprogramozáshoz, például a variadic sablonok, constexpr, és a template aliasok, amelyek megkönnyítik és erőteljesebbé teszik a metaprogramozást.
 
 Ezek a technikák együttesen lehetővé teszik a C++ számára, hogy nagyon rugalmas és hatékony kódot írjunk, amely különböző típusú adatokat és számításokat képes kezelni fordítási és futásidőben egyaránt.
+
+# 5. Standard Template Library megvalósítása és használata: adatfolyamok, manipulátorok, generikus algoritmusok, predikátumok, függvény objektumok, generikus konténerek és iterátorok.
+
+Az STL (Standard Template Library) a C++ programozási nyelv egyik alapvető könyvtára, amely széles körben használt adatstruktúrákat és algoritmusokat biztosít. Az STL célja, hogy újrafelhasználható, típusfüggetlen komponenseket kínáljon, amelyek lehetővé teszik a programozók számára, hogy hatékony és könnyen karbantartható kódot írjanak. Az STL három fő összetevője a következő:
+
+1. **Konténerek (Containers):**
+   
+   - A konténerek olyan adattárolók, amelyek különböző típusú adatokat képesek tárolni. Az STL-ben számos konténer található, amelyek különböző adatstruktúrákat valósítanak meg, mint például:
+     - `vector`: Dinamikus méretű tömb.
+     - `list`: Kétirányú láncolt lista.
+     - `deque`: Duplán végigjárható sor.
+     - `set` és `multiset`: Rendezett halmaz és többszörösen rendezett halmaz.
+     - `map` és `multimap`: Kulcs-érték párokat tartalmazó konténerek.
+     - `unordered_set` és `unordered_map`: Hash-tábla alapú halmazok és asszociatív konténerek.
+
+2. **Iterátorok (Iterators):**
+   
+   - Az iterátorok olyan objektumok, amelyek lehetővé teszik a konténerek elemeinek bejárását. Az iterátorok a pointerekhez hasonlóan működnek, és az STL-ben számos típusú iterátor található, mint például:
+     - `input iterator`: Csak olvasási hozzáférést biztosít a konténer elemeihez.
+     - `output iterator`: Csak írási hozzáférést biztosít.
+     - `forward iterator`: Egyirányú bejárást tesz lehetővé.
+     - `bidirectional iterator`: Kétirányú bejárást tesz lehetővé.
+     - `random access iterator`: Véletlenszerű hozzáférést tesz lehetővé, hasonlóan a pointerekhez.
+
+3. **Algoritmusok (Algorithms):**
+   
+   - Az algoritmusok a konténerek elemeinek feldolgozására szolgáló műveletek. Az STL-ben számos beépített algoritmus található, amelyek különböző műveleteket valósítanak meg, mint például:
+     - Keresés: `find`, `binary_search`.
+     - Rendezés: `sort`, `partial_sort`, `nth_element`.
+     - Halmazműveletek: `merge`, `union`, `intersection`.
+     - Átalakítások: `transform`, `replace`.
+     - Felhalmozás: `accumulate`, `inner_product`.
+
+Az STL használata jelentősen növelheti a kód hatékonyságát és olvashatóságát, mivel a programozók a jól bevált adatstruktúrák és algoritmusok újrafelhasználásával koncentrálhatnak a probléma specifikus részleteire, anélkül, hogy újra kellene írniuk az alapvető műveleteket.
+
+### Predikátumok
+
+- Másoláskor szükség lehet arra, hogy csak azokat az elemeket másoljuk át, amelyek megfelelnek bizonyos követelményeknek
+
+- Sok algoritmusnál lehetőség van átadni egy predikátumot, amely egy elemről eldönti, hogy kell-e
+
+- Predikátum: Olyan függvény, amely logikai értéket ad vissza
+
+- Pl.: Kicserélni egy sorozatban azokat az elemeket, amelyek nagyobbak 15-nél
+  
+  **Példa:**
+  
+  Feltételes csere - replace_if
+  
+  ```cpp
+  #include <algorithm>
+  #include <iterator>
+  #include <iostream>
+  using namespace std;
+  // predikátum
+  bool gt15(int x) {
+      return x > 15;
+  }
+  int main() {
+      int a[] = {10, 20, 30};
+      const size_t S = sizeof a / sizeof a[0];
+      replace_if(a, a+S, gt15, 3);
+      copy(a, a+S, ostream_iterator<int>(cout," "));
+      cout << endl;
+      return 0;
+  } // 10 3 3
+  ```
+
+### Függvény objektumok
+
+- Function objects
+
+- Az előző példákban a gt15 függvény használata eléggé korlátozott
+  
+  - Pl. szükség lehet gt20-ra vagy gt25-re, ...
+  
+  - Sok függvényt kellene írni
+  
+  - Minden értéknek ismertnek kellene lennie fordítási időben (nem lehet pl. újabb paraméterben átadni, mert csak egy értéket fogadhatnak a predikátum függvények)
+
+- A megoldás a függvény objektumok használata
+  
+  - Olyan osztály, amely megvalósítja a függvényhívás operator-t
+  
+  ```cpp
+  #include <algorithm>
+  #include <iterator>
+  #include <iostream>
+  using namespace std;
+  // függvény objektum
+  class gt_n {
+      int ertek;
+  public:
+      gt_n(int i) : ertek(i) {}
+  
+      bool operator()(int x) {
+          return x > ertek;
+      }
+  };
+  int main() {
+      int a[] = {10, 20, 30};
+      const size_t S = sizeof a / sizeof a[0];
+      int b[S];
+      int* endb = remove_copy_if(a, a+S, b, gt_n(15));
+      int* beginb = b;
+      copy(beginb, endb, ostream_iterator<int>(cout," "));
+      cout << endl;
+      return 0;
+  } 
+  ```
+
+### Függvény objektum adapterek
+
+- Function object adapters
+
+- Az STL tartalmaz egyszerű, hasznos függvény objektumokat
+
+- Ezek együttes használatával összetett predikátumok is készíthetők
+
+- Függvény objektum adapterek segítségével kombinálhatóak a predikátumok
+
+- Valójában speciális függvény sablonok
+
+### Fgv. obj. adapter példa
+
+- Függvény objektum
+  
+  - greater – igaz, ha az első argumentuma > második
+
+- Függvény objektum adapter kell, mert unáris (egy paraméterű) predikátumra van szükség
+  
+  - bind2nd – sablonfüggvény, használja a függvényobjektumot a második paraméteren (binder2nd objektumot készít)
+  
+  - binder2nd – függvényobjektum, amely eltárolja a bind2nd
+    két paraméterét
+  
+  ```cpp
+  #include <iostream>
+  #include <algorithm>
+  #include <functional>
+  #include <iterator>
+  using namespace std; 
+  
+  int main() {
+      int a[] = {10, 20, 30};
+      const int S = sizeof a / sizeof a[0];
+      remove_copy_if(a, a+S, ostream_iterator<int>(cout," "), 
+                      bind2nd(greater<int>(),15));
+      cout << endl;
+      return 0;
+  } //10
+  ```
+  
+  Ez a sor az `algorithm` könyvtár `remove_copy_if` függvényét használja:
+  
+  ```cpp
+  remove_copy_if(a, a+S, ostream_iterator<int>(cout," ")
+                  bind2nd(greater<int>(), 15));
+  ```
+  
+  - `a, a+S`: az `a` tömb elemeinek tartományát adja meg.
+  - `ostream_iterator<int>(cout," ")`: egy kimeneti iterátort hoz létre, amely a `cout`-ra ír, és szóközt tesz az elemek közé.
+  - `bind2nd(greater<int>(), 15)`: ez a kifejezés egy bináris függvényt alakít át egy egyváltozós függvénnyé, amely a `greater<int>()` (nagyobb) műveletet használja és rögzíti a `15`-ös értéket a második operandusként.
+  
+  A `remove_copy_if` tehát minden olyan elemet, amely nagyobb, mint `15`, kihagy, és a többi elemet (10) kimásolja a `cout`-ra. Az eredmény a `10` lesz, mivel csak az nem nagyobb, mint `15`.
+
+![](assets/2024-05-25-17-27-36-image.png)
+
+### Adaptálható függvény objektumok
+
+- Az STL függvény objektum adapterek feltételezik, hogy a függvény objektumok definiálják a következő típusokat
+  
+  - Unáris függvény objektumok esetében
+    
+    - argument_type
+    
+    - result_type
+  
+  - Bináris függvény objektumok esetében
+    
+    - first_argument_type
+    
+    - second_argument_type
+    
+    - result_type
+  
+  ```cpp
+  template<class Arg, class Result>
+  struct unary_function {            
+      typedef Arg argument_type;
+      typedef Result result_type;
+  };
+  template<class Arg1, class Arg2, class Result>
+  struct binary_function {
+      typedef Arg1 first_argument_type;
+      typedef Arg2 second_argument_type;
+      typedef Result result_type;
+  };
+  // fuggveny objektum
+  template<class T>
+  struct greater : binary_function<T, T, bool> {
+      bool operator()(const T& x, const T& y) const {return (x > y);}
+  };
+  ```
+  
+  ![](assets/2024-05-25-18-00-41-image.png)
+
+### Függvény pointer adapterek
+
+- Sok STL algoritmus predikátumot vár paraméterül
+
+- Ezek lehetnek
+  
+  - Függvény pointerek (Olyan pointerek, amelyek egy normál C++ függvényre mutatnak)
+  
+  - Függvény objektumok (Olyan objektumok, amelyek definiálnak egy `operator()` függvényt, így használhatók úgy, mintha függvények lennének.)
+
+- Függvény pointerek esetében nem használhatók a függvény objektumokhoz készített adapterek
+  
+  - mert feltételezik a megfelelő típusdefiníciók meglétét
+  
+  - Másszóval, az adapterek, mint például a `binder2nd`, feltételezik, hogy a predikátum típus tartalmaz bizonyos típusdefiníciókat (pl. `first_argument_type`, `second_argument_type`, `result_type`), amelyeket a `unary_function` és `binary_function` sablonok biztosítanak.
+
+- ptr_fun() – adapter átalakítja a függvény pointereket függvény objektumokká
+
+### Manipulátorok
+
+Az STL (Standard Template Library) manipulátorai olyan függvények vagy objektumok, amelyek a stream-ekkel (például `std::cout`, `std::cin`) való munka során használhatók a formázás és egyéb műveletek elvégzésére. Ezek a manipulátorok megkönnyítik az adatbevitelt és -kiírást, valamint a formázási beállítások módosítását a stream-eken keresztül.
+
+### Alapvető manipulátorok az STL-ben
+
+#### 1. Formázási manipulátorok
+
+- **std::endl**: Újsor karaktert ír ki és üríti a stream-et.
+  
+  ```cpp
+  std::cout << "Hello, World!" << std::endl;
+  ```
+
+- **std::setw(n)**: Beállítja a következő kiírandó adat szélességét n karakterre. Ezt a manipulátort az `<iomanip>` fejléccel kell használni.
+  
+  ```cpp
+  #include <iomanip>
+  std::cout << std::setw(10) << 123 << std::endl;
+  ```
+
+- **std::setfill(c)**: Beállítja a kitöltő karaktert (alapértelmezett a szóköz).
+  
+  ```cpp
+  std::cout << std::setfill('*') << std::setw(10) << 123 << std::endl;
+  ```
+
+- **std::setprecision(n)**: Beállítja a lebegőpontos számok pontosságát n számjegyre.
+  
+  ```cpp
+  #include <iomanip>
+  std::cout << std::setprecision(4) << 3.14159265 << std::endl;
+  ```
+
+#### 2. Állapot manipulátorok
+
+- **std::fixed**: Beállítja a lebegőpontos számok fixpontos formátumát.
+  
+  ```cpp
+  std::cout << std::fixed << std::setprecision(2) << 3.14159265 << std::endl;
+  ```
+
+- **std::scientific**: Beállítja a lebegőpontos számok tudományos (exponenciális) formátumát.
+  
+  ```cpp
+  std::cout << std::scientific << 123.45 << std::endl;
+  ```
+
+- **std::boolalpha**: Beállítja, hogy a logikai értékeket szöveges formában (true/false) írja ki.
+  
+  ```cpp
+  std::cout << std::boolalpha << true << std::endl;
+  ```
+
+- **std::noboolalpha**: Visszaállítja a logikai értékek numerikus kiírását (1/0).
+  
+  ```cpp
+  std::cout << std::noboolalpha << true << std::endl;
+  ```
+
+#### 3. Bit- és számrendszer manipulátorok
+
+- **std::hex**: Hexadecimális formátumra állítja a számok kiírását.
+  
+  ```cpp
+  std::cout << std::hex << 255 << std::endl; // kiírja: ff
+  ```
+
+- **std::oct**: Oktális formátumra állítja a számok kiírását.
+  
+  ```cpp
+  std::cout << std::oct << 255 << std::endl; // kiírja: 377
+  ```
+
+- **std::dec**: Decimális formátumra állítja a számok kiírását.
+  
+  ```cpp
+  std::cout << std::dec << 255 << std::endl; // kiírja: 255
+  ```
+
+### Példa a manipulátorok használatára
+
+Az alábbi példa bemutatja néhány gyakori manipulátor használatát:
+
+```cpp
+#include <iostream>
+#include <iomanip>
+
+int main() {
+    int num = 255;
+    double pi = 3.14159265;
+
+    // Alapértelmezett kiírás
+    std::cout << "Alapértelmezett: " << num << ", " << pi << std::endl;
+
+    // Hexadecimális kiírás
+    std::cout << "Hexadecimális: " << std::hex << num << std::endl;
+
+    // Oktális kiírás
+    std::cout << "Oktális: " << std::oct << num << std::endl;
+
+    // Visszaállítás decimálisra
+    std::cout << std::dec;
+
+    // Pontosság beállítása
+    std::cout << "Pi pontossággal (5 tizedesjegy): " << std::setprecision(5) << pi << std::endl;
+
+    // Szélesség és kitöltő karakter beállítása
+    std::cout << "Szélesség 10, kitöltő '*': " << std::setfill('*') << std::setw(10) << num << std::endl;
+
+    // Boolalpha használata
+    std::cout << "Boolalpha: " << std::boolalpha << true << ", " << false << std::endl;
+
+    return 0;
+}
+```
+
+Az STL manipulátorai rendkívül hasznosak a stream-ek formázásában és kezelésében. Lehetővé teszik az adatok kiírásának és beolvasásának finomhangolását, legyen szó szélesség, pontosság, formátum vagy egyéb beállításokról. Ezek a manipulátorok megkönnyítik a kód olvashatóságát és karbantarthatóságát, mivel világosan jelzik, hogyan kell az adatokat kezelni a stream-eken keresztül.
+
+![](assets/2024-05-25-18-17-43-image.png)
+
+![](assets/2024-05-25-18-18-00-image.png)
+
+### Generikus konténerek
+
+Az STL (Standard Template Library) generikus konténerei a C++ egyik legerősebb és leggyakrabban használt eszközei, amelyek lehetővé teszik különböző típusú elemek tárolását és kezelését egységes módon. A generikus konténerek sablonként vannak megvalósítva, így rugalmasan alkalmazhatók bármilyen adattípusra. Az STL konténerei több különböző típusú tárolási és hozzáférési modellt kínálnak.
+
+### Főbb konténertípusok
+
+1. **Szekvenciális konténerek**:
+   Ezek a konténerek az elemeket egy adott sorrendben tárolják.
+   
+   - **std::vector**:
+     Dinamikus tömb, amelynek mérete futásidőben változtatható. Gyors hozzáférést biztosít az elemekhez indexelés segítségével.
+     
+     ```cpp
+     #include <vector>
+     std::vector<int> vec = {1, 2, 3, 4, 5};
+     vec.push_back(6);
+     ```
+   
+   - **std::deque**:
+     Kétszeresen kapcsolt lista és tömb kombinációja, amely lehetővé teszi az elemek hozzáadását és eltávolítását mindkét végéről.
+     
+     ```cpp
+     #include <deque>
+     std::deque<int> deq = {1, 2, 3, 4, 5};
+     deq.push_front(0);
+     deq.push_back(6);
+     ```
+   
+   - **std::list**:
+     Duplán láncolt lista, amely hatékony beszúrást és törlést biztosít bárhol a listában, de lassú hozzáférést index alapján.
+     
+     ```cpp
+     #include <list>
+     std::list<int> lst = {1, 2, 3, 4, 5};
+     lst.push_back(6);
+     lst.push_front(0);
+     ```
+   
+   - **std::array**:
+     Fix méretű tömb, amely futásidőben nem változtatható.
+     
+     ```cpp
+     #include <array>
+     std::array<int, 5> arr = {1, 2, 3, 4, 5};
+     ```
+
+2. **Asszociatív konténerek**:
+   Ezek a konténerek kulcs-érték párok alapján tárolják az elemeket és gyors keresést biztosítanak.
+   
+   - **std::set**:
+     Egyedi elemek rendezetlen halmaza, amelyben minden elem csak egyszer szerepelhet.
+     
+     ```cpp
+     #include <set>
+     std::set<int> myset = {1, 2, 3, 4, 5};
+     myset.insert(6);
+     ```
+   
+   - **std::map**:
+     Kulcs-érték párokat tartalmazó rendezetlen halmaz, ahol minden kulcs egyedi.
+     
+     ```cpp
+     #include <map>
+     std::map<int, std::string> mymap;
+     mymap[1] = "one";
+     mymap[2] = "two";
+     ```
+   
+   - **std::multiset**:
+     Egyedi elemek rendezett halmaza, amelyben az elemek többször is előfordulhatnak.
+     
+     ```cpp
+     #include <set>
+     std::multiset<int> mymultiset = {1, 2, 2, 3, 4, 5};
+     ```
+   
+   - **std::multimap**:
+     Kulcs-érték párokat tartalmazó rendezetlen halmaz, ahol a kulcsok többször is előfordulhatnak.
+     
+     ```cpp
+     #include <map>
+     std::multimap<int, std::string> mymultimap;
+     mymultimap.insert({1, "one"});
+     mymultimap.insert({1, "uno"});
+     ```
+
+3. **Unordered konténerek**:
+   Ezek a konténerek hash tábla alapúak és gyors keresést biztosítanak, de az elemek sorrendje nem meghatározott.
+   
+   - **std::unordered_set**:
+     Egyedi elemek rendezetlen halmaza, amely hash táblát használ.
+     
+     ```cpp
+     #include <unordered_set>
+     std::unordered_set<int> myunorderedset = {1, 2, 3, 4, 5};
+     myunorderedset.insert(6);
+     ```
+   
+   - **std::unordered_map**:
+     Kulcs-érték párokat tartalmazó rendezetlen halmaz, amely hash táblát használ.
+     
+     ```cpp
+     #include <unordered_map>
+     std::unordered_map<int, std::string> myunorderedmap;
+     myunorderedmap[1] = "one";
+     myunorderedmap[2] = "two";
+     ```
+   
+   - **std::unordered_multiset**:
+     Egyedi elemek rendezetlen halmaza, ahol az elemek többször is előfordulhatnak és hash táblát használ.
+     
+     ```cpp
+     #include <unordered_set>
+     std::unordered_multiset<int> myunorderedmultiset = {1, 2, 2, 3, 4, 5};
+     ```
+   
+   - **std::unordered_multimap**:
+     Kulcs-érték párokat tartalmazó rendezetlen halmaz, ahol a kulcsok többször is előfordulhatnak és hash táblát használ.
+     
+     ```cpp
+     #include <unordered_map>
+     std::unordered_multimap<int, std::string> myunorderedmultimap;
+     myunorderedmultimap.insert({1, "one"});
+     myunorderedmultimap.insert({1, "uno"});
+     ```
+
+### Konténerek használata
+
+A generikus konténerek használatának fő előnyei:
+
+- **Típusbiztonság**: A konténerek típusbiztosak, így a kompiláció során ellenőrzik az adattípusokat.
+- **Újrahasznosíthatóság**: A konténerek sablonként vannak megvalósítva, így újrahasznosíthatók különböző adattípusokkal.
+- **Hatékonyság**: Az STL konténerek hatékony adatkezelést biztosítanak, beleértve a gyors hozzáférést, beszúrást és törlést.
+
+### Példa a különböző konténerek használatára
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <list>
+#include <set>
+#include <map>
+#include <unordered_set>
+#include <unordered_map>
+
+int main() {
+    // Vector
+    std::vector<int> vec = {1, 2, 3, 4, 5};
+    vec.push_back(6);
+    for (int v : vec) std::cout << v << " ";
+    std::cout << std::endl;
+
+    // List
+    std::list<int> lst = {1, 2, 3, 4, 5};
+    lst.push_back(6);
+    lst.push_front(0);
+    for (int l : lst) std::cout << l << " ";
+    std::cout << std::endl;
+
+    // Set
+    std::set<int> myset = {1, 2, 3, 4, 5};
+    myset.insert(6);
+    for (int s : myset) std::cout << s << " ";
+    std::cout << std::endl;
+
+    // Map
+    std::map<int, std::string> mymap;
+    mymap[1] = "one";
+    mymap[2] = "two";
+    for (const auto& p : mymap) std::cout << p.first << " -> " << p.second << " ";
+    std::cout << std::endl;
+
+    // Unordered Set
+    std::unordered_set<int> myunorderedset = {1, 2, 3, 4, 5};
+    myunorderedset.insert(6);
+    for (int us : myunorderedset) std::cout << us << " ";
+    std::cout << std::endl;
+
+    // Unordered Map
+    std::unordered_map<int, std::string> myunorderedmap;
+    myunorderedmap[1] = "one";
+    myunorderedmap[2] = "two";
+    for (const auto& up : myunorderedmap) std::cout << up.first << " -> " << up.second << " ";
+    std::cout << std::endl;
+
+    return 0;
+}
+```
+
+### Iterátorok
+
+Az STL (Standard Template Library) iterátorai olyan objektumok, amelyek lehetővé teszik az elemek bejárását és manipulálását különböző konténerekben egységes módon. Az iterátorok az STL alapvető komponensei, mivel azok segítségével az algoritmusok függetlenek maradnak a konténer konkrét típusától.
+
+### Iterátorok típusai
+
+Az iterátorok több különböző kategóriába sorolhatók, mindegyik saját jellemzőkkel és használati módokkal rendelkezik.
+
+1. **Input iterátorok**
+   
+   - Egyszeri olvasást tesznek lehetővé az elemekről.
+   - Példa: bejárás egy bemeneti adatfolyam (input stream) esetén.
+   - Előírás: csak előre léptethetők, és nem lehet őket másolni (nem feltétlenül).
+
+2. **Output iterátorok**
+   
+   - Egyszeri írást tesznek lehetővé az elemekre.
+   - Példa: írás egy kimeneti adatfolyam (output stream) esetén.
+   - Előírás: csak előre léptethetők, és nem lehet őket másolni (nem feltétlenül).
+
+3. **Forward iterátorok**
+   
+   - Kombinálják az input és output iterátorok tulajdonságait.
+   - Lehetővé teszik az elemek többszöri olvasását és írását.
+   - Példa: egyszerű összefűzött lista (singly linked list).
+   - Előírás: másolhatók és több lépésben előre léptethetők.
+
+4. **Bidirectional iterátorok**
+   
+   - Lehetővé teszik az előre és hátra léptetést.
+   - Példa: kétszeresen összefűzött lista (doubly linked list).
+   - Előírás: előre és hátra is léptethetők.
+
+5. **Random access iterátorok**
+   
+   - Lehetővé teszik a véletlenszerű hozzáférést az elemekhez.
+   - Példa: dinamikus tömb (vector).
+   - Előírás: minden iterátor művelet támogatott, beleértve az indexelést és az előre-hátra léptetést.
+
+### Iterátorok használata
+
+Az iterátorok használata az STL-ben alapvető fontosságú a konténerek elemeinek bejárásához és manipulálásához. Az iterátorokkal végzett műveletek szintaktikailag hasonlóak a pointerekkel végzett műveletekhez.
+
+#### Példa: std::vector iterátor használata
+
+```cpp
+#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<int> vec = {1, 2, 3, 4, 5};
+
+    // Iterátor használata az elemek bejárásához
+    for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+```
+
+#### Példa: std::list iterátor használata
+
+```cpp
+#include <iostream>
+#include <list>
+
+int main() {
+    std::list<int> lst = {1, 2, 3, 4, 5};
+
+    // Iterátor használata az elemek bejárásához
+    for (std::list<int>::iterator it = lst.begin(); it != lst.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+```
+
+### Iterátorok műveletei
+
+Az iterátorok több alapvető műveletet támogatnak, amelyek segítségével bejárhatók és manipulálhatók a konténerek elemei:
+
+- **Dereferálás**: Az iterátor által mutatott elem elérése.
+  
+  ```cpp
+  *it = 10; // Az iterátor által mutatott elem értékének beállítása 10-re
+  ```
+
+- **Inkrementálás**: Az iterátor előre léptetése.
+  
+  ```cpp
+  ++it; // Az iterátor előre léptetése a következő elemre
+  ```
+
+- **Dekrementálás**: Az iterátor visszaléptetése (bidirectional és random access iterátorok esetén).
+  
+  ```cpp
+  --it; // Az iterátor visszaléptetése az előző elemre
+  ```
+
+- **Összehasonlítás**: Az iterátorok összehasonlítása (pl. egyenlőség).
+  
+  ```cpp
+  if (it == vec.end()) { /* ... */ }
+  ```
+
+- **Indexelés**: Véletlenszerű hozzáférés az elemekhez (random access iterátorok esetén).
+  
+  ```cpp
+  it += 3; // Az iterátor előreléptetése három elemmel
+  int val = it[2]; // Az iterátortól számított második elem elérése
+  ```
+
+### Speciális iterátorok
+
+Az STL tartalmaz néhány speciális iterátort is, amelyek különleges feladatokat látnak el:
+
+- **std::istream_iterator**: Bemeneti adatfolyam iterátor.
+  
+  ```cpp
+  std::istream_iterator<int> in_iter(std::cin);
+  ```
+
+- **std::ostream_iterator**: Kimeneti adatfolyam iterátor.
+  
+  ```cpp
+  std::ostream_iterator<int> out_iter(std::cout, " ");
+  ```
+
+- **std::reverse_iterator**: Fordított iterátor, amely az elemeket fordított sorrendben járja be.
+  
+  ```cpp
+  std::reverse_iterator<std::vector<int>::iterator> r_it = vec.rbegin();
+  ```
+
+- **std::back_insert_iterator**: Beszúró iterátor, amely elemeket szúr be egy konténer végére.
+  
+  ```cpp
+  std::back_insert_iterator<std::vector<int>> back_it(vec);
+  ```
+
+- **std::front_insert_iterator**: Beszúró iterátor, amely elemeket szúr be egy konténer elejére.
+  
+  ```cpp
+  std::front_insert_iterator<std::list<int>> front_it(lst);
+  ```
+
+- **std::insert_iterator**: Beszúró iterátor, amely elemeket szúr be egy konténer adott helyére.
+  
+  ```cpp
+  std::insert_iterator<std::set<int>> insert_it(myset, myset.begin());
+  ```
+
+### Összefoglalva
+
+Az iterátorok az STL egyik legfontosabb komponensei, amelyek lehetővé teszik a konténerek elemeinek egységes kezelését és bejárását. Az iterátorok különböző típusai és műveletei rugalmasságot biztosítanak a programozóknak, hogy hatékonyan és biztonságosan dolgozhassanak különböző adatstruktúrákkal. Az iterátorok használata az STL algoritmusokkal együtt erőteljes eszközt biztosít a C++ programozásban.
