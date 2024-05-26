@@ -1960,3 +1960,957 @@ Az STL tartalmaz néhány speciális iterátort is, amelyek különleges feladat
 ### Összefoglalva
 
 Az iterátorok az STL egyik legfontosabb komponensei, amelyek lehetővé teszik a konténerek elemeinek egységes kezelését és bejárását. Az iterátorok különböző típusai és műveletei rugalmasságot biztosítanak a programozóknak, hogy hatékonyan és biztonságosan dolgozhassanak különböző adatstruktúrákkal. Az iterátorok használata az STL algoritmusokkal együtt erőteljes eszközt biztosít a C++ programozásban.
+
+# Képfeldolgozás haladóknak
+
+# 7. Morfológiai műveletek többszintű képekre; Vázkijelölés: távolság-transzformáció, vékonyítás, Voronoi-váz.
+
+## Morfológiai műveletek kétszintű képekre
+
+**<u>Matematikai morfológia:</u>** eszköztár a képfeldolgozáshoz és a képanalízishez, halmazelméleti módszer geometriai struktúrák kvantitatív leírásához. A módszer kifejlesztői G. Matheron és J. Serra.
+
+A morfológiai műveletek bemenete egy ponthalmaz (pl. egy kép fekete pontjainak halmaza) és egy elemi minta, a szerkesztőelem (structuring element).
+
+A szerkesztőelem szerepe és használata a konvolúciós
+maszkéhoz (convolution kerner) hasonlítható.
+
+![](assets/2024-05-25-22-19-20-image.png)
+
+Segédműveletek: tükrözés és eltolás
+
+![](assets/2024-05-25-22-24-32-image.png)
+
+![](assets/2024-05-25-22-24-50-image.png)
+
+![](assets/2024-05-25-22-29-04-image.png)
+
+## Morfológiai műveletek többszintű képekre
+
+### Dilatáció Többszintű Képekre Lapostetejű Szerkesztőelemmel
+
+#### Definíció
+
+A dilatáció egy olyan morfológiai művelet, amelynek célja az objektumok növelése a képen. Szürkeárnyalatos képeknél a dilatáció során minden pixel értékét a környezetében lévő pixelek maximumával helyettesítjük, egy lapostetejű szerkesztőelem segítségével. A lapostetejű szerkesztőelem minden pontja azonos súllyal rendelkezik, azaz nincs belső struktúrája vagy magassága.
+
+#### Működési Elv
+
+A dilatáció során a lapostetejű szerkesztőelem meghatározott területen belül minden egyes pixel környezetében keressük a maximum értéket, és ezzel helyettesítjük az adott pixel értékét.
+
+#### Matematikai Leírás
+
+Legyen $ I(x, y) $ a bemeneti szürkeárnyalatos kép, és $ B $ a lapostetejű szerkesztőelem. A dilatáció $ I $ képen $ B $ szerkesztőelemmel az alábbi módon történik:
+
+$ (I \oplus B)(x, y) = \max_{(s, t) \in B} \{ I(x-s, y-t) \} $
+
+Ez azt jelenti, hogy minden $ (x, y) $ pontban a kimeneti kép értéke a bemeneti kép azon pontjainak maximuma lesz, amelyek a szerkesztőelem $ B $ által meghatározott területen belül vannak.
+
+#### Példa
+
+Tegyük fel, hogy van egy szürkeárnyalatos kép, ahol az egyes pixelek értékei 0 és 255 között változnak (8 bites képek). Ha a szerkesztőelem egy 3x3-as négyzet, akkor a dilatáció során minden egyes pixel értéke a 3x3-as ablakban lévő pixelek maximum értékével lesz helyettesítve.
+
+1. **Bemeneti Kép:**
+   
+   ```
+   50 50 50
+   50 100 50
+   50 50 50
+   ```
+
+2. **Szerkesztőelem:** 3x3-as négyzet
+
+3. **Dilatáció Után:**
+   
+   ```
+   100 100 100
+   100 100 100
+   100 100 100
+   ```
+
+A középső pixel értéke 100, amely a maximum a 3x3-as ablakban, és ez a maximum érték kiterjed a környező pixelekre is.
+
+#### Alkalmazások
+
+1. **Lyukak Kitöltése:** A dilatáció kitöltheti a kis lyukakat és réseket az objektumokban.
+2. **Zaj Eltávolítása:** A kis zajos pontokat eltünteti azáltal, hogy a környező világosabb értékekkel helyettesíti őket.
+3. **Objektumok Méretének Növelése:** Az objektumok méretének növelése és kiterjesztése a képen.
+
+#### Vizualizáció
+
+A dilatáció eredményeként a kép világosabb területei kiterjednek, és az objektumok szélei eltolódnak. A kép simább lesz, és a kis lyukak kitöltődnek.
+
+### Példák és Illusztrációk
+
+1. **Bemeneti Kép:** Egy szürkeárnyalatos kép, ahol különböző intenzitású területek vannak.
+2. **Szerkesztőelem:** Egy 3x3-as vagy 5x5-ös négyzet vagy más alakzat.
+3. **Dilatált Kép:** A dilatáció után a kép világosabb területei kiterjednek, és a sötétebb területek csökkennek.
+
+### Alkalmazás Képfeldolgozási Feladatokban
+
+1. **Előkészítő Lépés:** A dilatációt gyakran használják előkészítő lépésként más képfeldolgozási feladatok előtt, például az objektumok detektálása és azonosítása.
+2. **Képszegmentálás:** A dilatáció segíthet a képszegmentálásban az objektumok jobb elkülönítésében és az egymástól távol lévő objektumok kiemelésében.
+3. **Formaelemzés:** Az objektumok alakjának és méretének elemzésében segít, különösen, ha fontos a lyukak és zajok eltávolítása.
+
+### Összefoglaló
+
+A dilatáció többszintű (szürkeárnyalatos) képeknél lapostetejű szerkesztőelemmel egy hatékony művelet, amely kiterjeszti a világosabb területeket és eltávolítja a kis lyukakat és zajokat. Ez a technika különösen hasznos a képfeldolgozásban, ahol fontos az objektumok simítása, kiterjesztése és a zaj eltávolítása.
+
+![](assets/2024-05-26-01-37-43-image.png)
+
+![](assets/2024-05-26-01-38-00-image.png)
+
+### Erózió Többszintű Képekre Lapostetejű Szerkesztőelemmel
+
+#### Definíció
+
+Az erózió egy olyan morfológiai művelet, amelynek célja az objektumok csökkentése a képen. Szürkeárnyalatos képeknél az erózió során minden pixel értékét a környezetében lévő pixelek minimumával helyettesítjük, egy lapostetejű szerkesztőelem segítségével. A lapostetejű szerkesztőelem minden pontja azonos súllyal rendelkezik, azaz nincs belső struktúrája vagy magassága.
+
+#### Működési Elv
+
+Az erózió során a lapostetejű szerkesztőelem meghatározott területen belül minden egyes pixel környezetében keressük a minimum értéket, és ezzel helyettesítjük az adott pixel értékét.
+
+#### Matematikai Leírás
+
+Legyen $ I(x, y) $ a bemeneti szürkeárnyalatos kép, és $ B $ a lapostetejű szerkesztőelem. Az erózió $ I $ képen $ B $ szerkesztőelemmel az alábbi módon történik:
+
+$ (I \ominus B)(x, y) = \min_{(s, t) \in B} \{ I(x+s, y+t) \} $
+
+Ez azt jelenti, hogy minden $ (x, y) $ pontban a kimeneti kép értéke a bemeneti kép azon pontjainak minimuma lesz, amelyek a szerkesztőelem $ B $ által meghatározott területen belül vannak.
+
+#### Példa
+
+Tegyük fel, hogy van egy szürkeárnyalatos kép, ahol az egyes pixelek értékei 0 és 255 között változnak (8 bites képek). Ha a szerkesztőelem egy 3x3-as négyzet, akkor az erózió során minden egyes pixel értéke a 3x3-as ablakban lévő pixelek minimum értékével lesz helyettesítve.
+
+1. **Bemeneti Kép:**
+   
+   ```
+   100 100 100
+   100 150 100
+   100 100 100
+   ```
+
+2. **Szerkesztőelem:** 3x3-as négyzet
+
+3. **Erózió Után:**
+   
+   ```
+   100 100 100
+   100 100 100
+   100 100 100
+   ```
+
+A középső pixel értéke 150, de a 3x3-as ablakban a minimum érték 100, így minden pixel értéke 100 lesz az erózió után.
+
+#### Alkalmazások
+
+1. **Zaj Eltávolítása:** Az erózió eltávolíthatja a kis világos zajos pontokat a képből.
+2. **Struktúrák Finomítása:** Az objektumok széleinek finomítása és a kis kiálló részek eltávolítása.
+3. **Objektumok Méretének Csökkentése:** Az objektumok méretének csökkentése és a finom részletek eltávolítása.
+
+#### Vizualizáció
+
+Az erózió eredményeként a kép sötétebb területei kiterjednek, és az objektumok szélei visszahúzódnak. A kép simább lesz, és a kis világos zajok eltűnnek.
+
+### Példák és Illusztrációk
+
+1. **Bemeneti Kép:** Egy szürkeárnyalatos kép, ahol különböző intenzitású területek vannak.
+2. **Szerkesztőelem:** Egy 3x3-as vagy 5x5-ös négyzet vagy más alakzat.
+3. **Erodált Kép:** Az erózió után a kép sötétebb területei kiterjednek, és a világosabb területek csökkennek.
+
+### Alkalmazás Képfeldolgozási Feladatokban
+
+1. **Előkészítő Lépés:** Az eróziót gyakran használják előkészítő lépésként más képfeldolgozási feladatok előtt, például az objektumok detektálása és azonosítása.
+2. **Képszegmentálás:** Az erózió segíthet a képszegmentálásban az objektumok jobb elkülönítésében és az egymástól távol lévő objektumok kiemelésében.
+3. **Formaelemzés:** Az objektumok alakjának és méretének elemzésében segít, különösen, ha fontos a zajok eltávolítása és a struktúrák finomítása.
+
+### Összefoglaló
+
+Az erózió többszintű (szürkeárnyalatos) képeknél lapostetejű szerkesztőelemmel egy hatékony művelet, amely kiterjeszti a sötétebb területeket és eltávolítja a kis világos zajokat. Ez a technika különösen hasznos a képfeldolgozásban, ahol fontos az objektumok finomítása, csökkentése és a zaj eltávolítása.
+
+### Dilatáció Többszintű Képekre Nem Lapostetejű Szerkesztőelemmel
+
+- Ha a szerkesztőelem továbbra is csak egy ponthalmaz, tartomány, akkor
+  lapostetejű (flat topped) szerkesztőelemről és operátorokról beszélünk
+
+- Ha a szerkesztőelemhez tartozó pontoknak értéke, intenzitása is van (többszintű
+  miniképeknek tekinthetők), akkor a szerkesztőelem és a művelet nem-lapostetejű
+  (non-flat topped). Megjegyezzük, hogy a lapostetejű szerkesztőelem egy olyan
+  nem-lapostetejűnek tekinthető, ahol a szerkesztőelem valamennyi pontjának 0 az értéke.
+
+#### Definíció
+
+A dilatáció többszintű képekre nem lapostetejű szerkesztőelemmel egy olyan morfológiai művelet, amelynek célja az objektumok kiterjesztése a képen. A nem lapostetejű szerkesztőelem különböző értékekkel rendelkezik, amelyek hozzáadódnak a kép pixeleinek értékeihez, lehetővé téve a finomabb és specifikusabb morfológiai műveleteket.
+
+#### Működési Elv
+
+A dilatáció során a nem lapostetejű szerkesztőelem meghatározott területen belül minden egyes pixel környezetében keressük az összeadott értékek maximumát (a pixel értéke és a szerkesztőelem értéke), és ezzel helyettesítjük az adott pixel értékét.
+
+#### Matematikai Leírás
+
+Legyen $ I(x, y) $ a bemeneti szürkeárnyalatos kép, és $ B(s, t) $ a nem lapostetejű szerkesztőelem. A dilatáció $ I $ képen $ B $ szerkesztőelemmel az alábbi módon történik:
+
+$ (I \oplus B)(x, y) = \max_{(s, t) \in B} \{ I(x-s, y-t) + B(s, t) \} $
+
+Ez azt jelenti, hogy minden $ (x, y) $ pontban a kimeneti kép értéke a bemeneti kép és a szerkesztőelem azon pontjainak összegének maximuma lesz, amelyek a szerkesztőelem $ B $ által meghatározott területen belül vannak.
+
+![](assets/2024-05-26-02-14-16-image.png)
+
+### Erózió Többszintű Képekre Nem Lapostetejű Szerkesztőelemmel
+
+#### Definíció
+
+Az erózió többszintű képekre nem lapostetejű szerkesztőelemmel egy olyan morfológiai művelet, amelynek célja az objektumok csökkentése és a finom struktúrák eltávolítása a képen. A nem lapostetejű szerkesztőelem különböző értékekkel rendelkezik, amelyek kivonódnak a kép pixeleinek értékeiből, lehetővé téve a finomabb és specifikusabb morfológiai műveleteket.
+
+#### Működési Elv
+
+Az erózió során a nem lapostetejű szerkesztőelem meghatározott területen belül minden egyes pixel környezetében keressük az összeadott értékek minimumát (a pixel értéke mínusz a szerkesztőelem értéke), és ezzel helyettesítjük az adott pixel értékét.
+
+#### Matematikai Leírás
+
+Legyen $ I(x, y) $ a bemeneti szürkeárnyalatos kép, és $ B(s, t) $ a nem lapostetejű szerkesztőelem. Az erózió $ I $ képen $ B $ szerkesztőelemmel az alábbi módon történik:
+
+$ (I \ominus B)(x, y) = \min_{(s, t) \in B} \{ I(x+s, y+t) - B(s, t) \} $
+
+Ez azt jelenti, hogy minden $ (x, y) $ pontban a kimeneti kép értéke a bemeneti kép és a szerkesztőelem azon pontjainak különbségének minimuma lesz, amelyek a szerkesztőelem $ B $ által meghatározott területen belül vannak.
+
+#### Példa
+
+Tegyük fel, hogy van egy szürkeárnyalatos kép, ahol az egyes pixelek értékei 0 és 255 között változnak (8 bites képek). Ha a szerkesztőelem egy 3x3-as négyzet, amely különböző értékekkel rendelkezik, akkor az erózió során minden egyes pixel értéke a 3x3-as ablakban lévő pixelek és a szerkesztőelem értékeinek minimum különbségével lesz helyettesítve.
+
+1. **Bemeneti Kép:**
+   
+   ```
+   150 150 150
+   150 200 150
+   150 150 150
+   ```
+
+2. **Szerkesztőelem (3x3-as négyzet, nem lapostetejű):**
+   
+   ```
+   0 0 0
+   0 10 0
+   0 0 0
+   ```
+
+3. **Erózió Után:**
+   
+   ```
+   140 140 140
+   140 140 140
+   140 140 140
+   ```
+
+A középső pixel értéke 200, amelyből kivonjuk a szerkesztőelem középső értékét 10, így a minimális érték 140 lesz, és ez az érték kiterjed a környező pixelekre is.
+
+#### Alkalmazások
+
+1. **Finom Struktúrák Eltávolítása:** Nem lapostetejű szerkesztőelemekkel finomabb és specifikusabb struktúrák eltávolíthatók.
+2. **Zaj Eltávolítása:** Az erózió eltávolíthatja a kis világos zajos pontokat a képből.
+3. **Objektumok Méretének Csökkentése:** Az objektumok méretének csökkentése és a finom részletek eltávolítása.
+4. **Struktúrák Finomítása:** Az objektumok széleinek finomítása és a kis kiálló részek eltávolítása.
+
+#### Vizualizáció
+
+Az erózió eredményeként a kép sötétebb területei kiterjednek, és az objektumok szélei visszahúzódnak. A kép simább lesz, és a kis világos zajok eltűnnek. A nem lapostetejű szerkesztőelem különböző értékei miatt az erózió finomabban és specifikusabban történik.
+
+### Példák és Illusztrációk
+
+1. **Bemeneti Kép:** Egy szürkeárnyalatos kép, ahol különböző intenzitású területek vannak.
+2. **Szerkesztőelem:** Egy 3x3-as vagy 5x5-ös négyzet különböző értékekkel.
+3. **Erodált Kép:** Az erózió után a kép sötétebb területei kiterjednek, és a világosabb területek csökkennek, a szerkesztőelem értékeinek megfelelően.
+
+### Alkalmazás Képfeldolgozási Feladatokban
+
+1. **Előkészítő Lépés:** Az eróziót gyakran használják előkészítő lépésként más képfeldolgozási feladatok előtt, például az objektumok detektálása és azonosítása.
+2. **Képszegmentálás:** Az erózió segíthet a képszegmentálásban az objektumok jobb elkülönítésében és az egymástól távol lévő objektumok kiemelésében.
+3. **Formaelemzés:** Az objektumok alakjának és méretének elemzésében segít, különösen, ha fontos a zajok eltávolítása és a struktúrák finomítása.
+
+### Összefoglaló
+
+Az erózió többszintű (szürkeárnyalatos) képeknél nem lapostetejű szerkesztőelemmel egy hatékony művelet, amely kiterjeszti a sötétebb területeket és finomabban eltávolítja a kis világos zajokat. Ez a technika különösen hasznos a képfeldolgozásban, ahol fontos az objektumok finomítása, csökkentése és a zaj eltávolítása, a szerkesztőelem különböző értékeinek segítségével.
+
+![](assets/2024-05-26-02-14-29-image.png)
+
+### Nyitás (Opening)
+
+#### Definíció
+
+A nyitás egy összetett morfológiai művelet, amely az erózió és dilatáció egymást követő alkalmazásából áll. A nyitás célja az objektumok simítása, a kis zajok eltávolítása, valamint a vékony nyúlványok és szűk szorosok eltávolítása az objektumokból.
+
+#### Működési Elv
+
+A nyitás egy bináris vagy szürkeárnyalatos képen az alábbi lépésekből áll:
+
+1. **Erózió (Erosion):** Először alkalmazunk egy eróziót a bemeneti képre, amely eltávolítja az objektumok külső rétegeit.
+2. **Dilatáció (Dilation):** Az eróziót követően dilatációt alkalmazunk a megmaradt objektumokra, hogy visszaállítsuk az objektumok méretét az eredeti állapotukhoz hasonlóan, de a kis zajok és nyúlványok nélkül.
+
+#### Matematikai Leírás
+
+Legyen $ A $ a bemeneti halmaz (az objektum pixelei) és $ B $ a szerkesztőelem. A nyitás $ A $ halmazon $ B $ szerkesztőelemmel az alábbi módon történik:
+$ A \circ B = (A \ominus B) \oplus B $
+ahol $ \ominus $ jelöli az eróziót és $ \oplus $ a dilatációt.
+
+#### Példa
+
+Tegyük fel, hogy van egy bináris kép, ahol az objektumok fekete pixelek. Ha a szerkesztőelem egy 3x3-as négyzet, akkor a nyitás során:
+
+1. **Erózió:** A 3x3-as négyzet szerkesztőelem minden olyan pixelt eltávolít, amely nem illeszkedik teljesen a fekete pixelekre. Az objektumok szélei összehúzódnak, és a kis zajok eltűnnek.
+2. **Dilatáció:** A maradék objektumokat kibővítjük ugyanazzal a 3x3-as négyzettel, hogy visszaállítsuk az objektumok méretét, de a zajok és vékony nyúlványok nélkül.
+
+#### Alkalmazások
+
+1. **Zaj Eltávolítása:** A nyitás eltávolítja a kis zajokat és elszigetelt pontokat a képből.
+2. **Határok Simítása:** Az objektumok határainak simítása, ami segít az objektumok jobb elkülönítésében.
+3. **Vékony Nyúlványok Eltávolítása:** A vékony nyúlványok és szűk szorosok eltávolítása, amelyek nem részei az objektumok fő struktúrájának.
+
+### Zárás (Closing)
+
+#### Definíció
+
+A zárás egy összetett morfológiai művelet, amely a dilatáció és erózió egymást követő alkalmazásából áll. A zárás célja az objektumok simítása, a kis lyukak és rések kitöltése, valamint az objektumok összekapcsolása.
+
+#### Működési Elv
+
+A zárás egy bináris vagy szürkeárnyalatos képen az alábbi lépésekből áll:
+
+1. **Dilatáció (Dilation):** Először alkalmazunk egy dilatációt a bemeneti képre, amely kibővíti az objektumokat és kitölti a kis lyukakat.
+2. **Erózió (Erosion):** A dilatációt követően eróziót alkalmazunk a kibővített objektumokra, hogy visszaállítsuk az objektumok méretét az eredeti állapotukhoz hasonlóan, de a kitöltött lyukakkal és összekapcsolt részekkel.
+
+#### Matematikai Leírás
+
+Legyen $ A $ a bemeneti halmaz (az objektum pixelei) és $ B $ a szerkesztőelem. A zárás $ A $ halmazon $ B $ szerkesztőelemmel az alábbi módon történik:
+$ A \bullet B = (A \oplus B) \ominus B $
+ahol $ \oplus $ jelöli a dilatációt és $ \ominus $ az eróziót.
+
+#### Példa
+
+Tegyük fel, hogy van egy bináris kép, ahol az objektumok fekete pixelek. Ha a szerkesztőelem egy 3x3-as négyzet, akkor a zárás során:
+
+1. **Dilatáció:** A 3x3-as négyzet szerkesztőelem minden fekete pixel köré egy 3x3-as négyzetet helyez, kibővítve az objektumokat és kitöltve a kis lyukakat.
+2. **Erózió:** A kibővített objektumokat visszacsökkentjük az erózióval, hogy az objektumok mérete visszaálljon az eredeti állapotukhoz hasonlóan, de a kitöltött lyukakkal és összekapcsolt részekkel.
+
+#### Alkalmazások
+
+1. **Lyukak Kitöltése:** A zárás kitölti az objektumokon belüli kis lyukakat és rések.
+2. **Határok Simítása:** Az objektumok határainak simítása, ami segít az objektumok jobb elkülönítésében.
+3. **Objektumok Összekapcsolása:** A zárás összekapcsolja a közeli objektumokat, amelyek között kis távolságok vagy rések vannak.
+
+### Morfológiai Szűrés (Morphological Filtering)
+
+#### Definíció
+
+A morfológiai szűrés olyan technika, amely a morfológiai műveletek (például nyitás és zárás) kombinációját használja a képek zajcsökkentésére és az objektumok struktúrájának kiemelésére. A morfológiai szűrés célja a kép tartalmának javítása, hogy a fontos struktúrák jobban felismerhetők és elemezhetők legyenek.
+
+#### Működési Elv
+
+A morfológiai szűrés általában a nyitás és zárás egymás utáni alkalmazásából áll:
+
+1. **Nyitás (Opening):** Az erózió és dilatáció egymást követő alkalmazásával a nyitás eltávolítja a kis zajokat és simítja az objektumok határait.
+2. **Zárás (Closing):** A dilatáció és erózió egymást követő alkalmazásával a zárás kitölti a kis lyukakat és réseket, valamint összekapcsolja a közeli objektumokat.
+
+#### Matematikai Leírás
+
+Legyen $ A $ a bemeneti halmaz (az objektum pixelei) és $ B $ a szerkesztőelem. A morfológiai szűrés során az alábbi műveleteket alkalmazzuk:
+
+1. **Nyitás (Opening):**
+   $ A \circ B = (A \ominus B) \oplus B $
+
+2. **Zárás (Closing):**
+   $ A \bullet B = (A \oplus B) \ominus B $
+
+A morfológiai szűrés eredménye általában a nyitás és zárás kombinációja:
+$ A_{filtered} = (A \circ B) \bullet B $
+
+#### Példa
+
+Tegyük fel, hogy van egy bináris kép, ahol az objektumok fekete pixelek, és zaj is jelen van a képen. Ha a szerkesztőelem egy 3x3-as négyzet, akkor a morfológiai szűrés során:
+
+1. **Nyitás:** Az erózió és dilatáció alkalmazásával eltávolítjuk a kis zajokat és simítjuk az objektumok határait.
+2. **Zárás:** A dilatáció és erózió alkalmazásával kitöltjük a kis lyukakat és összekapcsoljuk a közeli objektumokat.
+
+#### Alkalmazások
+
+1. **Zaj Eltávolítása:** A morfológiai szűrés segít eltávolítani a kis zajokat a képből, miközben megőrzi az objektumok struktúráját.
+
+2. **Határok Simítása:** Az objektumok határainak simítása, ami segít a jobb objektumfelismerésben.
+
+3. *
+
+4. **Struktúrák Kiemelése:** A fontos struktúrák kiemelése és a felesleges részletek eltávolítása.
+
+#### Vizualizáció
+
+A morfológiai szűrés eredménye egy tisztább és strukturáltabb kép lesz, ahol a zaj eltávolításra kerül, és az objektumok határai simábbak, a lyukak kitöltve maradnak.
+
+### Alkalmazás Képfeldolgozási Feladatokban
+
+1. **Előkészítő Lépés:** A morfológiai szűrést gyakran használják előkészítő lépésként más képfeldolgozási feladatok előtt, mint például az objektumok detektálása és azonosítása.
+2. **Formaelemzés:** Az objektumok alakjának és méretének elemzésében segít, különösen, ha fontos a zaj eltávolítása és a struktúrák kiemelése.
+3. **Képszegmentálás:** A morfológiai szűrés segíthet a képszegmentálásban az objektumok jobb elkülönítésében és az egymástól távol lévő objektumok kiemelésében.
+
+### Dualitás Képfeldolgozásban
+
+#### Definíciók és Jelölések
+
+- **$ A $**: Eredeti kép vagy halmaz.
+- **$ S $**: Szerkesztőelem (structuring element).
+- **$ A^C $**: Az $ A $ halmaz komplementere, amely tartalmazza az összes olyan pontot, amely nem része $ A $-nak.
+- **$ \hat{S} $**: Az $ S $ szerkesztőelem tükrözött változata, amely tartalmazza az összes $ (u, v) $ pontot, ahol $ (-u, -v) \in S $.
+
+#### Morfológiai Műveletek
+
+1. **Dilatáció ($ \oplus $)**:
+   A dilatáció célja az objektumok növelése és a lyukak kitöltése. Egy adott szerkesztőelem segítségével az objektumok környezetében lévő pixelek is az objektum részévé válnak.
+
+2. **Erózió ($ \ominus $)**:
+   Az erózió célja az objektumok csökkentése és a zaj eltávolítása. Csak azok a pixelek maradnak az objektumban, amelyek környezetükben is teljesen benne vannak a szerkesztőelem által meghatározott formában.
+
+#### Dualitás Tétel
+
+A dualitás tétel kimondja, hogy egy művelet alkalmazása egy halmazra (vagy képre) és annak komplementerére fordított sorrendben ugyanolyan eredményt ad, mint a dual művelet alkalmazása az eredeti halmaz komplementerére. A tétel matematikai formában az alábbi egyenletekben jelenik meg:
+
+1. **Erózió és Dilatáció Dualitása**:
+   $
+   A \ominus S = (A^C \oplus \hat{S})^C
+   $
+   Az erózió egy halmazra (vagy képre) egyenértékű a komplementer halmaz dilatációjával a tükrözött szerkesztőelemmel, majd a komplementer képzésével.
+
+2. **Nyitás és Zárás Dualitása**:
+   $
+   A \circ S = (A^C \bullet \hat{S})^C
+   $
+   A nyitás egy halmazra (vagy képre) egyenértékű a komplementer halmaz zárásával a tükrözött szerkesztőelemmel, majd a komplementer képzésével.
+
+#### Példák és Alkalmazások
+
+1. **Zaj Eltávolítása és Kitöltés**:
+   A nyitás eltávolítja a kis zajokat, míg a zárás kitölti a kis lyukakat. A dualitás elvét alkalmazva ezeket a műveleteket egyszerűen kifejezhetjük egymás komplementereként.
+
+2. **Alakfelismerés és Képszegmentálás**:
+   A morfológiai műveletek és azok dualitása segítenek az objektumok és a háttér jobb elkülönítésében, valamint az objektumok alakjának felismerésében.
+
+3. **Topológiai Jellemzők Kiemelése**:
+   A dualitás lehetővé teszi, hogy különböző topológiai jellemzőket emeljünk ki a képeken, például az összefüggőséget és a formákat, különböző morfológiai műveletek kombinálásával.
+
+### Összefoglaló
+
+A dualitás a morfológiai képfeldolgozásban egy alapvető elv, amely lehetővé teszi, hogy az eróziót és dilatációt, valamint a nyitást és zárást egymás dual műveleteiként értelmezzük. Ez az elv segít a képek zajcsökkentésében, az objektumok simításában, a lyukak kitöltésében és a struktúrák elemzésében.
+
+![](assets/2024-05-26-10-58-00-image.png)
+
+### Morfológiai Gradiens
+
+#### Definíció
+
+A morfológiai gradiens egy olyan művelet, amely a kép objektumainak határait emeli ki. Ez a művelet a dilatáció és az erózió közötti különbséget számítja ki, amely kiemeli az objektumok peremeit.
+
+#### Működési Elv
+
+A morfológiai gradiens kiszámításához először dilatációt, majd eróziót végzünk a képen ugyanazzal a szerkesztőelemmel, és a két eredményt kivonjuk egymásból.
+
+#### Matematikai Leírás
+
+Legyen $ I $ a bemeneti kép és $ B $ a szerkesztőelem. A morfológiai gradiens az alábbi módon számítható:
+
+$ \text{Gradient}(I) = (I \oplus B) - (I \ominus B) $
+
+ahol:
+
+- $ \oplus $ a dilatáció
+- $ \ominus $ az erózió
+
+#### Példa
+
+Tegyük fel, hogy van egy bináris vagy szürkeárnyalatos kép. A morfológiai gradiens kiemeli az objektumok határait, így azok jobban láthatóak lesznek.
+
+#### Alkalmazások
+
+1. **Éldetektálás:** Az objektumok peremének azonosítása a képen.
+2. **Képszegmentálás:** Segít az objektumok elkülönítésében a háttértől.
+3. **Textúraelemzés:** A textúrák finom részleteinek kiemelése.
+
+### Morfológiai Laplace-transzformáció
+
+#### Definíció
+
+A morfológiai Laplace-transzformáció a morfológiai gradiens továbbfejlesztése, amely egyfajta második derivált a képen. Ez a művelet az objektumok belső és külső határait emeli ki, és segít a finom részletek detektálásában.
+
+#### Működési Elv
+
+A morfológiai Laplace-transzformációhoz először kiszámítjuk a morfológiai gradiens dilatált és erodált változatának különbségét.
+
+#### Matematikai Leírás
+
+Legyen $ I $ a bemeneti kép és $ B $ a szerkesztőelem. A morfológiai Laplace-transzformáció az alábbi módon számítható:
+
+$ \text{Laplace}(I) = (I \oplus B) + (I \ominus B) - 2I $
+
+ahol:
+
+- $ \oplus $ a dilatáció
+- $ \ominus $ az erózió
+
+#### Példa
+
+Tegyük fel, hogy van egy szürkeárnyalatos kép. A morfológiai Laplace-transzformáció kiemeli az objektumok határait és a finom részleteket, így azok jobban láthatóak lesznek.
+
+#### Alkalmazások
+
+1. **Éldetektálás:** Finom élek és részletek detektálása a képen.
+2. **Képszegmentálás:** Segít az objektumok pontosabb elkülönítésében.
+3. **Struktúraelemzés:** Az objektumok belső és külső határainak kiemelése.
+
+### Morfológiai Éldetektálás
+
+#### Definíció
+
+A morfológiai éldetektálás olyan technika, amely a morfológiai műveletek segítségével azonosítja az éleket és határokat a képeken. Ez a technika a morfológiai gradiens és a Laplace-transzformáció kombinációját használja.
+
+#### Működési Elv
+
+A morfológiai éldetektálás során először morfológiai gradiens vagy Laplace-transzformációt alkalmazunk a képre, majd az eredményt felhasználva az élek és határok detektálására koncentrálunk.
+
+#### Példa
+
+1. **Morfológiai Gradiens Alapú Éldetektálás:**
+   $
+   \text{Edges}(I) = \text{Gradient}(I)
+   $
+
+2. **Morfológiai Laplace-transzformáció Alapú Éldetektálás:**
+   $
+   \text{Edges}(I) = \text{Laplace}(I)
+   $
+
+#### Alkalmazások
+
+1. **Objektumok Határainak Meghatározása:** Az objektumok pontos határainak azonosítása.
+2. **Textúraelemzés:** Finom textúrák és részletek kiemelése.
+3. **Képszegmentálás:** Az élek és határok segítségével az objektumok pontosabb elkülönítése a háttértől.
+
+### Összefoglaló
+
+- **Morfológiai Gradiens:** A dilatáció és az erózió különbsége, amely az objektumok határait emeli ki.
+- **Morfológiai Laplace-transzformáció:** A morfológiai gradiens továbbfejlesztése, amely az objektumok belső és külső határait emeli ki.
+- **Morfológiai Éldetektálás:** A morfológiai gradiens és Laplace-transzformáció technikáit használja az élek és határok detektálására.
+
+Ezek a technikák hatékony eszközök a képfeldolgozásban, amelyek segítenek az objektumok határainak és finom részleteinek azonosításában, a zaj eltávolításában és a képszegmentálásban.
+
+![](assets/2024-05-26-11-01-33-image.png)
+
+### Top-Hat Transzformáció (Csúcsdetektor)
+
+#### Definíció
+
+A top-hat transzformáció egy morfológiai művelet, amely kiemeli a kép világos objektumait egy sötétebb háttér előtt. Ez a művelet különösen hasznos a kis, fényes struktúrák detektálásában, mint például csúcsok vagy foltok.
+
+#### Típusai
+
+Két fő típusa van a top-hat transzformációnak:
+
+1. **White Top-Hat (Fehér Top-Hat):** A nyitási transzformáció és az eredeti kép különbsége.
+2. **Black Top-Hat (Fekete Top-Hat):** A zárási transzformáció és az eredeti kép különbsége.
+
+#### Matematikai Leírás
+
+- **White Top-Hat (Fehér Top-Hat):**
+  $
+  \text{White Top-Hat}(I) = I - (I \circ B)
+  $
+  ahol $ I $ a bemeneti kép, $ B $ a szerkesztőelem, és $ \circ $ a nyitás.
+
+- **Black Top-Hat (Fekete Top-Hat):**
+  $
+  \text{Black Top-Hat}(I) = (I \bullet B) - I
+  $
+  ahol $ I $ a bemeneti kép, $ B $ a szerkesztőelem, és $ \bullet $ a zárás.
+
+#### Működési Elv
+
+1. **Fehér Top-Hat:**
+   
+   - Először alkalmazzuk a nyitási transzformációt a képre, amely eltávolítja a kis, fényes objektumokat.
+   - Ezután kivonjuk az eredeti képből a nyitási transzformáció eredményét, így a kis, fényes objektumok kiemelkednek.
+
+2. **Fekete Top-Hat:**
+   
+   - Először alkalmazzuk a zárási transzformációt a képre, amely kitölti a kis, sötét lyukakat.
+   - Ezután kivonjuk az eredeti képet a zárási transzformáció eredményéből, így a kis, sötét objektumok kiemelkednek.
+
+#### Alkalmazások
+
+1. **Csúcsdetektálás:** Kis, fényes objektumok detektálása sötétebb háttér előtt.
+2. **Képszegmentálás:** Objektumok jobb elkülönítése a háttértől.
+3. **Textúraelemzés:** Finom textúrák és részletek kiemelése.
+
+### Well-Hat Transzformáció (Völgydetektor)
+
+#### Definíció
+
+A well-hat transzformáció (völgydetektor) a top-hat transzformáció ellentéte, és a kép sötét objektumait emeli ki egy világosabb háttér előtt. Ez a művelet hasznos a kis, sötét struktúrák detektálásában, mint például völgyek vagy lyukak.
+
+#### Matematikai Leírás
+
+A well-hat transzformáció alapja a top-hat transzformáció, de az eredmények ellentétesek:
+
+- **Well-Hat Transzformáció:**
+  $
+  \text{Well-Hat}(I) = (I \bullet B) - (I \circ B)
+  $
+  ahol $ I $ a bemeneti kép, $ B $ a szerkesztőelem, $ \bullet $ a zárás, és $ \circ $ a nyitás.
+
+#### Működési Elv
+
+- A well-hat transzformáció során először alkalmazzuk a nyitási transzformációt, majd a zárási transzformációt a képre.
+- A két transzformáció eredményeinek különbségét vesszük, így a sötét objektumok kiemelkednek.
+
+#### Alkalmazások
+
+1. **Völgydetektálás:** Kis, sötét objektumok detektálása világosabb háttér előtt.
+2. **Képszegmentálás:** Sötét objektumok jobb elkülönítése a világos háttértől.
+3. **Struktúraelemzés:** Finom, sötét struktúrák és részletek kiemelése.
+
+![](assets/2024-05-26-11-28-35-image.png)
+
+## Vázkijelölés
+
+**Váz (skeleton):** A váz egy gyakran alkalmazott régió-alapú alakleíró jellemző, mely leírja az objektumok általános formáját.
+
+### <u>Távolság-transzformáció</u>
+
+A távolság-transzformáció (distance transform) egy fontos módszer a képfeldolgozásban, különösen a vázkijelölés (skeletonization) során. Ez a módszer a bináris képeken működik, ahol a képpontok kétféle értéket vehetnek fel: 0-t (háttérpont) vagy 1-et (objektumpont). A távolság-transzformáció során minden objektumpont (1-es értékű képpont) helyére az adott pont és a legközelebbi háttérpont (0-s értékű képpont) közötti távolság kerül.
+
+### A távolság-transzformáció folyamata:
+
+1. **Bemenet**: Egy bináris kép, ahol a képpontok vagy 0-k (háttérpontok), vagy 1-ek (objektumpontok).
+
+2. **Kimenet**: Egy távolságtérkép (distance map), amely nem bináris, és amelynek elemei a legközelebbi háttérponttól való távolságokat tartalmazzák.
+
+### Távolságmértékek:
+
+- **d4-távolság (Manhattan-távolság)**: Csak a vízszintes és függőleges irányú lépések engedélyezettek. Két pont közötti távolság az őket összekötő utak minimális hossza.
+- **d8-távolság (Chessboard-távolság)**: Vízszintes, függőleges és átlós irányú lépések is engedélyezettek. Két pont közötti távolság az őket összekötő utak minimális hossza.
+- **Chamfer-távolságok**: Ezek racionális számokkal közelítik az euklideszi távolságot, ahol az elmozdulások a távolsági maszkok véges súlyú elemeinek irányában engedélyezettek. Egy út költsége a benne szereplő élek/elmozdulások súly-összege. Két pont chamfer-távolsága az őket összekötő utak minimális költsége.
+
+### Távolságtérkép számítása chamfer-távolságokra:
+
+- A távolságtérkép chamfer-távolságokra kiszámítható lineáris időben (O(n) komplexitással, ahol n a képpontok száma) tetszőleges dimenzióban.
+
+### Távolság-transzformáció lépései:
+
+1. **Előfeldolgozás**: A kiindulási bináris képen a tulajdonság-pontok legyenek a háttérpontok.
+2. **Távolságtérkép generálása**: Valamely távolságfogalom szerint, például d4, d8 vagy chamfer-távolságok.
+3. **Lokális maximumhelyek, hegygerincek detektálása**: Ezek a távolságtérképen azonosíthatók, és gyakran a vázpontok helyeit jelölik ki.
+
+### Példák:
+
+- **Távolságtérkép számítása d4-távolság szerint**:
+  
+  - Csak a vízszintes és függőleges szomszédok számítanak.
+  - A távolságtérkép elemei az adott pont és a legközelebbi háttérpont közötti Manhattan-távolságot tartalmazzák.
+
+- **Távolságtérkép számítása chamfer-távolságokra**:
+  
+  - Előre- és visszafelé pásztázással számítják ki a távolságtérképet.
+  - Az algoritmus a távolsági maszkok alapján engedélyezi az elmozdulásokat, és a költségeket összegzi az úthossz minimalizálására.
+
+### A távolságtérkép érzékenysége:
+
+- A távolságtérkép érzékeny a kiindulási kép zajára és a határpontok egyenetlenségeire, ezért gyakran szükséges valamilyen zajcsökkentési vagy előfeldolgozási lépés.
+
+### Alkalmazások:
+
+- **Vázkijelölés**: A távolságtérkép segítségével meghatározhatók az objektum középpontjai, amelyek a vázat alkotják.
+- **Orvosi képfeldolgozás**: Az orvosi képek elemzésében, például csőszerű struktúrák (erek, légutak) középvonalának meghatározásában használják.
+
+A távolság-transzformáció tehát egy hatékony eszköz a bináris képek elemzésére és az objektumok általános formájának leírására, különösen a vázkijelölés során.
+
+![](assets/2024-05-26-19-05-44-image.png)
+
+![](assets/2024-05-26-18-12-02-image.png)
+
+### <u>Voronoi-váz</u>
+
+A Voronoi-diagram egy hatékony módszer a vázkijelöléshez, amelyet a térbeli struktúrák elemzésére és reprezentálására használnak. A Voronoi-diagramot gyakran alkalmazzák a geometriai objektumok határpontjainak elemzésére, hogy meghatározzák az objektum belső szerkezetét, azaz a vázat.
+
+### Voronoi-diagram alapjai:
+
+1. **Definíció**: 
+   
+   - A Voronoi-diagram az m-dimenziós euklideszi tér egy felosztása n generálópont (vagy seed point) körül. Az egyes régiók, vagy cellák, azokból a pontokból állnak, amelyek közelebb vannak az adott generálópontjukhoz, mint bármely más generálópont.
+
+2. **Tulajdonságok**:
+   
+   - A Voronoi-diagram egyértelmű és a sík minden pontját lefedi.
+   - Minden Voronoi-cellának zárt, konvex alakja van.
+   - A Voronoi-cellák csak közös éleiken érintkeznek.
+
+### Voronoi-diagram használata a vázkijelölésben:
+
+1. **Generálópontok kiválasztása**:
+   
+   - Az objektum határán egyenletesen mintavételezett pontok szolgálnak generálópontokként a Voronoi-diagram létrehozásához.
+
+2. **Voronoi-diagram generálása**:
+   
+   - A generálópontok köré Voronoi-cellákat hoznak létre, amelyek lefedik az egész teret.
+
+3. **Vázkijelölés**:
+   
+   - Ha a határpontok sűrűsége megfelelő, a Voronoi-diagram belső (a határt nem metsző) éleinek egyesítése a vázhoz konvergál. Ez azt jelenti, hogy az objektum belsejében található Voronoi-élek alkotják a vázat.
+
+### Algoritmusok:
+
+1. **Pont-beszúró módszer**:
+   
+   - Adott egy Voronoi-diagram k generálóponttal. A (k+1)-edik pont beszúrásakor megkeressük azt a cellát, amelybe a pont esik, majd újrarajzoljuk azt és a szomszédos cellákat. Ennek időigénye O(n).
+
+2. **Oszd meg és uralkodj módszer**:
+   
+   - Két Voronoi-diagram összefűzése lineáris időben történik, az időigény O(n·logn). Az eljárás a generálópontok x-koordináta szerinti rendezésével kezdődik.
+
+3. **Pásztázó egyeneses módszer**:
+   
+   - A generálópontok befoglaló téglalapját felülről lefelé pásztázzuk egy egyenessel, amely parabolaívekből álló partvonalat hoz létre. Az eljárás időigénye O(n·logn).
+
+### Példák:
+
+- **2D Voronoi-diagram**:
+  
+  - A generálópontok a síkban helyezkednek el, és a Voronoi-cellák határozzák meg az objektum vázát.
+
+- **3D Voronoi-diagram**:
+  
+  - A generálópontok térben helyezkednek el, és a Voronoi-cellák térbeli szerkezeteket alkotnak, amelyeket a vázkijelölés során használnak.
+
+### Alkalmazások:
+
+- **Orvosi képfeldolgozás**:
+  - A Voronoi-diagramokat gyakran használják az orvosi képeken látható csőszerű struktúrák (erek, légutak) vázkijelölésére. Ezek az eljárások segítenek az anatómiai szerkezetek pontosabb elemzésében és modellezésében.
+
+### Voronoi-diagram és a vázkijelölés kritériumai:
+
+- A Voronoi-diagram alapú vázkijelölés megfelel a következő kritériumoknak:
+  - **Pont vékony**: A váz egy pont vékony.
+  - **Objektum közepén helyezkedik el**: A váz az objektum közepén található.
+  - **Geometriai transzformációk invarianciája**: A váz invariáns a legfontosabb geometriai transzformációkkal szemben.
+  - **Topológia megőrzése**: A váz megőrzi a kiindulási objektum topológiáját.
+
+### Tulajdonságok
+
+- „Hibrid”: az input (a mintavételezett határpontok halmaza) diszkrét, az output folytonos elemekből áll.
+
+- A közelítés pontossága és a vázban szereplő elemek száma erősen függ a
+  mintavételezéstől.
+
+- A nagyszámú lényegtelen részlet eltávolítására váztisztítás/regularizáció
+  szükséges.
+  
+  - A vázat alkotó szegmensek (Voronoi élek) többféle fontossági mérték szerint osztályozhatók és eltávolíthatók a lényegtelennek ítéltek.
+
+A Voronoi-diagram tehát egy hatékony és sokoldalú módszer a vázkijelölésre, különösen akkor, ha az objektum határpontjai sűrűn és egyenletesen mintavételezettek.
+
+![](assets/2024-05-26-18-21-44-image.png)
+
+![](assets/2024-05-26-18-22-22-image.png)
+
+### Vékonyítás
+
+A vékonyítás (thinning) egy iteratív képfeldolgozási technika, amely a bináris képeket redukálja egy vékonyabb, egyszerűsített vázszerű struktúrává, miközben megőrzi az eredeti objektum topológiai és geometriai jellemzőit. A vékonyítás célja az objektumok csontvázának (vázának) meghatározása.
+
+### Vékonyítás alapjai:
+
+1. **Definíció**:
+   
+   - A vékonyítás egy olyan folyamat, amely során a bináris képeken lévő objektumokat iteratív módon redukálják egy vékony vonalra vagy pontra, ami reprezentálja az objektum középtengelyét.
+
+2. **Célok**:
+   
+   - Megőrizni az objektum topológiai szerkezetét.
+   - Megőrizni az objektum geometriai formáját.
+   - Elérni egy pont vékony struktúrát.
+
+### Vékonyítási eljárások:
+
+1. **Iteratív redukció**:
+   
+   - Az iteratív redukció során a képpontokat lépésről lépésre eltávolítják a képből, miközben biztosítják, hogy a folyamat megőrizze az objektum topológiai tulajdonságait.
+
+2. **Irányszekvenciális algoritmus**:
+   
+   - Az algoritmus nyolc különböző irányból (S, SE, E, SW, N, NW, W, NE) vizsgálja a képpontokat és törli azokat, amelyek megfelelnek bizonyos törlési maszkoknak.
+     
+     ![](assets/2024-05-26-19-02-34-image.png)
+     
+     A többi irányhoz tartozó maszkok megkaphatók az előzőekből elforgatással.
+
+3. **Saito és Toriwaki algoritmusa**:
+   
+   - Az algoritmus euklidészi távolságtérkép számításával kezdődik, majd iteratívan törli a minimális távolságértékű határpontokat a hat főirányból.
+
+4. **Gong és Bertrand algoritmusa**:
+   
+   - Ez az algoritmus 6 irányból vékonyít, és a középfelszín kivonására szolgál.
+
+### Kritériumok a vékonyítási eljárásokhoz:
+
+1. **Pont vékony**:
+   
+   - A váz egy pont vékony, vagyis az objektum középtengelye egy pixel szélességű.
+
+2. **Középen elhelyezkedő**:
+   
+   - A váz az objektum közepén helyezkedik el, reprezentálva az objektum szimmetriáját. - nem biztos
+
+3. **Invariáns a geometriai transzformációkra**:
+   
+   - A váz legyen invariáns az eltolásra, forgatásra és uniform skálázásra. - nem biztos
+
+4. **Topológia megőrzése**:
+   
+   - A váz megőrzi az eredeti objektum topológiai szerkezetét, beleértve az összefüggőséget és az esetleges lyukakat.
+
+### Példák a vékonyításra:
+
+- **2D vékonyítás**:
+  
+  - A kiindulási bináris képet iteratív lépésekben redukálják egy középvonallá. Minden iteráció során az algoritmus a képpontokat vizsgálja és törli azokat, amelyek megfelelnek a törlési kritériumoknak.
+
+- **3D vékonyítás**:
+  
+  - A 3D képeken a vékonyítás célja a középfelszín meghatározása. Ez magában foglalja a térbeli objektumok redukálását egy olyan felszínre, amely az objektum belsejét reprezentálja.
+
+### Vékonyítás alkalmazásai:
+
+1. **Karakter- és szimbólumfelismerés**:
+   
+   - Egzotikus karakterek és szimbólumok felismerésére használják, mint például a japán aláírások.
+
+2. **Aláírás- és kézírásfelismerés**:
+   
+   - Az aláírások és kézírások azonosítására, ahol a vékonyított kép alapján végpontok és elágazási pontok detektálhatók.
+
+3. **Ujj- és tenyérlenyomat azonosítás**:
+   
+   - A vékonyított képek segítenek az ujjlenyomatok és tenyérlenyomatok jellemzőinek azonosításában.
+
+4. **Raszter-vektor konverzió**:
+   
+   - A vonalrajzok és térképek digitalizálására és vektoros formátumba való átalakítására használják, ahol a vékonyított kép alapját képezi a vektorizálásnak.
+
+5. **Orvosi képfeldolgozás**:
+   
+   - A 3D orvosi képeken a csőszerű struktúrák (például vérerek és légutak) középvonalának meghatározására használják.
+
+### Összefoglalás:
+
+A vékonyítás hatékony módszer a vázkijelölésre, amely az objektumok egyszerűsített, mégis informatív reprezentációját nyújtja. Az iteratív eljárások és speciális algoritmusok biztosítják, hogy a vázak megőrizzék az eredeti objektumok topológiai és geometriai tulajdonságait, miközben minimalizálják a struktúrák bonyolultságát.
+
+![](assets/2024-05-26-19-00-52-image.png)
+
+# On-line algorimtusok
+
+# 8. A versenyképességi elemzés alapfogalmai. Az on-line lapozás (paging) és ládapakolás (bin packing) problémák.
+
+### Alapfogalmak
+
+1. **Online algoritmusok**: Az online algoritmusok olyan algoritmusok, amelyek bemenete darabokban érkezik (ez a daraboltság problémától függően változik), és minden egyes bemeneti darab után visszavonhatatlan döntést kell hozniuk, mielőtt a következő bemeneti darabot megkapnák. Minden döntéssorozathoz társul egy nem negatív értékkel rendelkező költség, amelyet az algoritmus minimalizálni próbál.
+
+2. **Versenyképesség**: Mivel egy ilyen algoritmus nem tud mindig optimális döntéssorozatot előállítani, a versenyképesség egy olyan mérték, amely megmutatja, hogy az online algoritmus által generált sorozat költsége legfeljebb hány szorosa az optimális megoldás költségének.
+
+3. **Formális definíció**:
+   
+   - **Bemenet**: A probléma bemenete általában egy $\sigma = (\sigma_1, \ldots, \sigma_n)$ kéréssorozat.
+   - **Megoldások halmaza**: Minden egyes $\sigma$ esetén van egy $S(\sigma)$ megoldáshalmaz, ahol minden megoldásnak van egy nem negatív valós költsége $C(\tau)$, ahol $\tau \in S(\sigma)$.
+   - **Offline optimális költség**: Az offline optimális költség $\text{Opt}(\sigma)$ az $\sigma$ bemenet minimális költségű megoldása: $\text{Opt}(\sigma) = \min \{ C(\tau) : \tau \in S(\sigma) \}$.
+
+4. **Deterministic online algoritmus**: Egy determinisztikus online algoritmus $A$ nem látja a jövőt, és minden egyes bemeneti darab után ($\sigma_1, \ldots, \sigma_{i+1}$) egy új lépést ($\tau_{i+1}$) kell számítania úgy, hogy az $\tau_{i+1} = A(\sigma_1, \ldots, \sigma_{i+1})$ legyen, ahol $A(\sigma)$ az $A$ algoritmus által generált akciósorozat a $\sigma$ bemenetre. Minden $\sigma$ esetén $A(\sigma) \in S(\sigma)$ kell, hogy legyen (azaz az $A$ mindig érvényes megoldást kell, hogy generáljon).
+
+5. **Versenyképességi arány**: Az algoritmus $A$ c-versenyképes, ha minden lehetséges bemeneti sorozatra $\sigma$ teljesül, hogy $\frac{C(A(\sigma))}{\text{Opt}(\sigma)} \leq c$.
+
+### Lapozás (paging)
+
+A lapozás vagy paging problémában két pozitív egész szám paraméterünk van, n és k.
+Feltehetjük, hogy 1 < k < n. A k paraméter a cache mérete, az n pedig a lemez mérete (azt jelenti hogy n féle input lehet).
+
+Az inputban mindig valamelyik oldalát (page-ét) kérjük a lemeznek. Ha az adott oldal benne van a cache-ben, akkor nincs mit tennünk, ekkor a válasz 0. Ha nincs a cache-ben, de még nincs tele a cache, akkor egységnyi költségért berakhatjuk a cache-be az adott oldalt, ez szintén a 0 válasz. Ha a cache tele van, és egy olyan oldalt kérünk, ami nincs a cache-ben, akkor egységnyi költségért valamely oldalt ki kell dobnunk a cache-ből, és a helyére betölteni a kívánt oldalt. Ha a p oldalt dobjuk ki a cache-ből, akkor az algoritmus válasza p lesz.
+
+**Algoritmusok (online):**
+
+- ***LFU*** (least frequently used): a legkevesebbet használt page-et dobjuk ki
+
+- ***FIFO*** (first in first out): a legrégebben bekerült page-et dobjuk ki,
+
+- ***LRU*** (least recently used): a legrégebben használt oldalt dobjuk ki,
+
+- ***LIFO*** (last in first out): a legutoljára betöltött/használt oldalt dobjuk ki.
+
+**Offline algoritmus:**
+
+- ***LFD*** (longest forward distance): azt dobjuk ki, amit a jövőben a legkésőbb fogunk újra lekérni. Ez optimális megoldást ad.
+
+Sem az *LFU* sem a *LIFO* nem versenyképesek. A legjobb online algoritmusok erre a
+problémára k-versenyképesnél nem lehetnek jobbak.
+
+Az *LRU* és a *FIFO* + a "marking" algoritmusok k-versenyképesek.
+
+**Marking algoritmus:**
+
+- Először csak simán feltöltjük a cache-t
+
+- minden cache-ben lévő oldal lehet jelölt vagy nem jelölt, a cache feltöltés után megjelölünk minden elemet
+
+- ha jön p-re egy request, akkor
+  
+  - ha p benne van a cache-ben, akkor megjelöljük, és továbbmegyünk
+  
+  - ha nincs, akkor ha minden elem be van jelölve, letöröljük az összes
+    jelölést, és mivel van legalább egy nem jelölt oldal, valamelyiket
+    kiválasztjuk valamilyen algoritmus alapján, kidobjuk, betöltjük p-t, és
+    megjelöljük.
+
+![](assets/2024-05-26-23-16-51-image.png)
+
+**Ládapakolás (bin-packing)**
+
+A ládapakolási algoritmus inputja az a1, … , an sorozat, ahol 0 < ai < 1. Ezeket a számokat az érkező itemek méretének tekintjük, és a célunk ezeket az itemeket egységnyi méretű ládákba pakolni úgy, hogy minél kevesebb ládát használunk.
+
+Ennél a problémánál az aszimptotikus versenyképességi hányadost vizsgáljuk, vagyis az
+érdekel minket, hogy ha az optimum költsége a végtelenbe tart, akkor mennyi lesz a
+versenyképességi hányados.
+
+- Abszolút versenyképesség
+  
+  - Az abszolút versenyképesség egy általános, konkrétabb formája a versenyképességnek. Egy algoritmus abszolút versenyképes, ha létezik egy olyan állandó $c$, amelyre minden lehetséges bemeneti sorozatra igaz, hogy az online algoritmus költsége legfeljebb $c$-szerese az optimális offline algoritmus költségének.
+    
+    Formálisan, egy online algoritmus $A$ abszolút $c$-versenyképes, ha minden lehetséges $\sigma$ bemenetre:
+    $ \frac{C(A(\sigma))}{\text{Opt}(\sigma)} \leq c $
+    ahol $C(A(\sigma))$ az $A$ algoritmus által elért költség $\sigma$ bemenetre, és $\text{Opt}(\sigma)$ az optimális offline algoritmus költsége ugyanarra a bemenetre.
+
+- Aszimptotikus versenyképesség
+  
+  - Az aszimptotikus versenyképesség egy lazább és hosszú távú megközelítés a versenyképesség mérésére. Egy algoritmus aszimptotikusan $c$-versenyképes, ha létezik egy $c$ és egy konstans $b$, amelyre minden lehetséges $\sigma$ bemenetre igaz, hogy az online algoritmus költsége legfeljebb $c$-szerese az optimális költségnek, egy konstans $b$ hozzáadásával.
+    
+    Formálisan, egy online algoritmus $A$ aszimptotikusan $c$-versenyképes, ha létezik egy $c$ és egy $b$, hogy minden lehetséges $\sigma$ bemenetre:
+    $ C(A(\sigma)) \leq c \cdot \text{Opt}(\sigma) + b $
+    
+    Ez azt jelenti, hogy az algoritmus teljesítménye a nagy bemeneti méretekre nézve legfeljebb $c$-szerese az optimális algoritmus teljesítményének, némi konstans eltéréssel, ami a kisebb bemeneteknél jelentős lehet, de a nagy bemeneteknél már kevésbé.
+
+Nincs olyan online algoritmus, aminek az aszimptotikus versenyképességi hányadosa jobb lenne, mint 4/3 a ládapakolási problémára.
+
+<u>Algoritmusok:</u>
+
+- **NF** (next fit): egy láda van nyitva, addig pakolunk bele, amíg az érkező itemek
+  beleférnek, ha nem fér bele ami jön, akkor lezárjuk, és új ládát nyitunk, ez 2-versenyképes,
+
+- **HARMONIC(k)**: k láda van nyitva, mindegyiknek megvan, hogy mekkora
+  méretű itemeket pakolunk bele, mindegyik kategóriából csak egy van nyitva, ha
+  betelik, nyitunk egy új olyan kategóriájú ládát, ez max 1.69103 versenyképes,
+
+- **BF** (best fit): sosem csukunk be egy ládát, abba a ládába rakjuk az érkező itemet, amelyikben a legkisebb maradék helyet hagyja, ez 1.7-versenyképes,
+
+- **FF** (first fit): az érkező itemet az első olyan ládába rakjuk, amelyikbe belefér.
+
+A ládapakolásnak van 2d-s változata, a strip packing.
+
+# 9. On-line ütemezés (scheduling) és k-szerver problémák
