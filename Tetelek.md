@@ -2914,3 +2914,166 @@ Nincs olyan online algoritmus, aminek az aszimptotikus versenyképességi hánya
 A ládapakolásnak van 2d-s változata, a strip packing.
 
 # 9. On-line ütemezés (scheduling) és k-szerver problémák
+
+### **On-line ütemezés**
+
+Az online ütemezés problémánál van $m$ gépünk, és ezekre kell ütemeznünk jobokat. Minden jobnak van egy processing time-ja, a $\sigma$-ban (szigmában) ezeket kapjuk meg. A válaszunk egy inputra a gép sorszáma, amelyre a munkát ütemezzük. A célunk az ún. makespan minimalizálása, vagyis, hogy az összes munkát a lehető leghamarabb befejezzük.
+
+A $0 \le p_i$ a job költsége
+
+A makespant $L^*$-al jelöljük.
+
+Optimum alsó korlátai:
+
+- $ \frac{\sum p_i}{m} \le L^*$
+
+- $\max p_i \le L^*$
+
+LISTA algoritmus az érkező munkát a legkisebb töltésű gépre ütemezi (egyenlőség
+esetén a legkisebb indexűre). A LISTA algoritmus pontosan $(2 - \frac{1}{m})$-versenyképes.
+
+![](assets/2024-05-28-13-33-51-image.png)
+
+#### On-line ütemezés független gépek esetén
+
+Mindegyik gépen különböző sebességgel végződik el a job (tehát egy job-hoz $m$ db költség tartozik)
+
+Optimum alsó korlátai:
+
+- $L^*$ biztos nagyobb vagy egyenlő mint az összes jobhoz tartozó költségek közül a legkisebb
+
+- $ \frac{\sum_i \min_j p_i,j}{m}  \le L^*$ , tehát a költségek minimumának összege per a gépek számánál biztos nagyobb egyenlő az $L^*$
+
+Itt a LISTA algoritmus: arra a gépre tesszük a $\sigma_i$-t, amelynél $load(j)+p_i,j$ minimális. Független gépeknél pontosan $m$-kompetitív
+
+![](assets/2024-05-28-14-55-37-image.png)
+
+#### On-line ütemezés összefüggő gépekre
+
+Minden géphez tartozik egy $v$ sebesség is, ami miatt $load(j)= \frac{\sum_{\tau_i=j}p_i}{v_j}$ , tehát a gépen lévő loadot még a géphez tartozó $v$ sebességgel is el kell osztani.
+
+Itt a LISTA algoritmus: arra a gépre ütemezzük a jobot amin így a legkisebb lesz a $load$ (több ilyen esetén a legkisebb indexűt azok közül), versenyképessége $\Theta(\log m)$ (theta)
+
+($c_1 \log m \leq f(m) \leq c_2 \log m$, pontosabb mint $\Omicron$)
+
+Optimum alsó korlátai:
+
+- $\frac{\sum p_i}{\sum v_j} \le L^*$
+
+- $\frac{\max p_i}{\max v_j} \le L_*$
+
+![](assets/2024-05-28-16-22-38-image.png)
+
+#### On-line ütemezés idő modell
+
+A munkáknak feldolgozási idejük és érkezési idejük van. Egy munkát nem kezdhetünk el az érkezési ideje előtt. Nincs olyan online det. alg. aminek az idő modellre 4/3-nál jobb versenyképességi hányadosa lenne (1.3473-ra is meg lehet mutatni).
+
+Optimum alsó korlátai:
+
+- $\max(p_i+t_i) \le L^*$
+
+- $\frac{\sum p_i}{m} \le L^*$
+
+Az INTV algoritmus:
+
+- gyűjtögető fázis: várunk addig, amíg minden gép leüresedik, közben gyűjtjük a munkákat, amik érkeznek,
+
+- szétosztó fázis: az aktuális időpillanatban elérhető összes munkát optimálisan
+  ütemezzük a gépekre.
+
+- $2$ versenyképes
+
+- ez már 3 gépre is NP nehéz
+
+![](assets/2024-05-28-16-43-44-image.png)
+
+Online LPT:
+
+- addig vár amíg lesz szabad gép és arra a leghosszabb jobot ütemezi be
+
+- $3/2$ versenyképes
+
+INTV+A algoritmus:
+
+- INTV-t számolunk, de az offline algoritmust (az összevárt elemek elosztását) az A algoritmus számítja
+
+- Tétel: ha az A algoritmus $\alpha$ approximál, akkor INTV+A algoritmus egy $2\alpha$-versenyképes online algoritmus
+  
+  - sima INTV algoritmusnál $\alpha=1$ (mivel optimális), ezért lesz 2 versenyképes
+  
+  - Sidenote:
+    
+    - Egy 2-approximációs algoritmus garantálja, hogy az általa talált 
+      megoldás költsége legfeljebb kétszerese az optimális megoldás 
+      költségének. (offline problémákra használják)
+    
+    - Egy 3-versenyképes algoritmus garantálja, hogy az általa talált megoldás
+       költsége legfeljebb háromszorosa az optimális offline megoldás 
+      költségének.
+
+INTV+LPT (longest processing time) algoritmus:
+
+- INTV, de amikor gépekre osztjuk a munkákat akkor azokat először $p_i$ szerint csökkenő sorrendbe rendezzük, ezeket LIST algoritmussal optimalizáljuk
+  
+  - LIST algoritmus 2 versenyképes
+
+- Állítás: LPT alg $4/3$ approximál => INTV+LPT 8/3 versenyképes
+
+### K-szerver probléma
+
+Van $M$ metrikus terünk
+
+- pontok egy $M$ halmaza + egy $d(x,y)$ $M^2 \rarr \R_0^+$ (nem negatív, valós) távolságfüggvény
+
+- távolságfüggvény:
+  
+  - $d(x,x)=0$, önmagától 0 távolságra van mindenki
+  
+  - $d(x,y) > 0$, ha $x \ne y$
+  
+  - $d(x,y)$ = $d(y,x)$
+  
+  - $d(x,y) + d(y,z) \ge d(x,z)$ 
+
+Szerverkonfiguráció: $C \sube M$, multihalmaz (lehet egy ponton több szerver), $C$ elemszáma $k$
+
+-  Pl: $k=3$, $M = \R$ (valós számegyenes)
+  
+  - Példa konfigurációk: {0,0,2}, {1,2,4}
+
+Kezdeti konfiguráció: $C_0$
+
+Cél hogy megjelenik egy request, rámozgassuk az egyik szervert
+
+$d(C,C')$ : minimális $C$-$C'$ közti $d$-vel súlyozott párosítás súlya
+
+- Pl: $M=R$, $k=3$
+  
+  - {0,0,2} -> {1,3,5}
+    ![](assets/2024-05-29-00-12-26-image.png)
+
+![](assets/2024-05-29-00-14-14-image.png)
+
+Cél: a legolcsóbban a megfelelő konfigurációba vinni a szervereket (úgy hogy kiszolgáljon mindent amit kell)
+
+![](assets/2024-05-29-00-17-42-image.png)
+
+A legközelebbi szerver mozgatása nem versenyképes.
+
+Gyenge versenyképesség: az $A$ algoritmus gyengén c-komptetitív, ha minden $C_0$-hoz $\exist \beta $ konstans, melyre $\forall \sigma$-ra: $c(A(\sigma) \le c*opt(\sigma)+\beta$.
+
+- abszolút versenyképesség gyenge is, $\beta=0$
+
+- ha gyenge => ha $opt(\sigma) \rarr \inf$ akkor $\frac{c(A(\sigma)}{opt(\sigma)} \le \frac{c*opt(\sigma)+\beta}{opt(\sigma)} \rarr c$
+
+- aszimptotikus versenyképességgel szemben $\beta$ csak konstans lehet
+
+Egy algoritmus "lusta" ha minden lépésben legfeljebb egy szervert mozgat.
+
+Állítás: minden algoritmus lustává tehető.
+
+A lapozás (paging) majdnem ugyanaz mint a k-szerver probléma uniform téren (maximum távolság egy, minimum távolság 0 ha ugyabba megy).
+
+- ebből következik, hogy az uniform térre nincs k kompetitívnél jobb online algoritmus (ha $|M| \ge k+1$) 
+
+Tétel: ha $|M| \ge k+1$, akkor nincs olyan determinisztikus online algoritmus, mely jobb lenne mint gyengén k-versenyképes
