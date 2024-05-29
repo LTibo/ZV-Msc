@@ -3171,3 +3171,176 @@ Az algoritmus lusta algoritmusként működik:
   - Tehát választjuk az 5-öt, és a konfiguráció $ \{0, 2\} $ lesz.
 
 A work function algoritmus $(2k − 1)$-versenyképes bármilyen metrikus térre, és sok esetben $k$-versenyképes.
+
+# Gépi tanulási módszere
+
+# 10. Gépi tanuláshoz kapcsolódó alapfogalmak: jellemzőkinyerés, a dimenzionalitás átka, no free lunch tétel, Occam borotvája, általánosítás és túltanulás, a tanulás hibájának mérése.
+
+### Jellemzőkinyerés
+
+- Az optimális jellemzőkészlet nyilván feladatfüggő
+
+- Ideális esetben a feladatot ismerő szakember mondja meg
+
+- De a gyakorlatban mégis sokszor az informatikusra marad
+
+- Jó jellemzőkészlet: minél relevánsabb és minél kevesebb jellemző
+
+- A nem releváns jellemzők bevétele nehezíti a tanulást
+
+### Dimenzionalitás átka
+
+- a sok jellemző megnehezíti a tanulást
+  
+  - Jellemzők száma = jellemzőtér dimenziószáma
+  
+  - Magasabb dimenziószámú térben nehezebb tanulni
+  
+  - Ritkábbak az adatpontok (a magasabb dimenzió miatt)
+  
+  - Több jellemző => sokkal több tanítópélda kell
+    
+    - a modell paraméterszámát és a tanítás idejét is fölöslegesen növelik
+  
+  - A felesleges jellemzők zajok, félrevezethetik a tanító algoritmust
+
+- Általában kézileg próbáljuk a legjobb jellemzőket kiválasztani (“manual”, “hand-crafted” stb.)
+
+- A jellemzőtér transzformálással is redukálható
+  
+  - Az új jellemzők a régi jellemzők valamilyen kombinálásával állnak elő
+  
+  - Általában egyúttal a dimenziószámot is redukáljuk (az új tér dimenziószáma kisebb, mint a régié)
+
+### "No free lunch" tétel
+
+- Nincs olyan univerzális tanulóalgoritmus, ami minden feladaton jobb, mint a többi
+  
+  - Az optimális tanulóalgoritmus mindig a feladattól függ
+  
+  - Minden tanulóalgoritmushoz lehet olyan feladatot találni, amin jól működik, és olyat is, amin rosszul
+
+- Egy másik megfogalmazás: az „összes lehetséges feladatra” nézve  az összes tanulóalgoritmus átlagos teljesítménye ugyanakkora
+  
+  - Nem az „összes lehetséges feladatra” kell megoldást keresnünk, csak egy típusra
+  
+  - Gépi tanulási adatbázisok: gépi tanulási algoritmusok széles körű, objektív összehasonlítására szolgálnak („benchmark”)
+    
+    - Pl: UCI Machine Learning Repository
+
+### "Occam borotvája"
+
+- Tapasztalat: általában az egyszerűbb modell általánosít jobban
+  
+  - De persze a túl egyszerű modell sem jó
+
+- Az optimális komplexitású modell feladatonként eltérő
+  
+  ![](assets/2024-05-29-13-46-45-image.png)
+
+### Általánosítás és túltanulás
+
+- No Free Lunch tétel: sosem lehetünk biztosak benne, hogy a tanult modell jól általánosít a tanulás során nem látott esetekre
+
+- Tapasztalat: a modell méretének komplexitásának növelésével a modell rugalmassága nő, egyre pontosabb lesz a tanítópéldákon
+  
+  - Viszont a tesztpéldákon egy ponton túl romlani fog a teljesítménye
+  
+  - Ezt hívják túltanulásnak (overfitting): a modell az általános tulajdonságok után már az aktuális véges mintahalmaz egyedi furcsaságait kezdi megtanulni
+    
+    - lásd fentebbi ábra
+
+### A tanulás hibájának mérése
+
+- A tanítópéldák alapján a tanítóalgoritmus készít egy modellt, azaz egy hipotézist a $(x_1,...,x_n) \rarr c$ függvényre
+  
+  - Ez a tér tetszőleges $(x_1,...,x_n)$ pontjára meg tudja tippelni, hogy az melyik osztályba esik (kiértékelés)
+
+- Fő célunk nem a tanítópéldák címkéjének hibátlan megtanulása, hanem a tanítás során nem látott példákra való általánosítás
+
+- Hogyan tudunk becslést adni az általánosító képességre?
+  
+  - A példáink egy részét nem használjuk fel a tanítás során => külön teszthalmaz kell
+  
+  - Ezeken hogyan teljesít a modellünk? (címkézett példák!)
+
+- Kiértékelés:
+  
+  - A modell lefuttatása a teszthalmazon => tippelt címkék
+  
+  - A tippelt (jósolt) és a valódi címkék összehasonlítása
+  
+  - Az eltérés számszerűsítése („mérése”)
+  
+  - Nagyon sok metrika van, területenként eltérő lehet, hogy melyiket használják (pontosság, precision-recall-F1, AUC, UAR, MSE, RMSE, korreláció, Cllr, WER/CER)
+
+- Regressziós modell kiértékelésénél: Mean squared error
+  
+  - **Hiba (Error) kiszámítása**: Az egyes megfigyelésekre a hiba az eltérés a valódi érték ( $ y_i $ ) és a modell által becsült érték ( $ \hat{y}_i $ ) között. Az egyes hibák kiszámítása: $ e_i = y_i - \hat{y}_i $.
+  
+  - **Hibák négyzetre emelése**: Az egyes hibák négyzetre emelése annak érdekében, hogy a pozitív és negatív hibák ne egyenlítsék ki egymást. $ e_i^2 = (y_i - \hat{y}_i)^2 $.
+  
+  - **Négyzetes hibák átlagolása**: Az összes négyzetes hiba átlagának kiszámítása, amely az MSE értékét adja. Az MSE képlete:
+    $
+       MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+       $, ahol $ n $ az összes megfigyelés száma.
+  
+  - Root-mean-squared error: MSE gyök alatt
+
+- Osztályozás esetén a legegyszerűbb: hibaarány
+  
+  - Eltévesztett tesztpéldák száma / összes tesztpélda száma
+  
+  - Vagy: eltalált tesztpéldák száma / összes tesztpélda száma (accuracy)
+
+- Részletesebb analízis: tévesztési mátrix
+  
+  - Segít megérteni, hogy mely osztályokat keveri a gép
+  
+  - A különböző hibákat különböző súllyal számíthatjuk a hibafüggvénybe
+  
+  - Ehhez egy költségmátrixban kell megadni az egyes cellák súlyát
+  
+  - „0-1 loss”: a főátló elemeit 0-val, a többi cellát 1-gyel súlyozzuk
+  
+  - Megegyezik az osztályozási hibaaránnyal
+    ![](assets/2024-05-29-14-45-08-image.png)
+
+- Információ-visszakeresési (information retrieval) feladatok
+  
+  - Releváns elemek megtalálása (pl. Google keresés)
+  
+  - Pozitív és negatív osztályok (kell vs. nem kell)
+  
+  - Analóg feladatok is lehetnek, pl. beteg / nem beteg
+
+- Speciális metrikák
+  
+  - 2x2-es tévesztési mátrix
+  
+  - Négy kategória: True/False Positive/Negative
+  
+  - Precision, Recall: TP és az összes ??? aránya
+  
+  - F-measure: a kettő harmonikus közepe
+  
+  - Specificity: TN / (TN + FP), sensitivity: TP / (TP + FN)
+    ![](assets/2024-05-29-14-47-13-image.png)
+
+- Osztályozásnál: keresztentrópia
+  
+  A keresztentrópia (cross-entropy) hibafüggvény egy széles körben használt veszteségfüggvény a gépi tanulásban, különösen osztályozási problémák esetén, beleértve a bináris és többosztályos osztályozást is. A keresztentrópia mérőszámot ad arra, hogy mennyire jól teljesít a predikciós modell a valós osztályok előrejelzésében.
+  
+  **Bináris keresztentrópia** 
+  
+  Bináris osztályozási problémák esetén, ahol csak két lehetséges kimenetel (0 vagy 1) van, a keresztentrópia veszteségfüggvényt így írhatjuk fel:
+  
+  $
+  H(y, \hat{y}) = - \frac{1}{n} \sum_{i=1}^{n} [y_i \log \hat{y}_i + (1 - y_i) \log (1 - \hat{y}_i)]
+  $
+  
+  Itt:
+  
+  - $ y_i $ az $ i $-edik valódi címke (0 vagy 1),
+  - $ \hat{y}_i $ az $ i $-edik predikált valószínűség az 1-es osztályra,
+  - $ n $ a minták száma. 
