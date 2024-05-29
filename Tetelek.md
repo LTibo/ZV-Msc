@@ -3077,3 +3077,97 @@ A lapozás (paging) majdnem ugyanaz mint a k-szerver probléma uniform téren (m
 - ebből következik, hogy az uniform térre nincs k kompetitívnél jobb online algoritmus (ha $|M| \ge k+1$) 
 
 Tétel: ha $|M| \ge k+1$, akkor nincs olyan determinisztikus online algoritmus, mely jobb lenne mint gyengén k-versenyképes
+
+#### Double Coverage (DC) algoritmus
+
+$M = \R$, $d(x,y)=|x-y|$ (számegyenes)
+
+DC:
+
+- ha $C$ a konfig és $p \in \R$ a kérés 
+  
+  - ha $p \in C$, akkor done
+  
+  - ha $p < \min C$, akkor $\min C$-t mozgatjuk (bal legszélső)
+  
+  - ha $p > \max C$, akkor $\max C$-t mozgatjuk (jobb legszélső)
+  
+  - ha $x < p < y$,    $x,y \in C$,    $(x,y) \cap C = \empty$ (szorosan az $x$ és $y$ között van,  nincs más szerver abban az intervallumban)
+    
+    - legyen $x \rarr x+d$,   $y \rarr y-d$, ahol $d:= \min(|x-p|,|y-p|)$ 
+  
+  - nem lazy algoritmus! (de lazyvé lehet tenni)
+    
+    - ha mindig csak azt mozgatnánk oda ami a nem lazy változatában odaérne
+
+- DC egyenesen gyengén $k$ versenyképes
+
+#### Work Function Algorithm (WFA)
+
+- **Definíció**:
+  Az algoritmus célja, hogy gyenge k-versenyképes legyen bármely metrikus térben. Az algoritmus minden bemeneti szekvencia minden prefixére kiszámítja az offline optimális költséget. Legyen $ w_t(C) $ az offline optimális költség, amellyel az első $ t $ kérést kiszolgáljuk és a konfiguráció $ C $-ben végzünk.
+
+- **Költségszámítás**:
+  A $ w_t(C) $ költséget indukcióval számítjuk ki $ t $-re:
+  
+  - $ w_0(C_0) = 0 $ és minden $ C \neq C_0 $ esetén $ w_0(C) = \infty $.
+  - Ha a $ t $-dik kérés $ p $, és $ p \notin C $, akkor $ w_t(C) = \infty $.
+  - Ellenkező esetben: 
+    $
+    w_t(C) = \min_{C'} \{ w_{t-1}(C') + d(C', C) \}
+    $
+    ahol $ d(C', C) $ a $ C' $ és $ C $ konfigurációk közötti távolság.
+
+### Példa
+
+A metrikus tér pontjai 0, 2 és 5, és a távolság függvénye $ d(x, y) = |x - y| $. Az induló szerver konfiguráció $ \{0, 5\} $, a kérési szekvencia pedig 2, 0, 2.
+
+#### Táblázat az optimális költségekről
+
+A táblázat az $ w_t(C) $ költségeket mutatja $ t = 0, 1, 2, 3 $ esetén a különböző konfigurációkhoz:
+
+$
+\begin{array}{c|c|c|c}
+ & \{0, 2\} & \{0, 5\} & \{2, 5\} \\
+\hline
+0 & \infty & 0 & \infty \\
+1 & 2 & \infty & 2 \\
+2 & 2 & 3 & 4 \\
+3 & 4 & 6 & 6 \\
+\end{array}
+$
+
+- **Számítások**:
+  Például $ w_2(\{0, 5\}) $ kiszámítása: az előző sorban $ \{0, 2\} $ költsége 3, a $ \{0, 2\} $-ből $ \{0, 5\} $-be történő áthelyezés költsége 3, összesen 6. A $ \{2, 5\} $-ből $ \{0, 5\} $-be történő áthelyezés költsége 2, összesen 4. Így a minimum $ w_2(\{0, 5\}) = 4 $.
+
+### Algoritmus működése
+
+Az algoritmus lusta algoritmusként működik:
+
+- Ha a $ t $-dik kérés $ p $ és $ p $ nincs a jelenlegi konfigurációban $ C $, akkor kiválasztja azt a szervert $ q $-t, amely a $ p $-t szolgálja ki, és minimalizálja a költséget:
+  $
+  w_t(C - \{q\} + \{p\}) + d(q, p)
+  $
+
+### Példa az algoritmus működésére a 2, 0, 2 kérési szekvencián
+
+- **Kezdeti konfiguráció**: $ \{0, 5\} $
+  
+  - Kérés: 2
+    - Ha 0-tól mozgunk 2-re: $ w_1(\{2, 5\}) + d(0, 2) = 2 + 2 = 4 $
+    - Ha 5-től mozgunk 2-re: $ w_1(\{0, 2\}) + d(5, 2) = 3 + 3 = 6 $
+    - Tehát választjuk a 0-t, és a konfiguráció $ \{2, 5\} $ lesz.
+
+- **Következő kérés: 0**
+  
+  - Ha 2-ről mozgunk 0-ra: $ w_2(\{0, 5\}) + d(2, 0) = 4 + 2 = 6 $
+  - Ha 5-ről mozgunk 0-ra: $ w_2(\{2, 0\}) + d(5, 0) = 3 + 5 = 8 $
+  - Tehát választjuk a 2-t, és a konfiguráció $ \{0, 5\} $ lesz.
+
+- **Következő kérés: 2**
+  
+  - Ha 0-ról mozgunk 2-re: $ w_3(\{2, 5\}) + d(0, 2) = 6 + 2 = 8 $
+  - Ha 5-ről mozgunk 2-re: $ w_3(\{0, 2\}) + d(5, 2) = 3 + 3 = 6 $
+  - Tehát választjuk az 5-öt, és a konfiguráció $ \{0, 2\} $ lesz.
+
+A work function algoritmus $(2k − 1)$-versenyképes bármilyen metrikus térre, és sok esetben $k$-versenyképes.
