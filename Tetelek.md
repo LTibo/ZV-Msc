@@ -3344,3 +3344,144 @@ A work function algoritmus $(2k − 1)$-versenyképes bármilyen metrikus térre
   - $ y_i $ az $ i $-edik valódi címke (0 vagy 1),
   - $ \hat{y}_i $ az $ i $-edik predikált valószínűség az 1-es osztályra,
   - $ n $ a minták száma. 
+
+# 11. Bayes-döntéselmélet és a kapcsolódó fogalmak, paraméterek maximum likelihood becslése Gauss-eloszlás és Gauss-keverékmodellek esetén.
+
+## Statisztikai alakfelismerés
+
+- Az osztályozási feladat legnépszerűbb megközelítése
+  
+  - Szilárd matematikai (statisztikai) háttérrel rendelkezik
+  
+  - De a gyakorlatban is használható megoldást kínál
+
+- Az osztályozási feladat szokásos megfogalmazásából indulunk ki
+  
+  - Osztályozandó objektumok => x jellemzővektor
+  
+  - Cél: az objektumok (jellemzővektorok) besorolása a $C = (c_1,..,c_M)$ osztályok egyikébe
+
+### Bayes-formula
+
+A Bayes-tétel (formula) az alábbi formában van megadva:
+
+$ P(c_i | x) = \frac{P(x | c_i) \cdot P(c_i)}{P(x)} $
+
+Itt a kifejezések jelentése a következő:
+
+- **$ P(c_i | x) $**: Ez a $ c_i $ osztály **a posteriori** valószínűsége, azaz annak a valószínűsége, hogy egy adott $ x $ jellemzővektorhoz tartozik $ c_i $ osztály. Ez a valószínűség a célunk, amit szeretnénk meghatározni az osztályozás során.
+
+- **$ P(x | c_i) $**: Ez a $ x $ jellemzővektor **feltételes valószínűsége**, feltételezve, hogy $ x $ a $ c_i $ osztályhoz tartozik. Ez az eloszlás adja meg, hogy egy adott osztály milyen valószínűséggel tartalmazza az $ x $ jellemzővektort.
+
+- **$ P(c_i) $**: Ez a $ c_i $ osztály **a priori** valószínűsége, ami azt jelenti, hogy egy adott $ c_i $ osztály előzetes valószínűsége, függetlenül az $ x $ jellemzővektortól. Ezt általában az osztályok előfordulási gyakorisága alapján becsülik meg a teljes adathalmazon belül.
+
+- **$ P(x) $**: Ez az $ x $ jellemzővektor valószínűsége, amely az összes osztályra vonatkozó valószínűségek súlyozott összege. A dián megjegyzés található, miszerint erre a kifejezésre nem lesz szükség az osztályozáshoz, ami arra utal, hogy az osztályozási döntés meghozatalakor elég a relatív valószínűségekkel dolgozni.
+
+### Bayes döntési szabály
+
+A cél a téves osztályozások számának (vagy arányának) minimalizálása hosszú távon. Ezt egy formális keretben tudjuk megtenni, a következőképpen:
+
+#### 0-1 hibafüggvény
+
+A 0-1 hibafüggvény ($ \lambda_i(c_k, x) $) formalizálja a téves osztályozás költségét:
+
+$ \lambda_i(c_k, x) = 
+\begin{cases} 
+0, & \text{ha } i = k \\
+1, & \text{ha } i \ne k 
+\end{cases}
+$
+
+Itt:
+
+- $ i $ a kiválasztott osztály.
+- $ k $ a helyes osztály.
+
+Ez azt jelenti, hogy a hibafüggvény értéke 0, ha az osztályozás helyes (i = k), és 1, ha az osztályozás téves (i ≠ k).
+
+#### Bayes döntési szabály
+
+A Bayes döntési szabály kimondja, hogy a téves besorolások aránya hosszú távon akkor lesz minimális, ha minden $ x $ inputvektorhoz azt a $ c_i $ osztályt választjuk, amelyre $ P(c_i | x) $ maximális. Ez a szabály a Maximum A Posteriori (MAP) döntés néven is ismert.
+
+### MAP döntés
+
+A MAP döntés lényege, hogy az input $ x $ alapján kiválasztjuk azt az osztályt, amelynek a posteriori valószínűsége a legnagyobb:
+
+$ c_i^* = \arg\max_{c_i} P(c_i | x) $
+
+Ez a módszer biztosítja, hogy az osztályozás a lehető legnagyobb valószínűséggel helyes legyen, minimalizálva ezzel a téves besorolások számát hosszú távon.
+
+A téves osztályozások aránya akkor lesz minimális hosszú távon, ha minden x inputvektorhoz azt az osztályt választjuk, amelynek a posteriori 
+valószínűsége a legnagyobb. A kockázat kiszámítása során a várható 
+hibafüggvény értékét minimalizáljuk, ami az optimális döntési szabályt 
+adja meg.
+
+![](assets/2024-05-29-21-41-40-image.png)
+
+Ábra magyarázat:
+
+- Az ábra két valószínűségi eloszlást mutat be:
+  
+  - **$ P(x | c_1) \cdot P(c_1) $**: Az első osztály eloszlása az $ x $ tengelyen.
+  
+  - **$ P(x | c_2) \cdot P(c_2) $**: A második osztály eloszlása az $ x $ tengelyen.
+
+- A két görbe a két osztályhoz tartozó feltételes valószínűségeket és a priori valószínűségeket mutatja meg.
+
+- A piros vonal az ábrán a döntési határt jelöli. Ez az a pont, ahol a két osztályhoz tartozó valószínűségek egyenlők:
+  
+  - $ P(x | c_1) \cdot P(c_1) = P(x | c_2) \cdot P(c_2) $
+  
+  - Ez a pont választja el azt a területet, ahol az egyik osztály valószínűsége nagyobb, mint a másiké.
+
+- A Bayes döntési szabály szerint minden $ x $ inputvektorhoz azt az osztályt választjuk, amelyiknek a posteriori valószínűsége a legnagyobb. Az ábrán a görbék alapján látható, hogy a piros vonaltól balra az első osztály $c_1$, jobbra pedig a második osztály $c_2$ valószínűsége a nagyobb.
+
+### Kockázat kiterjesztése az egész jellemzőtérre
+
+A korábban bemutatott kockázati függvény egy adott $ x $ jellemzővektorhoz kapcsolódott. Most ezt a kockázatot az egész $ X $ jellemzőtérre terjesztjük ki. Ezt az integrál segítségével tesszük:
+
+$ Risk_i = \int_X Risk_i(x) \cdot p(x) \, dx $
+
+### Mit jelent ez?
+
+- **$ Risk_i(x) $**: Az adott $ x $ pontban vett kockázat az $ i $ osztályra.
+  - A hibát $ \lambda_i(c_k, x) $ várható értékeként formalizáljuk. Ezt nevezzük a $ c_i $ osztályra szavazás kockázatának:
+    
+    - $Risk_i(x) = E[\lambda_i(c_k, x)] = \sum_k \lambda_i(c_k, x) \cdot P(c_k | x)$
+- **$ p(x) $**: Az $ x $ jellemzővektor valószínűségi eloszlása az egész jellemzőtérben.
+- **Integrálás**: Az integrálás során az $ x $ jellemzőtér minden pontján vett kockázatot súlyozzuk az adott pont valószínűségével ($ p(x) $) és összegezzük az egész jellemzőtérre.
+
+### Minimalizálás
+
+A dián lévő megjegyzés szerint, ha minden $ x $-re minimalizáljuk a kockázatot (azaz minden $ x $ pontban optimális döntést hozunk), akkor ezzel egyúttal az egész jellemzőtérre vonatkozó kockázatot is minimalizáljuk. Ez azt jelenti, hogy:
+
+1. **Pontszerű optimalizálás**: Minden egyes $ x $ pontban az optimális döntést hozzuk meg, azaz kiválasztjuk azt az osztályt, amelyiknek a posteriori valószínűsége a legnagyobb ($ P(c_i | x) $ maximális).
+
+2. **Globális minimalizálás**: Ha minden pontban optimális döntést hozunk, akkor az összesített kockázatot is minimalizáljuk az egész jellemzőtérre. Ez a teljes jellemzőtérre vonatkozó kockázat ($ Risk_i $) minimalizálásához vezet.
+
+### Indirekt vagy döntéselméleti megközelítés
+
+- A Bayes döntési szabály egy speciális esete annak, amit indirekt vagy  döntéselméleti megközelítésnek hívtunk
+  
+  - Minden $c_i$ osztályhoz készítünk egy $g_i(x)$ diszkriminánsfüggvényt
+  
+  - Adott $x$ tesztpéldát abba az osztályba sorolunk, amelyre $g_i(x)$ maximális
+
+- Más diszkrimináns-függvényekkel is működhet, de a bizonyítás csak $g_i(x)=P(c_i|x)$ esetére garantál optimalitást
+
+- Tehát: $P(c_i|x)$ minél pontosabb becslése szükséges véges tanulóhalmaz alapján
+
+(A diszkriminánsfüggvény olyan függvény, amely egy adott jellemzővektor ($x$) alapján meghatározza, hogy az $x$ jellemzővektor melyik osztályhoz tartozik a legnagyobb valószínűséggel. A Bayes döntési szabály szerint a diszkrimináns függvény a posteriori valószínűséget reprezentálja: $g_i(x)=P(c_i|x)$)
+
+### Diszkriminánsfüggvények és döntési felületek
+
+- A diszkriminánsfüggvények és a döntési szabály indirekt módon döntési felület(ek)et határoznak meg
+
+- Két osztály esetére:
+  ![](assets/2024-05-29-22-51-00-image.png)
+
+### A Bayes döntés hibája
+
+- Bayes döntés esetén a hibázás valószínűsége két osztályra: Bayes-hiba
+
+- 
