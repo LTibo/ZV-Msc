@@ -3445,10 +3445,13 @@ $ Risk_i = \int_X Risk_i(x) \cdot p(x) \, dx $
 ### Mit jelent ez?
 
 - **$ Risk_i(x) $**: Az adott $ x $ pontban vett kockázat az $ i $ osztályra.
+  
   - A hibát $ \lambda_i(c_k, x) $ várható értékeként formalizáljuk. Ezt nevezzük a $ c_i $ osztályra szavazás kockázatának:
     
     - $Risk_i(x) = E[\lambda_i(c_k, x)] = \sum_k \lambda_i(c_k, x) \cdot P(c_k | x)$
+
 - **$ p(x) $**: Az $ x $ jellemzővektor valószínűségi eloszlása az egész jellemzőtérben.
+
 - **Integrálás**: Az integrálás során az $ x $ jellemzőtér minden pontján vett kockázatot súlyozzuk az adott pont valószínűségével ($ p(x) $) és összegezzük az egész jellemzőtérre.
 
 ### Minimalizálás
@@ -3484,4 +3487,440 @@ A dián lévő megjegyzés szerint, ha minden $ x $-re minimalizáljuk a kockáz
 
 - Bayes döntés esetén a hibázás valószínűsége két osztályra: Bayes-hiba
 
-- 
+- Az ábra satírozott részének területével arányos
+  
+  - Az adott eloszlások mellett ez a legkisebb elérhető hiba
+  
+  - Ettől ez még persze (abszolút skálán) igen nagy is lehet
+  
+  - Csökkenteni csak jobb jellemzők találásával (azaz az osztályokátfedésének csökkentésével) lehet!
+  
+  <img title="" src="assets/2024-05-29-23-37-57-image.png" alt="" width="447">
+
+- A határok eltolásával a hiba csak nőhet!
+  
+  <img src="assets/2024-05-29-23-39-07-image.png" title="" alt="" width="450">
+
+### Diszkrét eloszlások becslése
+
+- Diszkrét valószínűségi eloszlást becsülni példák alapján egyszerűen leszámlálással tudunk
+
+### Bayes döntés folytonos jellemzők mellett
+
+- Folytonos jellemzők esetén általában feltesszük, hogy az eloszlás valamilyen folytonos görbével írható le.
+
+- Leggyakrabban a normális (Gauss) eloszlást használjuk erre a célra
+
+- Egyváltozós Gauss-eloszlás: $ f(x | \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}} $
+  
+  - **$ f(x | \mu, \sigma^2) $**: A sűrűségfüggvény értéke $ x $-ben, adott $ \mu $ várható érték és $ \sigma^2 $ variancia mellett.
+  
+  - **$ \mu $**: A normális eloszlás várható értéke (mean), amely a görbe középpontját jelzi.
+  
+  - **$ \sigma^2 $**: A normális eloszlás varianciája (variance), amely a görbe szórását (szélességét) jelzi.
+  
+  - **$ \sigma $**: A szórás (standard deviation), amely a variancia négyzetgyöke.
+    ![](assets/2024-05-30-00-12-55-image.png)
+
+- Többváltozós Gauss-eloszlás: $ f_X(\mu, \Sigma) = \frac{\exp\left(-\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu)\right)}{\sqrt{(2\pi)^k |\Sigma|}} $
+  
+  - **$ f_X(\mu, \Sigma) $**: A sűrűségfüggvény értéke $ x $-ben, adott $ \mu $ várható érték és $ \Sigma $ kovarianciamátrix mellett.
+  
+  - **$ \mu $**: A várható értékek vektora (mean vector). Ez a $ k $-dimenziós vektor a többváltozós eloszlás középpontját jelöli.
+  
+  - **$ \Sigma $**: A kovarianciamátrix (covariance matrix). Ez a $ k \times k $-dimenziós mátrix az egyes változók közötti lineáris kapcsolatokat és az egyes változók szórásait írja le.
+  
+  - **$ k $**: Az eloszlás dimenzióinak száma.
+  
+  - A többváltozós normális eloszlás sűrűségfüggvénye egy általánosítás, 
+    amely lehetővé teszi a normális eloszlás kiterjesztését több dimenzióra.
+     A várható értékek vektora (μ) és a kovarianciamátrix (Σ) határozza meg az eloszlás középpontját és alakját. Az exponenciális komponens az x pont és a várható érték közötti eltérést méri a kovarianciamátrix által
+     normalizált módon, míg a normálási tényező biztosítja, hogy a 
+    sűrűségfüggvény integrálja az egész térben 1 legyen.
+    ![](assets/2024-05-30-00-13-04-image.png)
+
+- Kovariancia mátrix példák:
+  
+  - Diagonális kovarianciamátrix azonos szórással
+    $
+      \Sigma = \begin{pmatrix}
+      \sigma^2 & 0 \\
+      0 & \sigma^2
+      \end{pmatrix}
+      $
+    
+    - A mátrix diagonális elemei ($ \sigma^2 $) az $ x $ és $ y $ változók szórását jelzik.
+    
+    - A diagonális mátrix nem tartalmaz off-diagonális elemeket (azok 0-k), ami azt jelenti, hogy az $ x $ és $ y $ változók függetlenek egymástól.
+      
+      <img src="assets/2024-05-30-00-19-39-image.png" title="" alt="" width="153">
+  
+  - Diagonális kovarianciamátrix eltérő szórással
+    $
+      \Sigma = \begin{pmatrix}
+      \sigma_x^2 & 0 \\
+      0 & \sigma_y^2
+      \end{pmatrix}
+      $
+    
+    - A mátrix diagonális elemei ($ \sigma_x^2 $ és $ \sigma_y^2 $) az $ x $ és $ y $ változók eltérő szórását jelzik.
+    
+    - Az off-diagonális elemek továbbra is 0-k, ami azt jelenti, hogy az $ x $ és $ y $ változók függetlenek egymástól.
+      
+      <img src="assets/2024-05-30-00-21-01-image.png" title="" alt="" width="149">
+  
+  - Nemdiagonális kovarianciamátrix
+    $
+      \Sigma = \begin{pmatrix}
+      \sigma_x^2 & \rho \sigma_x \sigma_y \\
+      \rho \sigma_x \sigma_y & \sigma_y^2
+      \end{pmatrix}
+      $
+    
+    - A mátrix diagonális elemei ($ \sigma_x^2 $ és $ \sigma_y^2 $) az $ x $ és $ y $ változók szórását jelzik.
+    
+    - Az off-diagonális elemek ($ \rho \sigma_x \sigma_y $) a kovarianciát jelzik az $ x $ és $ y $ változók között, ahol $ \rho $ (ró) a korrelációs együttható.
+      
+      <img src="assets/2024-05-30-00-34-00-image.png" title="" alt="" width="150">
+
+- Általánosan: a kovarianciamátrixok osztályonként eltérőek, és tetszőleges alakúak
+  
+  - az egyes osztályok kovarianciamátrixai különbözőek, és nem korlátozódnak
+    egyszerűbb formákra, mint például diagonális mátrixokra. Ez a helyzet  sokkal általánosabb, és bonyolultabb mintákat enged meg az adatokban.
+
+- Ekkor a diszkriminánsfüggvény nem egyszerűsíthető, így x-re nézve kvadratikus marad.
+  
+  - a döntési felület nem egyenes lesz, hanem bonyolultabb geometriai alakzatokat ölthet
+
+- A döntési felület tetszőleges kúpszelet alakját öltheti (egyenes, kör, ellipszis, parabola vagy hiperbola)
+  
+  <img src="assets/2024-05-30-00-35-16-image.png" title="" alt="" width="319">
+
+Összegezve, a statisztikai alakfelismerési módszertan szerint egy osztályozó létrehozása 3 lépésből áll:
+
+1. Megfelelő jellemzőkészlet kiválasztása
+
+2. Parametrikus görbe megválasztása, amellyel az egyes osztályok eloszlását le fogjuk írni (folytonos jellemzők esetén) 
+
+3. A véges tanító adathalmaz alapján megbecsüljük a parametrikus eloszlás paramétereit
+
+Hibák kezelése:
+
+- Bayes hiba: Ha a jellemzők alapján az osztályok nem szétválaszthatóak
+  
+  - A Bayes hiba csak úgy csökkenthető, ha a feladatot jobban leíró jellemzőket használunk
+
+- Modellezési hiba: Ha a választott (modellezett) eloszlás nem illeszkedik kellően az adatok eloszlására
+  
+  - Ez a hiba egy jobban illeszkedő modell választásával csökkenthető
+
+- Paraméterbecslési hiba: a modell paramétereit a tanítópéldák alapján valamilyen tanulóalgoritmussal fogjuk 
+  
+  - Ez a hiba a tanítópéldák számának növelésével, illetve a tanulóalgoritmus pontosságának javításával csökkenthető
+
+### A naiv Bayes osztályozó
+
+A naiv Bayes osztályozó egy egyszerű, de hatékony valószínűségi osztályozó algoritmus, amely a Bayes-tételen alapul. Különlegessége, hogy feltételezi az egyes jellemzők (attribútumok) függetlenségét az osztályon belül, innen ered a „naiv” jelző. Ez az egyszerűsítés gyakran nem áll fenn a valós adatokban, ennek ellenére a naiv Bayes osztályozó sok esetben nagyon jól teljesít. 
+
+#### Bayes-tétel ismétlése
+
+A Bayes-tétel egy esemény valószínűségének frissítését teszi lehetővé egy másik esemény bekövetkezésének ismeretében:
+
+$ P(c_i | x) = \frac{P(x | c_i) \cdot P(c_i)}{P(x)} $
+
+Itt:
+
+- **$ P(c_i | x) $**: Az $ i $-edik osztály feltételes valószínűsége az $ x $ jellemzővektor alapján.
+- **$ P(x | c_i) $**: Az $ x $ jellemzővektor feltételes valószínűsége, feltételezve, hogy az $ i $-edik osztályhoz tartozik.
+- **$ P(c_i) $**: Az $ i $-edik osztály a priori valószínűsége.
+- **$ P(x) $**: Az $ x $ jellemzővektor teljes valószínűsége.
+
+#### Naiv Bayes feltételezés
+
+A naiv Bayes osztályozó a következő feltételezéseket teszi:
+
+- A jellemzők feltételesen függetlenek az adott osztályhoz tartozás esetén:
+  $ P(x | c_i) = \prod_{j=1}^n P(x_j | c_i) $
+
+Itt $ x_j $ az $ x $ jellemzővektor $ j $-edik eleme.
+
+#### Osztályozási szabály
+
+Az osztályozás során az $ x $ jellemzővektort abba az osztályba soroljuk, amelyiknek a posteriori valószínűsége a legnagyobb:
+
+$ c_i^* = \arg\max_{c_i} P(c_i | x) = \arg\max_{c_i} \frac{P(x | c_i) \cdot P(c_i)}{P(x)} $
+
+Mivel a nevező ($ P(x) $) minden osztályra azonos, elhagyható a maximális keresés során:
+
+$ c_i^* = \arg\max_{c_i} P(x | c_i) \cdot P(c_i) $
+
+#### Lépések a naiv Bayes osztályozó alkalmazásához
+
+1. **Tanulás (Training)**:
+   
+   - Számítsuk ki az egyes osztályok a priori valószínűségeit: $ P(c_i) $.
+   - Számítsuk ki az egyes jellemzők feltételes valószínűségeit minden osztály esetén: $ P(x_j | c_i) $.
+
+2. **Osztályozás (Prediction)**:
+   
+   - Adott egy új jellemzővektor ($ x $), számítsuk ki a posteriori valószínűségeket minden osztályra: $ P(c_i | x) $.
+   - Soroljuk az $ x $ jellemzővektort abba az osztályba, amelyikre a posteriori valószínűség maximális: $ c_i^* $.
+
+### Paraméterek maximum likelihood becslése Gauss-eloszlásnál
+
+Adatpontok alapján akarjuk becsülni $p(x|c_i)$-t és $P(c_i)$-t
+
+- **$ p(x|c_i) $**: Ez a feltételes valószínűség egy adott osztályra vonatkozóan. Azt jelenti, hogy mekkora a valószínűsége annak, hogy egy $ x $ értékű adatpont az $ c_i $ osztályba tartozik.
+
+- **$ P(c_i) $**: Ez az a priori valószínűség, azaz annak a valószínűsége, hogy egy véletlenszerűen kiválasztott adatpont az $ c_i $ osztályba tartozik, függetlenül az $ x $ értéktől.
+
+Az osztályok a priori eloszlása diszkrét eloszlás, ez könnyen becsülhető az adatokból egyszerű leszámlálással
+
+- Az osztályok előfordulási gyakorisága alapján könnyen kiszámítható az a priori valószínűség. Ez egy diszkrét valószínűségi eloszlás, mert az osztályok száma véges és jól meghatározott.
+
+- Pl: 2 osztályunk van, 60 példa az egyikből, 40 a másikból
+  
+  - $ \text{A Priori Probability} = \frac{\text{No. of Desired Outcomes}}{\text{Total No. of Outcomes}} $
+  
+  - $P(c_1) \approx \frac{60}{60 + 40} = \frac{60}{100} = 0.6 $
+  
+  - $ P(c_2) \approx \frac{40}{60 + 40} = \frac{40}{100} = 0.4 $
+
+Folytonos jellemzők esetén $p(x|c_i)$ egy folytonos többváltozós eloszlás, ezt
+jóval nehezebb becsülni
+
+Feltesszük, hogy $p(x|c_i)$ Gauss-eloszlás
+
+- Egy Gauss-görbe megadásához $\Sigma_i$ és $\mu_i$ megadása szükséges, így ezeket a paramétereket fogjuk becsülni az adatokból
+
+- Osztályonként külön végezzük a becslést, a többi osztálytól függetlenül
+
+- Ezért elhagyjuk az $i$ indexet
+
+#### Maximum likelihood módszer
+
+$p(x|c_i)$-et próbáljuk becsülni
+
+Feltesszük, hogy adott példahalmaz esetén $\Sigma$ és $\mu$ valamilyen konkrét értékkel rendelkezik, de ez ismeretlen számunkra
+
+Azt a paraméter-értéket (értékeket, paraméter-vektort) választja, amely legjobban magyarázza az adatokat
+
+- A legnagyobb valószínűséget rendeli hozzájuk $\rarr$ maximum
+  likelihood
+
+- Lehetne „maximum probability” is, de attól, hogy 0 és 1 között van, még nem valószínűség
+
+##### Maximum Likelihood becslés
+
+- Ez a lehető legegyszerűbb megoldás
+
+- Ha az adatok eloszlása valóban normális, akkor a példaszám
+  növelésével gyorsan konvergál a valódi paraméter-értékekhez
+
+- Feltesszük, hogy az osztályokba eső példák normális
+  eloszlásúak.
+
+- Az eloszlás paramétereit osztályonként külön-külön becsüljük.
+
+- A paraméterek rövid jelölése: $\theta = (\mu_i , \Sigma_i)$
+
+- A tanítópéldák halmazának rövid jelölése: $D ( = \{ x_1, …, x_n \} )$
+  
+  - Feltesszük továbbá, hogy a példák függetlenek egymástól és azonos eloszlásúak (angol rövidítéssel “independent and identically distributed”, “i.i.d.”)
+
+##### A „likelihood” célfüggvény
+
+- Az alábbi likelihood célfüggvény maximumhelyét keressük:
+  $ P(D|\theta) = P(x_1, ..., x_n|\theta) = \prod_{k=1}^{n} P(x_k|\theta) $
+  
+  -  Ez a képlet azt mutatja meg, hogyan számíthatjuk ki a teljes adathalmaz $ D $ valószínűségét adott $ \theta $ paraméterek mellett.
+  
+  - $ P(D|\theta) $ az $ \theta $ paraméterek melletti valószínűsége az adathalmaznak.
+  
+  - A termékjel ($ \prod $) azt jelzi, hogy a teljes valószínűséget az egyes adatpontok valószínűségének szorzataként számítjuk ki, feltételezve, hogy az adatpontok függetlenek egymástól.
+
+- Azt a $ \theta $ értéket keressük, amely maximálja $ P(D|\theta) $-t, azaz a likelihood függvényt.
+  
+  - **Magyarázat #1**: Ez az a $ \theta $ érték, amely esetén a likelihood függvény legjobban magyarázza az adatokat.
+    
+    - Azaz, ez az a paraméterérték, amely mellett a legvalószínűbb, hogy az adott adathalmazt megfigyeljük.
+  
+  - **Magyarázat #2**: A Bayes-döntési szabály szerint azt az osztályt választjuk, amelyiknek a likelihood görbéje a legnagyobb értéket adja.
+    
+    - Ez azt jelenti, hogy a legjobb paraméterértéket választjuk, amely maximalizálja az adatok valószínűségét.
+
+- Az $ i $-edik osztályhoz tartozó tanítópéldák esetén azt szeretnénk, ha az $ i $-edik osztály győzne, ennek esélyét pedig azzal tudjuk növelni, ha olyan paramétert választunk, amelynél a likelihood függvény értéke maximális lesz.
+  
+  - A gyakorlatban ez azt jelenti, hogy az osztály paramétereinek becslésekor (pl. a Gauss-eloszlás esetén a várható érték és a szórás) olyan értékeket keresünk, amelyek maximalizálják az adott osztályhoz tartozó adatok likelihood-ját.
+
+##### A „log-likelihood” célfüggvény
+
+- a valószínűségi függvény logaritmizált változatát fogjuk használni – az
+  optimuma ugyanott van, de könnyebb kezelni
+
+- Példa (ábra): egyváltozós Gauss, $σ^2$ ismert, $\mu$ optimális értékét keressük
+  
+  - 1) A tanítópéldák és négy „jelölt” a megoldásra
+    2) A likelihood függvény (θ függvényében) és optimumhelye
+    3) A log-likelihood függvény és optimumhelye
+  
+  ![](assets/2024-05-30-13-18-43-image.png)
+
+##### A log-likelihood maximalizálása
+
+- Formálisan is megmutatjuk az optimalizást – először egyszerűbb esetekre
+
+- Példa: egyváltozós Gauss, μ és σ az optimalizálandó
+  
+  
+  $
+       f(x | \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}
+       $
+  
+  
+  
+  - A változók átjelölésével a maximalizálandó paraméterek $ \theta = (\theta_1, \theta_2) = (\mu, \sigma^2) $.
+
+- Elvégezve az átjelölést, az optimalizálási feladat a következő lesz:
+  
+  
+  $
+       \theta_{MLE} = \arg \max_{\theta} f(x | \theta) = \arg \max_{\theta} \left( \frac{1}{\sqrt{2\pi\theta_2}} e^{-\frac{(x - \theta_1)^2}{2\theta_2}} \right)
+       $
+  
+  - a kitevőben lévő kifejezés negatív, ami azt jelenti, hogy az exponenciális tag maximumát keressük.
+  
+  - MLE: maximum likelihood estimation
+
+- Mivel a valószínűségi függvény logaritmizált változatának optimuma ugyanott van mint a valószínűségi függvényé:
+  
+  
+  $
+       \theta_{MLE} = \arg \max_{\theta} f(x | \theta) = \arg \max_{\theta} \ln f(x | \theta)
+       $
+  
+  
+
+- A log-likelihood célfüggvényből a következő lesz:
+  
+  
+  $
+       \ln P(x_k | \theta) = -\frac{1}{2} \ln 2\pi\theta_2 - \frac{1}{2} \ln \theta_2 - \frac{1}{2\theta_2} (x_k - \theta_1)^2
+       $
+  
+  
+  
+  - Itt $ x_k $ egyetlen tanítópélda, és $ \theta_1 = \mu $ valamint $ \theta_2 = \sigma^2 $.
+  
+  - A teljes adathalmazra a log-likelihood függvény értékeit összegezve kapjuk meg a maximális log-likelihood értéket.
+
+- Maximum ott van, ahol a derivált nulla
+
+- A gradiens az összes paraméter szerinti parciális deriváltakat tartalmazza:
+  
+  
+  $
+       \nabla_{\theta} = \begin{pmatrix}
+       \frac{\partial}{\partial \theta_1} \ln P(x_k | \theta) \\
+       \frac{\partial}{\partial \theta_2} \ln P(x_k | \theta)
+       \end{pmatrix} = 0
+       $
+
+- Az első paraméter (várható érték, $ \theta_1 $) szerinti parciális derivált
+  
+  - $
+         \frac{1}{\theta_2} (x_k - \theta_1) = 0
+         $
+
+- A második paraméter (variancia, $ \theta_2 $) szerinti parciális derivált:
+  
+  - $
+         -\frac{1}{2\theta_2} + \frac{(x_k - \theta_1)^2}{2\theta_2^2} = 0
+         $
+
+- Az összes példára összegezve:
+  
+  - $ \hat{\mu} = \frac{\sum_{k=1}^n x_k}{n} $
+  
+  - $ \hat{\sigma}^2 = \frac{\sum_{k=1}^n (x_k - \hat{\mu})^2}{n} $
+  
+  - Az első egyenlet ($\hat{\mu}$) a mintaátlagot adja, amely a $\hat{\theta}_1$ paraméter legjobb becslése. A második egyenlet ($\hat{\sigma}^2$) a minta varianciáját adja, amely a $\hat{\theta}_2$ paraméter legjobb becslése.
+
+- Ezek a képletek a Gauss-eloszlás „elégséges statisztikái”
+  
+  - Ezek ismeretében nincs szükség a tanítópontok megtartására
+  
+  - Elég csak a fönti két érték az eloszlás tárolásához
+
+- Többváltozós esetben:
+  
+  - Általános esetben a jellemzőink vektorok
+    
+    - Így a Gauss-eloszlásuk többváltozós eloszlás
+  
+  - A paraméterek becslésére ugyanazt a módszert használjuk, mint az egyváltozós esetben, vagyis a log-likelihood függvény deriváltjainak zérushelyét keressük.
+  
+  - Mivel a függvény sokváltozós, ezért szimpla deriválás helyett a gradiens operátort kell alkalmaznunk. A gradiens egy vektor, amely a függvény minden egyes paramétere szerinti részleges deriváltakat tartalmazza.
+    
+    $ \hat{\theta} = \arg \max l(\theta) $
+    
+    Itt $ l(\theta) $ a log-likelihood függvény, és $\hat{\theta}$ az a paraméterérték, ahol a maximumot elérjük.
+  
+  - A gradiens operátor ($\nabla_{\theta}$) a következőképpen van definiálva:
+    
+    $ \nabla_{\theta} = \left[ \frac{\delta}{\delta \theta_1}, \frac{\delta}{\delta \theta_2}, \ldots, \frac{\delta}{\delta \theta_p} \right]^t $
+    
+    Ez azt jelenti, hogy a gradiens vektor minden egyes komponense a log-likelihood függvény adott paraméter szerinti részleges deriváltja.
+  
+  - A konkrét célfüggvény a következő formában van megadva:
+    
+    $
+      \nabla_{\theta} l = \sum_{k=1}^n \nabla_{\theta} \ln P(x_k \mid \theta)
+      $
+    
+    Az optimumot akkor találjuk meg, amikor a gradiens zérushelyén vagyunk.
+  
+  - Az átlagvektor a minta adatpontjainak átlagát adja:
+    
+    - $
+        \hat{\mu} = \frac{1}{n} \sum_{k=1}^n x_k
+        $
+      
+      Ez a sokváltozós esetben is hasonló az egyváltozós esethez, de itt $ x_k $ egy vektor.
+  
+  - A kovarianciamátrix az adatpontok és az átlagvektor közötti eltérések szóródását méri:
+    
+    $
+      \hat{\Sigma} = \frac{1}{n} \sum_{k=1}^n (x_k - \hat{\mu})(x_k - \hat{\mu})^T
+      $
+    
+    Itt $ (x_k - \hat{\mu})^T $ az eltérések transzponáltja, és a szorzatuk egy mátrixot eredményez.
+    
+    A gyakorlatban gyakran diagonálisra korlátozzuk a kovarianciamátrix alakját (egyszerűbb tanítás)
+
+### Paraméterek maximum likelihood becslése Gauss-keverékmodell esetén
+
+A Gauss-görbe mint modell, nem igazán flexibilis.
+
+Valós adatok eloszlása ritkán lesz  tökéletesen Gauss-os, azaz
+a „modellezési hiba” nagy lesz => Gauss-keverékmodell bevezetése, sokkal rugalmasabb az alakja.
+
+A GMM tanítása sajnos jóval nehezebb. Továbbra is a Maximum Likelihood célfüggvényt fogjuk használni, azonban a zárt képletes megoldás nem fog működni, ezért bevezetünk egy iteratív tanítóalgoritmust (EM-algoritmus).
+
+Az egyes osztályokhoz tartozó modelleket ismét külön-külön tanítjuk.
+
+Azt tárgyaljuk, hogyan lehet a modellt egyetlen osztály példáira illeszteni, ezért $c_i$ nem szerepel a jelölésben, de persze az eljárást minden osztályra meg kell ismételni
+
+#### GMM (Gaussian Mixture Model)
+
+A $p(x)$ eloszlást Gauss-görbék súlyozott összegével közelítjük
+
+Képlet: $ P(x) = \sum_{k=1}^{K} \pi_k \cdot \mathcal{N}_{\mu_k, \Sigma_k}(x) $
+
+- Ahol $\mathcal{N}$ jelöli a normális (vagy Gauss) eloszlást jelöli
+
+- A $\pi_k$ értékek nemnegatívok és összegük 1
+
+- A Gauss-komponensek $K$ száma rögzített, nekünk kell megadni tanítás előtt  (azaz ún. „meta-paraméter”)
+
+A komponensek számának növelésével lényegében bármilyen eloszlást képes közelíten,  jóval rugalmasabb eloszlást ad, mint egyetlen Gauss-görbe
