@@ -3917,10 +3917,114 @@ A $p(x)$ eloszlást Gauss-görbék súlyozott összegével közelítjük
 
 Képlet: $ P(x) = \sum_{k=1}^{K} \pi_k \cdot \mathcal{N}_{\mu_k, \Sigma_k}(x) $
 
-- Ahol $\mathcal{N}$ jelöli a normális (vagy Gauss) eloszlást jelöli
+- **$ x $**: Az adatpont, amit modellezni szeretnénk. Ez lehet egy egydimenziós vagy többdimenziós adatpont, attól függően, hogy milyen típusú adatokat vizsgálunk.
+  
+  - ha $ x $ egy adott érték a minta terében, akkor $ P(x) $ azt jelenti, hogy mekkora a valószínűsége annak, hogy $ x $ a Gauss-keverék modell szerint előfordul.
 
-- A $\pi_k$ értékek nemnegatívok és összegük 1
+- $\pi_k$: Keverési együttható, amely az k-adik Gauss-komponens súlyát jelöli. Minden πk​ nemnegatív, és az összegük 1.
+
+- **$ \mathcal{N}_{\mu_k, \Sigma_k}(x) $**: Az $ k $-adik Gauss-eloszlás $ x $ adatpontnál vett értéke. Ez a normális eloszlás sűrűségfüggvénye, amelynek középértéke $ \mu_k $ és kovarianciamátrixa $ \Sigma_k $.
 
 - A Gauss-komponensek $K$ száma rögzített, nekünk kell megadni tanítás előtt  (azaz ún. „meta-paraméter”)
 
 A komponensek számának növelésével lényegében bármilyen eloszlást képes közelíten,  jóval rugalmasabb eloszlást ad, mint egyetlen Gauss-görbe
+
+<img title="" src="assets/2024-05-30-16-43-44-image.png" alt="" width="369" data-align="left">
+
+#### A GMM paramétereinek becslése
+
+A modell paraméterei: $\pi_k$, $\mu_k$ és $\Sigma_k$ minden komponensre$ (k=1,…,K)$.
+
+A paramétereket gyakran röviden $\theta$-val fogjuk jelölni:  $\theta = (\pi_1, \mu_1, \Sigma_1,…, \pi_K, \mu_K, \Sigma_K)$
+
+A tanítás során ismét a log-likelihood függényt maximalizáljuk
+
+$\sum_n{\log P_\theta (x_n)}$
+
+Amikor $p(x)$ egyetlen Gauss-görbe volt, egyszerűen vettük a deriváltját és annak zérushelyét kerestük
+
+Sajnos a GMM esetén a deriválás nem fog menni. Sima egyenlettel nem lehet megoldani. Más megoldásra lesz szükség – ez lesz az EM-algoritmus.
+
+#### EM (Expectation-Maximization) algoritmus
+
+#### EM Algoritmus Lépései
+
+https://youtu.be/EWd1xRkyEog?si=DVhvdG4bI4fR6Ccx
+
+##### 1. Kezdeti Paraméterek
+
+Kezdjük a paraméterek (pl. $ \theta $) kezdeti becslésével. Ez magában foglalhatja a komponensek középértékeit ($ \mu_k $), kovarianciamátrixait ($ \Sigma_k $), és keverési együtthatókat ($ \pi_k $).
+
+A paramétereket gyakran K-means klaszterezéssel inicializáljuk
+
+##### 2. E lépés (Expectation)
+
+Ebben a lépésben a rejtett változókat becsüljük meg a jelenlegi paraméterek alapján. Ez a lépés a valószínűségeket számítja ki, hogy melyik komponenshez tartozik egy adott adatpont.
+
+- Számoljuk ki a felelősségeket ($ \gamma(z_{ik}) $):
+  $
+  \gamma(z_{ik}) = \frac{\pi_k \mathcal{N}(x_i \mid \mu_k, \Sigma_k)}{\sum_{j=1}^K \pi_j \mathcal{N}(x_i \mid \mu_j, \Sigma_j)}
+  $
+  ahol $ \gamma(z_{ik}) $ a valószínűsége annak, hogy az $ i $-edik adatpont az $ k $-adik komponenshez tartozik.
+  
+  $\pi_k$: A $k$-adik komponens keverési együtthatója.
+  
+  $\mathcal{N}(x_i \mid \mu_k, \Sigma_k)$: A $k$-adik Gauss-eloszlás sűrűségfüggvénye az $x_i$ adatpontnál, ahol $\mu_k$ a középérték és $\Sigma_k$ a kovarianciamátrix.
+  
+  $\sum_{j=1}^K \pi_j \mathcal{N}(x_i \mid \mu_j, \Sigma_j)$: A nevezőben az $i$-edik adatpont teljes valószínűsége, amely az összes komponens valószínűségének súlyozott összege.
+- ($\gamma$ = gamma)
+
+##### 3. M lépés (Maximization)
+
+Ebben a lépésben a paramétereket frissítjük az E lépésben kiszámolt felelősségek alapján. A cél az, hogy maximalizáljuk a várható log-likelihood függvényt.
+
+- Frissítsük a keverési együtthatókat ($ \pi_k $):
+  $
+  \pi_k = \frac{1}{N} \sum_{i=1}^N \gamma(z_{ik})
+  $
+  
+  Itt $N$ az adatpontok száma. Ez a képlet azt jelenti, hogy az $k$-adik komponens keverési együtthatóját az $i$-edik adatpontokhoz tartozó felelősségek átlagaként számítjuk ki.
+
+- Frissítsük a középértékeket ($ \mu_k $):
+  $
+  \mu_k = \frac{\sum_{i=1}^N \gamma(z_{ik}) x_i}{\sum_{i=1}^N \gamma(z_{ik})}
+  $
+  
+  Ez a képlet azt jelenti, hogy az $k$-adik komponens új középértéke az $i$-edik adatpontok súlyozott átlaga lesz, ahol a súlyok a felelősségek.
+
+- Frissítsük a kovarianciamátrixokat ($ \Sigma_k $):
+  $
+  \Sigma_k = \frac{\sum_{i=1}^N \gamma(z_{ik}) (x_i - \mu_k)(x_i - \mu_k)^T}{\sum_{i=1}^N \gamma(z_{ik})}
+  $
+  
+  Ez a képlet azt jelenti, hogy az $k$-adik komponens új kovarianciamátrixa az $i$-edik adatpontok és az új középértékük közötti eltérések súlyozott kovarianciája lesz.
+  
+  A gyakorlatban sokszor diagonális kovarianciamátrixúra korlátozzuk a Gauss-komponenseket
+
+#### 4. Iteráció
+
+Az E és M lépéseket addig ismételjük, amíg a paraméterek konvergálnak (azaz a változásuk nagyon kicsi lesz).
+
+![](assets/2024-05-30-18-51-23-image.png)
+
+Amit maximalizálunk:
+
+$ \log L(\theta) = \sum_{i=1}^N \log \left( \sum_{k=1}^K \pi_k \mathcal{N}(x_i \mid \mu_k, \Sigma_k) \right) $
+
+- **$ \log L(\theta) $**: A log-likelihood függvény.
+
+- **$ \sum_{i=1}^N $**: Az összes adatpont ($ x_i $) logaritmusának összege.
+
+- **$ \log \left( \sum_{k=1}^K \pi_k \mathcal{N}(x_i \mid \mu_k, \Sigma_k) \right) $**: Az $ i $-edik adatpont ($ x_i $) valószínűségének logaritmusa az összes $ K $ komponens felett súlyozva.
+
+Alternatívan:
+
+$ P(X \mid \pi, \mu, \Sigma) = \prod_{n=1}^N \left[ \sum_{k=1}^K \pi_k \mathcal{N}(x_n \mid \mu_k, \Sigma_k) \right] $
+
+- **$ P(X \mid \pi, \mu, \Sigma) $**: Az $ X $ megfigyelt adatok valószínűsége a modell paraméterei ($ \pi, \mu, \Sigma $) mellett.
+
+- **$ \prod_{n=1}^N $**: Az összes adatpont ($ x_n $) szorzata.
+
+- **$ \sum_{k=1}^K \pi_k \mathcal{N}(x_n \mid \mu_k, \Sigma_k) $**: Az $ n $-edik adatpont ($ x_n $) valószínűsége az összes $ K $ komponens felett súlyozva.
+
+# 12. Felügyelt tanulási módszerek (nem-paraméteres tanulás, neuronhálók, szupport vektor gép, döntési fák).
