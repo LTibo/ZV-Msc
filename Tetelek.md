@@ -3733,7 +3733,7 @@ Azt a paraméter-értéket (értékeket, paraméter-vektort) választja, amely l
 - Az alábbi likelihood célfüggvény maximumhelyét keressük:
   $ P(D|\theta) = P(x_1, ..., x_n|\theta) = \prod_{k=1}^{n} P(x_k|\theta) $
   
-  -  Ez a képlet azt mutatja meg, hogyan számíthatjuk ki a teljes adathalmaz $ D $ valószínűségét adott $ \theta $ paraméterek mellett.
+  - Ez a képlet azt mutatja meg, hogyan számíthatjuk ki a teljes adathalmaz $ D $ valószínűségét adott $ \theta $ paraméterek mellett.
   
   - $ P(D|\theta) $ az $ \theta $ paraméterek melletti valószínűsége az adathalmaznak.
   
@@ -3772,54 +3772,48 @@ Azt a paraméter-értéket (értékeket, paraméter-vektort) választja, amely l
 
 - Példa: egyváltozós Gauss, μ és σ az optimalizálandó
   
-  
   $
+  
        f(x | \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}
        $
-  
-  
-  
-  - A változók átjelölésével a maximalizálandó paraméterek $ \theta = (\theta_1, \theta_2) = (\mu, \sigma^2) $.
+
+- A változók átjelölésével a maximalizálandó paraméterek $ \theta = (\theta_1, \theta_2) = (\mu, \sigma^2) $.
 
 - Elvégezve az átjelölést, az optimalizálási feladat a következő lesz:
   
-  
   $
+  
        \theta_{MLE} = \arg \max_{\theta} f(x | \theta) = \arg \max_{\theta} \left( \frac{1}{\sqrt{2\pi\theta_2}} e^{-\frac{(x - \theta_1)^2}{2\theta_2}} \right)
        $
-  
-  - a kitevőben lévő kifejezés negatív, ami azt jelenti, hogy az exponenciális tag maximumát keressük.
-  
-  - MLE: maximum likelihood estimation
+
+- a kitevőben lévő kifejezés negatív, ami azt jelenti, hogy az exponenciális tag maximumát keressük.
+
+- MLE: maximum likelihood estimation
 
 - Mivel a valószínűségi függvény logaritmizált változatának optimuma ugyanott van mint a valószínűségi függvényé:
   
-  
   $
+  
        \theta_{MLE} = \arg \max_{\theta} f(x | \theta) = \arg \max_{\theta} \ln f(x | \theta)
        $
-  
-  
 
 - A log-likelihood célfüggvényből a következő lesz:
   
-  
   $
+  
        \ln P(x_k | \theta) = -\frac{1}{2} \ln 2\pi\theta_2 - \frac{1}{2} \ln \theta_2 - \frac{1}{2\theta_2} (x_k - \theta_1)^2
        $
-  
-  
-  
-  - Itt $ x_k $ egyetlen tanítópélda, és $ \theta_1 = \mu $ valamint $ \theta_2 = \sigma^2 $.
-  
-  - A teljes adathalmazra a log-likelihood függvény értékeit összegezve kapjuk meg a maximális log-likelihood értéket.
+
+- Itt $ x_k $ egyetlen tanítópélda, és $ \theta_1 = \mu $ valamint $ \theta_2 = \sigma^2 $.
+
+- A teljes adathalmazra a log-likelihood függvény értékeit összegezve kapjuk meg a maximális log-likelihood értéket.
 
 - Maximum ott van, ahol a derivált nulla
 
 - A gradiens az összes paraméter szerinti parciális deriváltakat tartalmazza:
   
-  
   $
+  
        \nabla_{\theta} = \begin{pmatrix}
        \frac{\partial}{\partial \theta_1} \ln P(x_k | \theta) \\
        \frac{\partial}{\partial \theta_2} \ln P(x_k | \theta)
@@ -3828,15 +3822,13 @@ Azt a paraméter-értéket (értékeket, paraméter-vektort) választja, amely l
 
 - Az első paraméter (várható érték, $ \theta_1 $) szerinti parciális derivált
   
-  - $
-         \frac{1}{\theta_2} (x_k - \theta_1) = 0
-         $
+  - $\frac{1}{\theta_2} (x_k - \theta_1) = 0
+     $
 
 - A második paraméter (variancia, $ \theta_2 $) szerinti parciális derivált:
   
-  - $
-         -\frac{1}{2\theta_2} + \frac{(x_k - \theta_1)^2}{2\theta_2^2} = 0
-         $
+  - $-\frac{1}{2\theta_2} + \frac{(x_k - \theta_1)^2}{2\theta_2^2} = 0
+     $
 
 - Az összes példára összegezve:
   
@@ -3972,6 +3964,7 @@ Ebben a lépésben a rejtett változókat becsüljük meg a jelenlegi paraméter
   $\mathcal{N}(x_i \mid \mu_k, \Sigma_k)$: A $k$-adik Gauss-eloszlás sűrűségfüggvénye az $x_i$ adatpontnál, ahol $\mu_k$ a középérték és $\Sigma_k$ a kovarianciamátrix.
   
   $\sum_{j=1}^K \pi_j \mathcal{N}(x_i \mid \mu_j, \Sigma_j)$: A nevezőben az $i$-edik adatpont teljes valószínűsége, amely az összes komponens valószínűségének súlyozott összege.
+
 - ($\gamma$ = gamma)
 
 ##### 3. M lépés (Maximization)
@@ -4028,3 +4021,206 @@ $ P(X \mid \pi, \mu, \Sigma) = \prod_{n=1}^N \left[ \sum_{k=1}^K \pi_k \mathcal{
 - **$ \sum_{k=1}^K \pi_k \mathcal{N}(x_n \mid \mu_k, \Sigma_k) $**: Az $ n $-edik adatpont ($ x_n $) valószínűsége az összes $ K $ komponens felett súlyozva.
 
 # 12. Felügyelt tanulási módszerek (nem-paraméteres tanulás, neuronhálók, szupport vektor gép, döntési fák).
+
+## Nemparametrikus módszerek
+
+A valóságban a pontos eloszlása az adatoknak sosem ismert, és a feltevések, pl. hogy Gauss eloszlásúak, is irreálisak. Így egy jó ötlet lehet az, hogy nem parametrikus görbével próbáljuk meg jellemezni az adatokat.
+
+Nem használnak parametrikus görbét az eloszlás leírásához.
+
+Az elnevezés félrevezető, mert megválasztandó metaparamétereik azért vannak!
+
+Közvetlenül a tanítópéldákat használják fel az eloszlás modellezésére
+
+- Ezért hívják őket példány-alapú tanulásnak is („instance-based learning”)
+
+- Az eloszlás alakjára nem tesznek fel semmilyen előzetes feltevést
+
+A tanító fázis pusztán a tanítópéldák eltárolásából áll (Ezt hívják lusta tanulásnak is („lazy learning”)).
+
+A műveletvégzés a tesztelési fázisban történik – egyben ez a fő hátrányuk is
+
+- Módszerek egyik típusa: $p(x|c_i)$ -et közelíti (generatív modell)
+  
+  - Ezek a modellek megpróbálják megérteni, hogyan generálódnak az adatok minden egyes osztályhoz tartozóan.
+  
+  - Pl.: Naiv Bayes osztályozó, Gaussian Mixture Model (GMM)
+
+- Másik típus: közvetlenül $P(c_i|x)$ -et közelíti (diszkriminatív modell)
+  
+  - Ezek a modellek nem próbálják megérteni, hogyan generálódnak az adatok, csak az osztályok közötti határvonalakat vagy kapcsolatokat keresik.
+  
+  - Pl.: Logisztikus regresszió, Support Vector Machine (SVM)
+
+### Példány alapú tanulás
+
+**Alapötlet**: Egy adott x pontban $p(x)$-et az x körüli kis $R$ régióba eső példapontok sűrűségével fogjuk közelíteni, több példa => nagyobb valószínűség
+
+<img src="assets/2024-05-31-14-25-27-image.png" title="" alt="" width="509">
+
+Figyelembe kell venni a $R$ régió térfogatát is
+
+**Intuitívan (Valószínűségi sűrűség becslése):**
+
+- **$ p(x) \approx \frac{k/n}{V} $**: Itt $ p(x) $ annak a valószínűségi sűrűségfüggvénynek a becsült értéke, hogy az $ x $ pont egy adott $ R $ régióba esik.
+
+- $ x $ egy adott pont, ami a régióban van.
+
+- $ k $ az $ R $ régióba eső minták száma.
+
+- $ n $ az összes minta száma.
+
+- $ V $ az $ R $ régió térfogata.
+
+- Ez a képlet azt mondja, hogy a valószínűségi sűrűséget becsülhetjük úgy, hogy megszámoljuk, hány minta esik az $ R $ régióba, és ezt elosztjuk az összes minta számával és a régió térfogatával.
+
+**Formálisan (Pontos Eloszlás Átlagának Becsülése):**
+
+- **Átlagbecslés $ R $ felett**: Vegyük észre, hogy a becslésünk lényegében a pontos eloszlás átlaga $ R $ régió felett:
+    $
+    p(x) \approx \frac{k/n}{V} = \frac{\hat{\rho}}{V} \approx \frac{1}{V} \int_{R} p(x') \, dx'
+    $
+
+- $ \hat{\rho} $ a valószínűségi sűrűség becsült értéke.
+
+- Az integrál az $ R $ régióban lévő pontos eloszlás összegzését jelenti.
+
+- Ez a képlet azt jelzi, hogy a becsült $ p(x) $ értékünk lényegében az eloszlás átlagát adja $ R $ régió felett.
+
+#### **A becsülés pontossága**
+
+- Mennyire pontos a közelítő formulánk, $p(x) \approx \frac{k/n}{V}$ ?
+
+- A közelítés két feltevésre épült
+  
+  - $\hat{\rho} = \frac{k}{n}$ egyre pontosabb ha $n \rarr \infty$
+  
+  - $\int_{R} p(x') \, dx' \cong p(x)V$ egyre pontosabb ha $V \rarr 0$
+
+- Egyre több példa esetén $V$-t fokozatosan tudjuk zsugorítani
+  
+  - De ha túl kicsire vesszük és nem tartalmaz példákat, $p(x)=0$ becslést kapunk!
+
+- Elméletileg, ha a példaszám végtelenhez tart, akkor a becsült eloszlás is tartani fog a valódi eloszláshoz
+  
+  - ha n növekedésével szinkronban csökkentjük $V$-t
+  
+  - …de óvatosan: úgy, hogy $k$ is végtelenhez tartson
+
+- Sorozat a közelítésekből: $ p_n(x) = \frac{k_n / n}{V_n} $
+  
+  - **$ n $**: A példák száma, vagyis az összes adatpont száma.
+  
+  - **$ V_n $**: A régió mérete az $ n $-edik közelítésben.
+  
+  - **$ k_n $**: A régióba eső példák száma az $ n $-edik közelítésben.
+
+- Megmutatható hogy,
+  
+  $ p_n(x) \rightarrow p(x) \text{ amikor } n \rightarrow \infty $
+  
+  a becsült valószínűségi sűrűségfüggvény konvergál a valódi valószínűségi sűrűségfüggvényhez, ha bizonyos feltételek teljesülnek.
+  
+  - **$ V_n \rightarrow 0 $ amikor $ n \rightarrow \infty $**
+    
+    - Ez azt jelenti, hogy a régió mérete az $ n $ közelítések során egyre kisebb lesz. A régiók egyre finomabb felbontásúak lesznek, így pontosabban le tudják fedni az eloszlást.
+  
+  - **$ k_n \rightarrow \infty $ amikor $ n \rightarrow \infty $**
+    
+    - Ez azt jelenti, hogy a régióba eső példák száma növekszik, ahogy az összes minta száma növekszik. Ez biztosítja, hogy elegendő adatpont lesz minden régióban a sűrűség pontos becsléséhez.
+  
+  - **$ k_n / n \rightarrow 0 $ amikor $ n \rightarrow \infty $**
+    
+    - Ez azt jelenti, hogy a régióba eső példák aránya az összes példához képest csökken. Ez biztosítja, hogy a becsült sűrűség nem lesz túl nagy, ami kiegyensúlyozott becslést eredményez.
+
+- Két példa, amely kielégíti a feltételeket
+  
+  - **Parzen-ablak módszer**: A régió mérete ($ V_n $) csökken, ahogy az adatpontok száma nő, így egyre finomabb becslést kapunk.
+    
+    - rögzítjük $V$ -t
+    
+    - $k$ -t az adatokból számoljuk ki
+  
+  - **Legközelebbi szomszéd módszer**: A $ k_n $ érték növekedésével a régió mérete ($ V_n $) is pontosabbá válik, hiszen több adatpontot veszünk figyelembe.
+    
+    - rögzítjük k -t
+    
+    - V -t az adatokból számoljuk ki
+
+- Egy gyakorlati feladatban az $n$ példaszám mindig véges és rögzített
+  
+  - Ezért $n$-t nem tudjuk növelni, csak $V$-t csökkenteni
+  
+  - De ezzel óvatosnak kell lenni, mert ha $V$ túl kicsi, akkor a $p(x)$ becslése sok $x$ pontban $0$-t ad, mivel a régióban nem lesz példa
+
+- Ezért a gyakorlatban $V$-re nézve kompromisszumot kell kötnünk
+  
+  - Nem lehet túl kicsi, hogy elég példát tartalmazzon (azaz $k$ ne legyen 0)
+  
+  - Nem lehet túl nagy, mert akkor a becslés válik pontatlanná(túl sima lesz, mivel adott $R$ régión belül konstans értéket ad)
+
+- A megfelelő $V$ vagy $k$ értéket az aktuális példahalmazhoz érdemes belőni
+
+### Parzen-ablak
+
+#### Alapötlet
+
+A Parzen-ablak módszer célja a valószínűségi sűrűségfüggvény becslése egy adott ponthoz közeli minták felhasználásával. Az alapötlet az, hogy egy rögzített ablakot (kernel) helyezünk minden egyes adatpontra, és ezeknek az ablakoknak az összegzésével becsüljük a sűrűséget.
+
+#### Lépések
+
+1. **Ablak (Kernel) Definiálása**:
+   
+   - Válasszunk egy ablak (kernel) függvényt $ K(x) $, amely az $ x $ környezetében levő pontokra fókuszál. A kernel függvény gyakran egy egyszerű, szimmetrikus függvény, például a Gauss-eloszlás vagy az egységnyi négyzet (boxcar) függvény:
+     $
+     K(x) = \begin{cases}
+     1 & \text{ha } |x| \leq \frac{1}{2} \\
+     0 & \text{egyébként}
+     \end{cases}
+     $
+
+2. **Ablak Szélességének (Bandwidth) Meghatározása**:
+   
+   - Válasszuk meg az ablak szélességét (bandwidth) $ h $, amely meghatározza a kernel függvény skálázását. Az $ h $ értéke határozza meg, hogy mennyire széles vagy szűk legyen az ablak.
+
+3. **Sűrűség Becslése**:
+   
+   - A valószínűségi sűrűségfüggvény becsült értékét ($ \hat{p}(x) $) az $ x $ pontban az alábbi képlet segítségével számoljuk:
+     $
+     \hat{p}(x) = \frac{1}{n h^d} \sum_{i=1}^{n} K\left(\frac{x - x_i}{h}\right)
+     $
+     ahol:
+     - $ n $ az adatpontok száma,
+     - $ d $ az adatok dimenziója,
+     - $ x_i $ az $ i $-edik adatpont,
+     - $ h $ az ablak szélessége (bandwidth).
+
+#### Magyarázat
+
+- **Kernel Függvény**: A kernel függvény ($ K $) minden adatpontra egy "súlyozott" ablakot helyez, amelynek értéke az $ x $ pont körüli adatok sűrűségét reprezentálja.
+- **Ablak Szélessége**: Az $ h $ szélesség határozza meg, hogy mennyire széles az ablak. Kis $ h $ érték esetén a sűrűségbecslés érzékeny lesz a helyi variációkra (több részlet), míg nagy $ h $ érték esetén a sűrűségbecslés simább lesz (kevésbé részletes).
+- **Összegzés**: Az összegzés során az összes adatpontra alkalmazott kernel függvények értékeit összegezzük, és az eredményt normalizáljuk az adatpontok száma ($ n $) és az ablak szélessége ($ h $) szerint.
+
+#### Példa
+
+Tegyük fel, hogy van egy egy dimenziós adathalmazunk, és Gauss-eloszlású kerneleket használunk. Az $ h $ ablak szélességgel a Gauss-kernel:
+$
+K(x) = \frac{1}{\sqrt{2\pi}} e^{-\frac{x^2}{2}}
+$
+
+A sűrűségbecslés képlete ebben az esetben:
+$
+\hat{p}(x) = \frac{1}{n h} \sum_{i=1}^{n} \frac{1}{\sqrt{2\pi}} e^{-\frac{(x - x_i)^2}{2h^2}}
+$
+
+#### Előnyök és Hátrányok
+
+#### Előnyök:
+
+- **Nemparametrikus**: Nincs szükség előzetes feltételezésekre az adatok eloszlásáról.
+- **Rugalmasság**: Különböző kernel függvények és ablak szélességek használhatók az adatokhoz legjobban illeszkedő sűrűség becsléséhez.
+
+#### Hátrányok:
+
+- **Számítási Igény**: Nagy adatállomány esetén a számítási költségek magasak lehetnek, mivel minden adatponthoz alkalmazni kell a kernel függvényt.
+- **Ablak Szélesség Kiválasztása**: Az optimális ablak szélesség kiválasztása nem mindig egyszerű, és nagyban befolyásolja a becslés pontosságát.
