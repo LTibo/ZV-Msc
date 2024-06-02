@@ -4503,3 +4503,9 @@ A tanítás során a háló optimalizálja a súlyokat és biasokat, hogy minima
 - **Tanulási folyamat**: Forward propagation, loss függvény, backpropagation és gradient descent.
 
 A neurális hálók sokféle alkalmazásban használhatók, például képfelismerés, beszédfelismerés, természetes nyelv feldolgozás és sok más területen. Ha további kérdéseid vannak, vagy szeretnél mélyebben belemenni valamelyik részletbe, nyugodtan tedd fel!
+
+# Közelítő és szimbolikus számítások haladóknak
+
+[Közelítő és szimbolikus számítások haladóknak](https://www.inf.u-szeged.hu/~tvinko/KosziH/)
+
+# 13. Ortogonális transzformációk használata a lineáris algebra numerikus módszereiben (ortogonális-trianguláris felbontások, speciális alakra transzformálás, QR-algoritmus)
