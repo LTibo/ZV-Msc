@@ -4163,6 +4163,8 @@ Figyelembe kell venni a $R$ régió térfogatát is
 
 ### Parzen-ablak
 
+[k-NN 6: Parzen windows and kernels - YouTube](https://www.youtube.com/watch?v=UPXIdi_aTEg&ab_channel=VictorLavrenko)
+
 #### Alapötlet
 
 A Parzen-ablak módszer célja a valószínűségi sűrűségfüggvény becslése egy adott ponthoz közeli minták felhasználásával. Az alapötlet az, hogy egy rögzített ablakot (kernel) helyezünk minden egyes adatpontra, és ezeknek az ablakoknak az összegzésével becsüljük a sűrűséget.
@@ -4224,3 +4226,142 @@ $
 
 - **Számítási Igény**: Nagy adatállomány esetén a számítási költségek magasak lehetnek, mivel minden adatponthoz alkalmazni kell a kernel függvényt.
 - **Ablak Szélesség Kiválasztása**: Az optimális ablak szélesség kiválasztása nem mindig egyszerű, és nagyban befolyásolja a becslés pontosságát.
+
+![](assets/2024-06-01-12-16-04-image.png)
+
+### k-NN Osztályozó
+
+#### Alapötlet
+
+A k-NN osztályozó lényege, hogy egy ismeretlen adatpontot az alapján osztályoz, hogy milyen osztályokba tartoznak a hozzá legközelebbi $ k $ adatpontok. Az ismeretlen adatpont osztályát az határozza meg, hogy a legközelebbi szomszédok közül melyik osztály fordul elő leggyakrabban.
+
+#### Lépések
+
+1. **Távolság Mérése**: Számítsuk ki az ismeretlen adatpont és az összes tanítópont közötti távolságot. Gyakran használt távolságmértékek közé tartozik az euklideszi távolság:
+   $
+   d(x, x_i) = \sqrt{\sum_{j=1}^n (x_j - x_{ij})^2}
+   $
+   ahol $ x $ az ismeretlen adatpont, $ x_i $ pedig egy tanítópont.
+
+2. **Legközelebbi $ k $ Szomszéd Kiválasztása**: Válasszuk ki a $ k $ legközelebbi tanítópontot az ismeretlen adatpont körül, az előző lépésben kiszámított távolságok alapján.
+
+3. **Szavazás**: Határozzuk meg az ismeretlen adatpont osztályát a $ k $ legközelebbi szomszéd szavazatai alapján. Az adatpont osztálya az lesz, amelyik osztály a legtöbbször fordul elő a legközelebbi szomszédok között.
+
+#### Példa
+
+Tegyük fel, hogy $ k = 3 $, és az ismeretlen adatpontunk három legközelebbi szomszédja közül kettő az "A" osztályba, egy pedig a "B" osztályba tartozik. Ekkor az ismeretlen adatpontot az "A" osztályba soroljuk, mivel az "A" osztály fordul elő a legtöbbször.
+
+### k-NN Regresszió
+
+A k-NN regresszió hasonló módon működik, de osztályozás helyett folytonos értékeket becsül. Az ismeretlen adatpont értékét a $ k $ legközelebbi szomszédjának átlagával becsüljük.
+
+#### Lépések
+
+1. **Távolság Mérése**: Ugyanúgy számítjuk ki az ismeretlen adatpont és az összes tanítópont közötti távolságot.
+2. **Legközelebbi $ k $ Szomszéd Kiválasztása**: Válasszuk ki a $ k $ legközelebbi tanítópontot.
+3. **Átlag Számítása**: Az ismeretlen adatpont értékét a $ k $ legközelebbi szomszéd értékeinek átlagával becsüljük:
+   $
+   \hat{y} = \frac{1}{k} \sum_{i=1}^k y_i
+   $
+   ahol $ y_i $ a legközelebbi szomszédok értéke.
+
+### Paraméterek és Megfontolások
+
+1. **$ k $ Értékének Megválasztása**: A $ k $ értéke kritikus szerepet játszik a k-NN teljesítményében.
+   
+   - **Kis $ k $**: Az algoritmus érzékeny lehet a zajra és az adatokban lévő anomáliákra.
+   - **Nagy $ k $**: Az algoritmus jobban általánosít, de túlságosan elsimíthatja az adatokat és elveszítheti a finom részleteket.
+
+2. **Távolságmérték**: Az euklideszi távolság mellett használhatunk más távolságmértékeket is, mint például a Manhattan-távolság vagy a Mahalanobis-távolság.
+
+3. **Normalizálás**: Az adatok normalizálása vagy standardizálása fontos lehet, különösen, ha az adatok különböző mértékegységekben vannak.
+
+### Előnyök és Hátrányok
+
+**Előnyök**:
+
+- Egyszerű és intuitív.
+- Nincs szükség modell felépítésére vagy paraméter becslésére a tanítási fázisban.
+
+**Hátrányok**:
+
+- Nagy számítási költség a tesztelési fázisban, mivel minden új adatponthoz az összes tanítóponttal való távolságot ki kell számítani.
+- Érzékeny a zajra és az irreleváns jellemzőkre.
+- Nagy adathalmazok esetén nehezen skálázható.
+
+## Döntési fák
+
+#### Szerkezet
+
+- **Gyökércsomópont (Root Node)**: A fa legfelső csomópontja, amely az első döntést hozza.
+- **Belső csomópontok (Internal Nodes)**: Azok a csomópontok, amelyek további döntéseket hoznak az adat további felosztásával.
+- **Levélcsomópontok (Leaf Nodes)**: Azok a csomópontok, amelyek végső osztályokat vagy előrejelzéseket tartalmaznak.
+
+#### Működés
+
+- Minden belső csomópont egy jellemző (feature) és egy küszöbérték alapján hoz döntést.
+- Az adatpontokat iteratívan osztják fel a jellemzők és küszöbértékek alapján, amíg el nem érik a levélcsomópontot, ahol az osztályozás vagy előrejelzés történik.
+
+### Döntési Fa Építése
+
+#### 1. Split (Felosztás)
+
+Az adathalmazt fel kell osztani jellemzők alapján. Az optimális felosztási pont megtalálása kulcsfontosságú. Gyakran használt felosztási kritériumok:
+
+- **Gini Index**: Az adathalmaz tisztaságát méri. Minél kisebb az érték, annál tisztább az adathalmaz.
+  $
+  Gini(D) = 1 - \sum_{i=1}^{C} p_i^2
+  $
+  ahol $ p_i $ az $ i $-edik osztály valószínűsége az adott adathalmazon.
+
+- **Információnyereség (Information Gain)**: Az entrópia csökkenését méri, amely az adathalmaz tisztaságának mértéke.
+  $
+  IG(D, A) = Entropy(D) - \sum_{v \in Values(A)} \frac{|D_v|}{|D|} Entropy(D_v)
+  $
+  ahol $ Entropy(D) = - \sum_{i=1}^{C} p_i \log(p_i) $.
+
+#### 2. Stopping Criteria (Megállási kritériumok)
+
+A döntési fa építése megállhat, ha:
+
+- Az összes adatpont ugyanabba az osztályba tartozik.
+- Nincs további jellemző az adatok felosztására.
+- Az előre meghatározott fa mélységét elértük.
+- A csomópontban lévő adatpontok száma egy bizonyos küszöbérték alatt van.
+
+#### 3. Pruning (Metszés)
+
+A fa túlzott növekedésének (overfitting) elkerülése érdekében a döntési fát visszametszhetjük. A metszés eltávolítja a kevésbé hasznos csomópontokat.
+
+- **Előre Metszés (Pre-pruning)**: Megállunk a fa építésében bizonyos kritériumok alapján (pl. maximális mélység).
+- **Utólagos Metszés (Post-pruning)**: A teljes fa építése után visszametszünk kevésbé fontos ágakat.
+
+### Előnyök és Hátrányok
+
+#### Előnyök
+
+- **Érthetőség**: A döntési fák egyszerűen értelmezhetők és vizualizálhatók.
+- **Kevesebb előfeldolgozás**: Nem igényel skálázást vagy normalizálást.
+- **Nemparametrikus**: Nincs feltételezés az adatok eloszlására vonatkozóan.
+
+#### Hátrányok
+
+- **Overfitting**: A döntési fák hajlamosak túlzottan illeszkedni az adatokra, különösen, ha a fa mély.
+- **Instabilitás**: Kis változások az adatokban nagy változásokat eredményezhetnek a fa struktúrájában.
+- **Bonyolult modellek**: Nagyon mély vagy komplex fák esetén a modell nehezen érthetővé válhat.
+
+#### Példa egy Döntési Fa Osztályozóra
+
+Tegyük fel, hogy van egy adathalmazunk az alábbi jellemzőkkel: életkor, jövedelem, vásárolt-e terméket. Az alábbi egyszerű fa mutatja, hogyan osztályozzuk az adatokat:
+
+1. **Gyökércsomópont**: Jövedelem > 50k?
+   
+   - **Igen**: Továbbosztás
+   - **Nem**: Vásárolt = Nem
+
+2. **Továbbosztás (Jövedelem > 50k)**: Életkor > 30?
+   
+   - **Igen**: Vásárolt = Igen
+   - **Nem**: Vásárolt = Nem
+
+Ez a fa egyszerű, könnyen érthető szabályokkal osztályozza az adatokat a jövedelem és életkor alapján.
