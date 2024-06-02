@@ -4365,3 +4365,141 @@ Tegyük fel, hogy van egy adathalmazunk az alábbi jellemzőkkel: életkor, jöv
    - **Nem**: Vásárolt = Nem
 
 Ez a fa egyszerű, könnyen érthető szabályokkal osztályozza az adatokat a jövedelem és életkor alapján.
+
+## SVM
+
+### Alapelvek
+
+#### 1. **Cél**
+
+Az SVM célja, hogy találjon egy olyan hiper-síkot, amely a legjobban elválasztja a két osztály adatpontjait a magas dimenziós térben. Az elválasztó hiper-síknak maximális margóval kell rendelkeznie, ami azt jelenti, hogy a legközelebbi adatpontok (szupport vektorok) és a hiper-sík közötti távolság maximális.
+
+#### 2. **Hiper-sík**
+
+Egy hiper-sík egy $ n $-dimenziós térben $ n-1 $ dimenziós sík. Például egy 2D térben egy hiper-sík egyenes, 3D térben pedig egy sík.
+
+#### 3. **Margó**
+
+A margó a hiper-sík és a legközelebbi adatpontok (szupport vektorok) közötti távolság. Az SVM célja, hogy maximalizálja ezt a margót, hogy az adatpontok a lehető legjobban elválasztva legyenek.
+
+### Matematikai Formuláció
+
+#### 1. **Hiper-sík egyenlete**
+
+Egy hiper-sík egyenlete a következő formában írható fel:
+$ \mathbf{w} \cdot \mathbf{x} + b = 0 $
+ahol $\mathbf{w}$ a normálvektor, $\mathbf{x}$ az adatpontok vektora és $b$ az eltolási paraméter.
+
+#### 2. **Optimalizációs probléma**
+
+Az SVM az alábbi optimalizációs problémát oldja meg:
+$ \min_{\mathbf{w}, b} \frac{1}{2} \|\mathbf{w}\|^2 $
+míg az alábbi feltételek teljesülnek minden $i$-re:
+$ y_i (\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1 $
+ahol $y_i \in \{-1, 1\}$ az osztály címke.
+
+#### 3. **Lágy margó (Soft Margin)**
+
+A valós adatok gyakran nem lineárisan szeparálhatók, ezért bevezetünk egy lágy margót, ami lehetővé teszi, hogy néhány adatpont a margón belül vagy rossz oldalon legyen. Ezt a következőképpen módosítjuk:
+$ \min_{\mathbf{w}, b, \xi} \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^n \xi_i $
+míg az alábbi feltételek teljesülnek minden $i$-re:
+$ y_i (\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1 - \xi_i $
+ahol $\xi_i$ a slack változók, és $C$ egy szabályozási paraméter, amely kontrollálja a büntetést a rossz osztályozásokért.
+
+### Kernel Trükk (Kernel Trick)
+
+Sok adat nem lineárisan szeparálható az eredeti dimenzióban. Az SVM használhatja a kernel trükköt, hogy az adatokat egy magasabb dimenziós térbe vetítse, ahol lineárisan szeparálhatóvá válnak. Néhány gyakori kernel függvény:
+
+- **Lineáris Kernel**: $ K(\mathbf{x}_i, \mathbf{x}_j) = \mathbf{x}_i \cdot \mathbf{x}_j $
+- **Polinomiális Kernel**: $ K(\mathbf{x}_i, \mathbf{x}_j) = (\mathbf{x}_i \cdot \mathbf{x}_j + 1)^d $
+- **Gauss (RBF) Kernel**: $ K(\mathbf{x}_i, \mathbf{x}_j) = \exp(-\gamma \|\mathbf{x}_i - \mathbf{x}_j\|^2) $
+
+### Szupport Vektorok
+
+Az SVM néhány adatpontot, az úgynevezett szupport vektorokat használja fel a hiper-sík meghatározásához. Ezek azok az adatpontok, amelyek a legközelebb vannak a hiper-síkhoz, és ezek a pontok döntő szerepet játszanak a modell kialakításában.
+
+### Példa
+
+Képzeljünk el egy egyszerű példát, ahol két osztály van: pozitív és negatív. Az SVM megkeresi azt a hiper-síkot, amely a legjobban elválasztja a két osztályt, és maximalizálja a margót. A szupport vektorok azok az adatpontok, amelyek közvetlenül a margó vonalain találhatók.
+
+### Összefoglalás
+
+- **Szupport Vektor Gép (SVM)**: Felügyelt tanulási algoritmus, amelyet elsősorban osztályozási feladatokra használnak.
+- **Hiper-sík és Margó**: Az SVM megkeresi az adatokat legjobban elválasztó hiper-síkot, és maximalizálja a margót.
+- **Lágy margó**: Lehetővé teszi néhány adatpont számára, hogy rossz oldalon legyenek, és bünteti a rossz osztályozásokat.
+- **Kernel Trükk**: Az adatokat magasabb dimenziós térbe vetíti, hogy lineárisan szeparálhatóvá váljanak.
+- **Szupport Vektorok**: Azok az adatpontok, amelyek a hiper-síkot meghatározzák és döntő szerepet játszanak a modellben.
+
+## Neuronhálók
+
+### Alapfogalmak
+
+#### 1. Neurális Háló (Neural Network)
+
+Egy neurális háló egy matematikai modell, amely neuronokból (mesterséges neurális egységekből) épül fel. Ezek a neuronok rétegekbe szerveződnek, és az információt rétegről rétegre továbbítják.
+
+#### 2. Rétegek (Layers)
+
+A neurális hálók rétegekre oszthatók:
+
+- **Bemeneti réteg (Input Layer)**: Ez a réteg veszi fel a bemeneti adatokat.
+- **Rejtett rétegek (Hidden Layers)**: Ezek a rétegek végzik a tényleges számításokat és mintafelismerést. Több rejtett réteg is lehet egy hálóban, és ezek mélysége határozza meg a háló komplexitását.
+- **Kimeneti réteg (Output Layer)**: Ez a réteg adja meg a háló végső kimenetét, például egy osztályozási feladatban az osztály valószínűségeit.
+
+#### 3. Neuronok (Nodes vagy Units)
+
+Minden egyes rétegben neuronok találhatók, amelyek a bemenetek súlyozott összegét és egy aktivációs függvényt használnak a kimenet számításához.
+
+### Működés
+
+#### 1. Súlyok és Biasok
+
+- **Súlyok (Weights)**: A súlyok határozzák meg, hogy mennyire fontos egy adott bemenet egy neuron számára. Minden kapcsolat két neuron között egy súllyal van jelölve.
+- **Biasok (Biases)**: A bias egy konstans érték, amelyet a neuronok kimenetéhez adunk hozzá, hogy eltoljuk az aktivációs függvény értékét.
+
+#### 2. Aktivációs Függvény (Activation Function)
+
+Az aktivációs függvények nemlineáris transzformációkat végeznek a neuronok kimenetén, ami lehetővé teszi a háló számára, hogy komplex mintázatokat tanuljon meg. Néhány gyakori aktivációs függvény:
+
+- **Sigmoid**: $\sigma(x) = \frac{1}{1 + e^{-x}}$
+- **ReLU (Rectified Linear Unit)**: $\text{ReLU}(x) = \max(0, x)$
+- **Tanh**: $\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$
+
+### Tanulási Folyamat
+
+#### 1. Forward Propagation
+
+Az információ a bemeneti rétegtől kezdve rétegenként halad előre a hálóban, amíg el nem éri a kimeneti réteget. Minden neuron kiszámítja a kimenetét az alábbi képlet alapján:
+$ \text{output} = \text{activation}(\sum (\text{input} \times \text{weight}) + \text{bias}) $
+
+#### 2. Loss Function
+
+A loss (veszteség) függvény méri, hogy mennyire jó a háló előrejelzése a valós adatokhoz képest. Példák:
+
+- **Mean Squared Error (MSE)**: $\frac{1}{n}\sum_{i=1}^n (y_i - \hat{y}_i)^2$
+- **Cross-Entropy Loss**: $-\sum_{i=1}^n y_i \log(\hat{y}_i)$
+
+#### 3. Backpropagation és Gradient Descent
+
+A háló tanulási folyamata során a hibát (veszteséget) visszaterjesztjük a hálóban, hogy frissítsük a súlyokat. Ezt a folyamatot backpropagation-nek nevezzük. A súlyok frissítése a gradient descent algoritmus segítségével történik:
+$ \text{weight}_{new} = \text{weight}_{old} - \eta \cdot \nabla L $
+ahol $\eta$ a tanulási ráta, és $\nabla L$ a veszteségfüggvény gradiensvektora a súlyok szerint.
+
+### Példa
+
+Képzeljünk el egy egyszerű neurális hálót, amely képes felismerni kézzel írt számjegyeket (0-9). A háló bemeneti rétege a képpontokból áll, és több rejtett rétegen keresztül juttatja el az információt a kimeneti réteghez, amely 10 neuront tartalmaz (egy minden lehetséges számjegy számára).
+
+1. **Bemenet**: Képpontok (például 28x28 pixel egy kézzel írt számjegyből).
+2. **Rejtett rétegek**: Több réteg, amelyek megtanulják az egyes képpontok közötti kapcsolatokat és mintázatokat.
+3. **Kimenet**: 10 neuron, amelyek a 0-9 közötti számjegyek valószínűségeit adják meg.
+
+A tanítás során a háló optimalizálja a súlyokat és biasokat, hogy minimalizálja a veszteséget, ami a valós számjegyek és a háló által előrejelzett számjegyek közötti különbséget méri.
+
+### Összefoglalás
+
+- **Neurális hálók**: Mesterséges rendszerek, amelyek az emberi agy működését modellezik.
+- **Rétegek**: Bemeneti, rejtett és kimeneti rétegek.
+- **Neuronok**: Az adatokat feldolgozó alapegységek, amelyek súlyokat és aktivációs függvényeket használnak.
+- **Tanulási folyamat**: Forward propagation, loss függvény, backpropagation és gradient descent.
+
+A neurális hálók sokféle alkalmazásban használhatók, például képfelismerés, beszédfelismerés, természetes nyelv feldolgozás és sok más területen. Ha további kérdéseid vannak, vagy szeretnél mélyebben belemenni valamelyik részletbe, nyugodtan tedd fel!
