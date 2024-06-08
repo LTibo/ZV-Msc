@@ -4698,7 +4698,7 @@ Tetszőleges $ \mathbf{A} \in \mathbb{R}^{n \times n} $ mátrix ortogonális-tri
 
 3. **Folytatás:**
    
-   - Ismételjük meg a fenti lépéseket minden oszlopra $ n-1 $-ig.
+   - Ismételjük meg a fenti lépéseket minden oszlopra $ n-1 $-ig (mert az utolsó oszlopot nem bántjuk).
 
 4. **Végeredmény:**
    
@@ -4717,3 +4717,73 @@ Minden lépésben egy kisebb (minden dimenzióba) mátrixhoz készítjük a $\ma
 
 - Az ortogonális-trianguláris felbontás egyik fő előnye, hogy tetszőleges $ \mathbf{A} $ mátrixra alkalmazható.
 - Elemi tükröző mátrixok használatával megkapható bármely mátrix $ \mathbf{A} = \mathbf{Q} \mathbf{R} $ felbontása.
+
+#### Műveletigény
+
+![](assets/2024-06-08-22-36-46-image.png)
+
+### Elemi forgató mátrixok (Givens-mátrixok)
+
+Ebben a fejezetben az adott tengely körüli adott θ szögű síkbeli forgatásoknak megfelelő ortogonális mátrixokat vezetjük be. Wallace Givens az 1950-es években az Argonne National Library-ban dolgozott és ott mutatta be a forgatómátrixok használhatóságát a numerikus matematikában.
+
+**Egy $\mathbf{G}(p, q, \theta)$ mátrixot elemi forgató mátrixnak nevezünk, ha az alábbi alakban adható meg:**
+$ \mathbf{G}(p, q, \theta) = \mathbf{I} + (\cos \theta - 1) (\mathbf{e}_p \mathbf{e}_p^T + \mathbf{e}_q \mathbf{e}_q^T) + \sin \theta (\mathbf{e}_p \mathbf{e}_q^T - \mathbf{e}_q \mathbf{e}_p^T) $
+
+Itt:
+
+- $\mathbf{I}$ az egységmátrix.
+- $\mathbf{e}_p$ és $\mathbf{e}_q$ az $n$-dimenziós egységvektorok, ahol $\mathbf{e}_p$ az $p$-edik helyen, $\mathbf{e}_q$ a $q$-edik helyen 1-et tartalmaz, és minden más helyen 0-t.
+
+Alakja:
+
+![](assets/2024-06-08-23-55-57-image.png)
+
+Példa:
+
+![](assets/2024-06-09-00-02-08-image.png)
+
+![](assets/2024-06-09-00-14-16-image.png)
+
+### Ortogonális Triangulárizáció Givens Eljárással
+
+A Givens forgató mátrixokat használhatjuk egy $ \mathbf{A} \in \mathbb{R}^{n \times n} $ mátrix QR-felbontásának előállítására, hasonlóan a korábban vizsgált Householder-mátrixokhoz. A cél az, hogy olyan ortogonális $ \mathbf{Q} $ és felső háromszög mátrix $ \mathbf{R} $ legyen, hogy $ \mathbf{A} = \mathbf{Q} \mathbf{R} $.
+
+#### Tétel
+
+**Tetszőleges $ \mathbf{A} \in \mathbb{R}^{n \times n} $ mátrix ortogonális-trianguláris felbontása előállítható elemi forgató mátrixokkal végzett szorzások segítségével, pontosabban megadhatók véges sok olyan $ \mathbf{G}(p, q, \theta) $ elemi forgató mátrix, hogy:**
+
+$ \mathbf{G}(n-1, n, \theta_{n-1,n}) \cdots \mathbf{G}(1, 3, \theta_{1,3}) \mathbf{G}(1, 2, \theta_{1,2}) \mathbf{A} $
+
+egy felső háromszög mátrixot eredményez.
+
+#### Lépések
+
+1. **Kezdőállapot:**
+   
+   - Kezdjük a $ \mathbf{A} $ mátrixszal.
+
+2. **Elemi forgató mátrixok alkalmazása:**
+   
+   - Alkalmazzuk a Givens forgató mátrixokat, hogy az $ \mathbf{A} $ mátrix alsó háromszögbeli elemeit nullázzuk.
+   - Az első lépésben a $\mathbf{G}(1, 2, \theta_{1,2}) \mathbf{A}$ szorzattal nullázzuk az $ \mathbf{A} $ első oszlopának 2. elemét.
+   - A következő lépésben a $\mathbf{G}(1, 3, \theta_{1,3}) \mathbf{A}$ szorzattal nullázzuk az $ \mathbf{A} $ első oszlopának 3. elemét.
+
+3. **Ismétlés:**
+   
+   - Folytassuk ezt az eljárást minden szükséges elemre, hogy az $ \mathbf{A} $ mátrix alsó háromszögbeli elemeit nullázzuk. A forgató mátrixokat úgy választjuk meg, hogy az adott elem nullázása megtörténjen, míg a korábban nullázott elemek ne változzanak.
+
+4. **Végeredmény:**
+   
+   - Az utolsó lépésben alkalmazott forgató mátrixok után a $\mathbf{A}$ mátrix egy felső háromszög mátrix lesz.
+   - Az ortogonális mátrix $ \mathbf{Q} $ az összes alkalmazott forgató mátrix szorzataként áll elő:
+     $ \mathbf{Q} = \mathbf{G}(1, 2, \theta_{1,2})^T \mathbf{G}(1, 3, \theta_{1,3})^T \cdots \mathbf{G}(n-1, n, \theta_{n-1,n})^T. $
+
+<img src="assets/2024-06-09-00-29-43-image.png" title="" alt="" width="561">
+
+#### Műveletigény
+
+![](assets/2024-06-09-00-20-10-image.png)
+
+Ugyanúgy $\Omicron(n^3)$ mint a Householder-módszer esetén.
+
+Ha az alap A mátrixban sok a nulla (az alsó trianguláris részben) akkor a Givens módszer tud gyorsabb lenni.
