@@ -4508,4 +4508,212 @@ A neurális hálók sokféle alkalmazásban használhatók, például képfelism
 
 [Közelítő és szimbolikus számítások haladóknak](https://www.inf.u-szeged.hu/~tvinko/KosziH/)
 
+![](assets/2024-06-08-12-54-30-image.png)
+
+### Műveletigények
+
+![](assets/2024-06-07-23-57-44-image.png)
+
+### Vektornormák
+
+A vektornormák olyan függvények, amelyek a vektorok méretét vagy hosszát mérik. Egy $ \|\mathbf{x}\| $ normának a következő tulajdonságokkal kell rendelkeznie minden $\mathbf{x}$ és $\mathbf{y}$ vektorra, valamint minden $\alpha$ skalárra:
+
+1. **Pozitivitás**: $ \|\mathbf{x}\| \geq 0 $, és $ \|\mathbf{x}\| = 0 $ akkor és csak akkor, ha $\mathbf{x} = \mathbf{0}$.
+2. **Homogenitás (Szakítóság)**: $ \|\alpha \mathbf{x}\| = |\alpha| \|\mathbf{x}\| $.
+3. **Háromszög-egyenlőtlenség**: $ \|\mathbf{x} + \mathbf{y}\| \leq \|\mathbf{x}\| + \|\mathbf{y}\| $.
+
+A leggyakoribb vektornormák a következők:
+
+1. **1-norma (Manhattan-norma)**:
+   $
+   \|\mathbf{x}\|_1 = \sum_{i=1}^{n} |x_i|
+   $
+   Ez a norma a vektor összes abszolút értékének összegét méri.
+
+2. **2-norma (Euklideszi norma)**:
+   $
+   \|\mathbf{x}\|_2 = \left( \sum_{i=1}^{n} x_i^2 \right)^{1/2}
+   $
+   Ez a leggyakoribb norma, amely a vektor Euklideszi hosszát méri.
+
+3. **∞-norma (Max-norma)**:
+   $
+   \|\mathbf{x}\|_\infty = \max_i |x_i|
+   $
+   Ez a norma a vektor komponenseinek legnagyobb abszolút értékét méri.
+
+### Mátrixnormák
+
+A mátrixnormák a mátrixok méretét vagy "nagyobbítását" mérik. A mátrixnormák is a következő tulajdonságokkal rendelkeznek minden $A$ és $B$ mátrixra, valamint minden $\alpha$ skalárra:
+
+1. **Pozitivitás**: $ \|A\| \geq 0 $, és $ \|A\| = 0 $ akkor és csak akkor, ha $ A = 0 $.
+2. **Homogenitás (Szakítóság)**: $ \|\alpha A\| = |\alpha| \|A\| $.
+3. **Háromszög-egyenlőtlenség**: $ \|A + B\| \leq \|A\| + \|B\| $.
+4. **Szubmultiplikativitás**: $ \|AB\| \leq \|A\| \|B\| $.
+
+Néhány fontos mátrixnorma:
+
+1. **Frobenius-norma**:
+   $
+   \|A\|_F = \left( \sum_{i=1}^{m} \sum_{j=1}^{n} |a_{ij}|^2 \right)^{1/2}
+   $
+   Ez a norma a mátrix összes elemének négyzetösszegéből származik, hasonlóan a 2-normához vektorok esetében.
+
+2. **1-norma**:
+   $
+   \|A\|_1 = \max_{1 \leq j \leq n} \sum_{i=1}^{m} |a_{ij}|
+   $
+   Ez a norma a mátrix oszlopainak abszolút értékeinek maximális összegét méri.
+
+3. **∞-norma**:
+   $
+   \|A\|_\infty = \max_{1 \leq i \leq m} \sum_{j=1}^{n} |a_{ij}|
+   $
+   Ez a norma a mátrix sorainak abszolút értékeinek maximális összegét méri.
+
+4. **Spektrális norma (2-norma)**:
+   $
+   \|A\|_2 = \sigma_{\max}(A)
+   $
+   Ez a norma a mátrix legnagyobb szinguláris értékét méri.
+
 # 13. Ortogonális transzformációk használata a lineáris algebra numerikus módszereiben (ortogonális-trianguláris felbontások, speciális alakra transzformálás, QR-algoritmus)
+
+## Ortogonális vektorok és mátrixok
+
+**Két vektor $ \mathbf{u}, \mathbf{v} \in \mathbb{R}^n \setminus \{0\} $ ortogonális, ha a belső szorzatuk nulla:**
+$ \langle \mathbf{u}, \mathbf{v} \rangle \overset{\text{def}}{=} \mathbf{v}^T \mathbf{u} = 0. $
+
+Vektorok egy halmazát ortogonálisnak nevezzük, ha az elemei páronként ortogonálisak.
+
+**Az $ \{\mathbf{u}_1, \ldots, \mathbf{u}_k\} $ ortogonális vektorhalmaz ortonormált, ha:**
+$ \|\mathbf{u}_i\|_2 = 1 \quad (i = 1, \ldots, k). $
+
+Az ortogonális és ortonormált vektorok halmaza két nagyon speciális esete a lineárisan független vektorok halmazának.
+
+**Egy $ Q \in \mathbb{R}^{n \times n} $ mátrixot ortogonálisnak nevezünk, ha az oszlopvektorai ortonormált vektorhalmazt alkotnak.**
+
+- Könnyen belátható, hogy egy ortogonális $ Q $ mátrixra teljesül, hogy:
+       $ Q^T Q = QQ^T = I, $
+
+- Ez azt jelenti, hogy az ortogonális mátrix transzponáltja egyben az inverze is:
+       $ Q^T = Q^{-1}. $
+  
+  - az invertálás itt nagyon könnyen elvégezhető
+
+- Ortogonális mátrixok szorzata ortogonális.
+
+## Householder mátrixok (elemi tükröző mátrixok)
+
+**Definíció:**  egy $ H \in \mathbb{R}^{n \times n} $ mátrixot elemi tükröző mátrixnak nevezünk, ha felírható a következő formában, valamely $h \ne 0$ vektorral:
+
+$
+H = I - \frac{2}{\|\mathbf{h}\|_2^2} \mathbf{h} \mathbf{h}^T = I - \frac{2}{\mathbf{h}^T \mathbf{h}} \mathbf{h} \mathbf{h}^T
+$
+
+- $I$ az $n \times n$ egységmátrix.
+- $\mathbf{h}$ egy $n$-dimenziós vektor
+  - a tükrözés normális vektora (a tükröző síkra merőleges vektor).
+  - a tükröző sík átmegy az origón
+- $\|\mathbf{h}\|_2$ a vektor Euklideszi normája.
+- $\mathbf{h} \mathbf{h}^T$ a vektor és saját transzponáltja által képzett mátrix.
+
+![](assets/2024-06-08-18-51-57-image.png)
+
+**A $ \mathbf{H} \neq \mathbf{I} $ esetben az $ \mathbf{x} \mapsto \mathbf{H}\mathbf{x} $ transzformáció az $ \mathbb{R}^n $ térnek a $ \mathbf{h} $ normálisú, origón áthaladó hipersíkra való tükrözését indukálja. Így például a definíció alapján könnyen bizonyítható, hogy $ \mathbf{H}\mathbf{h} = -\mathbf{h} $ és $ \mathbf{H}\mathbf{a} = \mathbf{a} $, ha $ \mathbf{h}^T \mathbf{a} = 0 $.**
+
+- A definíció szerint könnyen belátható, hogy ha egy vektor $ \mathbf{h} $, amely a hipersík normálvektora, akkor $ \mathbf{H}\mathbf{h} = -\mathbf{h} $. Ez azt jelenti, hogy a $ \mathbf{h} $ vektort $ \mathbf{H} $ tükrözi, és az ellenkező irányba mutat.
+
+- ha $ \mathbf{a} $ egy olyan vektor, amely ortogonális $ \mathbf{h} $-hoz (azaz $ \mathbf{h}^T \mathbf{a} = 0 $), akkor $ \mathbf{H}\mathbf{a} = \mathbf{a} $. Ez azt jelenti, hogy $ \mathbf{a} $ a hipersíkon marad, és nem változik meg a tükrözés során.
+
+*Segédtétel*: **Minden $ \mathbf{H} $ elemi tükröző mátrixra teljesülnek a következő tulajdonságok:**
+
+1. $ \mathbf{H}^T = \mathbf{H} $
+2. $ \mathbf{H}^{-1} = \mathbf{H} $
+
+vagyis $H$ szimmetrikus és ortogonális.
+
+*Segédtétel*: **Legyenek $ \mathbf{a}, \mathbf{b} \in \mathbb{R}^n $ tetszőleges egymástól és 0-tól különböző vektorok! Ha $ \|\mathbf{a}\|_2 = \|\mathbf{b}\|_2 $, akkor:**
+$ \mathbf{h} \overset{\text{def}}{=} (\mathbf{a} - \mathbf{b}) $
+és
+$ \mathbf{H} \overset{\text{def}}{=} \mathbf{I} - 2 \frac{(\mathbf{a} - \mathbf{b})(\mathbf{a} - \mathbf{b})^T}{\|\mathbf{a} - \mathbf{b}\|_2^2} $
+formulákkal megadott elemi tükrözés $\mathbf{a}$-t $\mathbf{b}$-be viszi át.
+
+![](assets/2024-06-08-20-54-05-image.png)
+
+**Alkalmazás:**
+
+- az $a$ vektort letükrözni az $x$ tengelyre (ez lesz a $b$ vektor, ugyanolyan hosszú mint az $a$)
+
+- két megoldás is van: függjön az $a$ vektor 1. koordinátájától (ez alapján itt a kék lesz, ne legyen túl nagy távolságú a tükrözés)
+  
+  <img src="assets/2024-06-08-20-59-14-image.png" title="" alt="" width="550">
+
+**Segédtétel.** Tetszőleges $H$ elemi tükrözőmátrix, $A$ mátrix és $x$ vektor esetén:
+
+- a $Hx$ transzformált vektor meghatározásának műveletigénye $\Omicron(n)$
+
+- a $HA$ transzformált mátrix meghatározásának műveletigénye $\Omicron(n^2)$
+
+## $A=QR$ meghatározása
+
+### Householder-módszer
+
+A Householder-módszer egy eljárás egy tetszőleges mátrix $ \mathbf{A} \in \mathbb{R}^{n \times n} $ ortogonális-trianguláris felbontására. Az eljárás célja, hogy $ \mathbf{A} $-t két mátrix szorzataként írjuk fel:
+$ \mathbf{A} = \mathbf{Q} \mathbf{R}, $
+ahol $ \mathbf{Q} $ egy ortogonális mátrix, $ \mathbf{R} $ pedig egy felső háromszögmátrix.
+
+#### Tétel
+
+Tetszőleges $ \mathbf{A} \in \mathbb{R}^{n \times n} $ mátrix ortogonális-trianguláris felbontása előállítható elemi tükröző mátrixokkal végzett szorzások segítségével, pontosabban megadhatók olyan $ \mathbf{H}_1, \mathbf{H}_2, \ldots, \mathbf{H}_{n-1} $ elemi tükröző mátrixok, hogy az alábbi rekurzív formulával számított $ \mathbf{A}_j $ mátrix $ 1, 2, \ldots, j $-dik oszlopában már felső háromszögű, azaz ezekben az oszlopokban minden főátló alatti elem 0. 
+
+#### Eljárás
+
+1. **Kezdeti állapot:**
+   
+   - Induljunk ki az $ \mathbf{A}_0 = \mathbf{A} $ mátrixból.
+
+2. **Rekurzív lépés:**
+   
+   - Definiáljuk az $ \mathbf{A}_j $ mátrixot az alábbi módon:
+     $ \mathbf{A}_j = \mathbf{H}_j \mathbf{A}_{j-1} \quad \text{(} j = 1, 2, \ldots, n-1 \text{)}. $
+   - Az $ \mathbf{H}_j $ elemi tükröző mátrixok úgy vannak meghatározva, hogy a $ j $-dik oszlopban minden főátló alatti elem 0 legyen.
+
+3. **Végső állapot:**
+   
+   - Speciálisan, az $ \mathbf{A}_{n-1} $ mátrix felső háromszögmátrix.
+
+![](assets/2024-06-08-22-07-30-image.png)
+
+#### Példa lépésről lépésre
+
+1. **Első lépés:**
+   
+   - Válasszuk ki az első oszlopot, és hozzuk létre az $ \mathbf{H}_1 $ tükröző mátrixot úgy, hogy az első oszlop összes főátló alatti elemét nullázza.
+
+2. **Második lépés:**
+   
+   - Alkalmazzuk $ \mathbf{H}_1 $-t $ \mathbf{A} $-ra, hogy megkapjuk $ \mathbf{A}_1 $-et.
+   - Ismételjük meg a folyamatot a $ \mathbf{A}_1 $ mátrix második oszlopával, és hozzuk létre az $ \mathbf{H}_2 $ mátrixot, hogy a második oszlop összes főátló alatti elemét nullázza.
+
+3. **Folytatás:**
+   
+   - Ismételjük meg a fenti lépéseket minden oszlopra $ n-1 $-ig.
+
+4. **Végeredmény:**
+   
+   - Az utolsó lépésben kapott $ \mathbf{A}_{n-1} $ felső háromszögmátrix lesz, amely a kívánt $ \mathbf{R} $.
+   - Az ortogonális mátrix $ \mathbf{Q} $ az összes alkalmazott tükröző mátrix szorzataként áll elő:
+     $ \mathbf{Q} = \mathbf{H}_1 \mathbf{H}_2 \ldots \mathbf{H}_{n-1}. $
+     - a $\mathbf{H_i}$-ket át kellett rendezni a bal oldalra
+
+#### $\mathbf{H}$ mátrix előállítása
+
+Minden lépésben egy kisebb (minden dimenzióba) mátrixhoz készítjük a $\mathbf{H_k}$ mátrixot a képen látható módon:
+
+![](assets/2024-06-08-22-33-23-image.png)
+
+### Előnyök
+
+- Az ortogonális-trianguláris felbontás egyik fő előnye, hogy tetszőleges $ \mathbf{A} $ mátrixra alkalmazható.
+- Elemi tükröző mátrixok használatával megkapható bármely mátrix $ \mathbf{A} = \mathbf{Q} \mathbf{R} $ felbontása.
