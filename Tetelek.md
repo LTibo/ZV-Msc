@@ -3772,37 +3772,28 @@ Azt a paraméter-értéket (értékeket, paraméter-vektort) választja, amely l
 
 - Példa: egyváltozós Gauss, μ és σ az optimalizálandó
   
-  $
-  
-       f(x | \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}
-       $
+  $ f(x | \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}$
 
 - A változók átjelölésével a maximalizálandó paraméterek $ \theta = (\theta_1, \theta_2) = (\mu, \sigma^2) $.
 
 - Elvégezve az átjelölést, az optimalizálási feladat a következő lesz:
-  
-  $
-  
-       \theta_{MLE} = \arg \max_{\theta} f(x | \theta) = \arg \max_{\theta} \left( \frac{1}{\sqrt{2\pi\theta_2}} e^{-\frac{(x - \theta_1)^2}{2\theta_2}} \right)
-       $
+
+  $\theta_{MLE} = \arg \max_{\theta} f(x | \theta) = \arg \max_{\theta} \left( \frac{1}{\sqrt{2\pi\theta_2}} e^{-\frac{(x - \theta_1)^2}{2\theta_2}} \right)
+   $
 
 - a kitevőben lévő kifejezés negatív, ami azt jelenti, hogy az exponenciális tag maximumát keressük.
 
 - MLE: maximum likelihood estimation
 
 - Mivel a valószínűségi függvény logaritmizált változatának optimuma ugyanott van mint a valószínűségi függvényé:
-  
-  $
-  
-       \theta_{MLE} = \arg \max_{\theta} f(x | \theta) = \arg \max_{\theta} \ln f(x | \theta)
-       $
+
+  $\theta_{MLE} = \arg \max_{\theta} f(x | \theta) = \arg \max_{\theta} \ln f(x | \theta)
+   $
 
 - A log-likelihood célfüggvényből a következő lesz:
   
-  $
-  
-       \ln P(x_k | \theta) = -\frac{1}{2} \ln 2\pi\theta_2 - \frac{1}{2} \ln \theta_2 - \frac{1}{2\theta_2} (x_k - \theta_1)^2
-       $
+  $\ln P(x_k | \theta) = -\frac{1}{2} \ln 2\pi\theta_2 - \frac{1}{2} \ln \theta_2 - \frac{1}{2\theta_2} (x_k - \theta_1)^2
+   $
 
 - Itt $ x_k $ egyetlen tanítópélda, és $ \theta_1 = \mu $ valamint $ \theta_2 = \sigma^2 $.
 
@@ -3812,13 +3803,11 @@ Azt a paraméter-értéket (értékeket, paraméter-vektort) választja, amely l
 
 - A gradiens az összes paraméter szerinti parciális deriváltakat tartalmazza:
   
-  $
-  
-       \nabla_{\theta} = \begin{pmatrix}
-       \frac{\partial}{\partial \theta_1} \ln P(x_k | \theta) \\
-       \frac{\partial}{\partial \theta_2} \ln P(x_k | \theta)
-       \end{pmatrix} = 0
-       $
+  $ \nabla_{\theta} = \begin{pmatrix}
+   \frac{\partial}{\partial \theta_1} \ln P(x_k | \theta) \\
+   \frac{\partial}{\partial \theta_2} \ln P(x_k | \theta)
+   \end{pmatrix} = 0
+   $
 
 - Az első paraméter (várható érték, $ \theta_1 $) szerinti parciális derivált
   
@@ -4573,9 +4562,10 @@ Néhány fontos mátrixnorma:
 
 4. **Spektrális norma (2-norma)**:
    $
-   \|A\|_2 = \sigma_{\max}(A)
+   \|A\|_2 = \sqrt{\rho(A^TA)}
    $
-   Ez a norma a mátrix legnagyobb szinguláris értékét méri.
+   
+   - $\rho$: legnagyobb sajátérték
 
 # 13. Ortogonális transzformációk használata a lineáris algebra numerikus módszereiben (ortogonális-trianguláris felbontások, speciális alakra transzformálás, QR-algoritmus)
 
@@ -4594,14 +4584,30 @@ Az ortogonális és ortonormált vektorok halmaza két nagyon speciális esete a
 **Egy $ Q \in \mathbb{R}^{n \times n} $ mátrixot ortogonálisnak nevezünk, ha az oszlopvektorai ortonormált vektorhalmazt alkotnak.**
 
 - Könnyen belátható, hogy egy ortogonális $ Q $ mátrixra teljesül, hogy:
-       $ Q^T Q = QQ^T = I, $
+  
+  $Q^T Q = QQ^T = I$
 
 - Ez azt jelenti, hogy az ortogonális mátrix transzponáltja egyben az inverze is:
-       $ Q^T = Q^{-1}. $
+  
+  $Q^T = Q^{-1}$
   
   - az invertálás itt nagyon könnyen elvégezhető
 
 - Ortogonális mátrixok szorzata ortogonális.
+
+$cond(QA)=cond(A)$
+
+- elméletben ortogonális mátrixal való szorzás nem ront a kondíciószámon
+
+- kondíciószám: numerikus stabilitást jelenti
+  
+  - az inputban lévő kis hiba mennyire rontja el az eredményt (numerikusan instabil műveleteknél kis hiba miatt is nagyon más lehet az eredmény, nagyon nagy számokat is adhat kicsi számokból)
+
+- $cond(A)=||A||*||A^{-1}||$
+  
+  - az inverz művelet magában numerikusan instabil, ezért általában csak különleges esetekben számoljuk (pl ortogonális mátrixoknál, ahol egyenlő a transzponálttal)
+
+Az ortogonális mátrixok numerikusan stabilak
 
 ## Householder mátrixok (elemi tükröző mátrixok)
 
@@ -4787,3 +4793,106 @@ egy felső háromszög mátrixot eredményez.
 Ugyanúgy $\Omicron(n^3)$ mint a Householder-módszer esetén.
 
 Ha az alap A mátrixban sok a nulla (az alsó trianguláris részben) akkor a Givens módszer tud gyorsabb lenni.
+
+### $QR$ felbontás tulajdonságai, alkalmazásai
+
+Az $A=QR$ mindig létezik
+
+- akkor is ha $A^{-1}$ nem létezik
+
+- akkor is ha $A$ nem négyzetes
+
+![](assets/2024-06-09-12-50-40-image.png)
+
+Unicitás
+
+- a $QR$ felbontás nem egyértelmű, az előjelek miatt (abszolút értékbenugyanazok a számok)
+
+### $QR$ felbontás alkalmazásai
+
+(Determináns számítás - lehet, de nem szokták használni)
+
+(Inverz mátrix meghatározás - lehet, de nem szokták használni)
+
+#### **Lineáris egyenletrendszer megoldása**
+
+![](assets/2024-06-09-13-09-29-image.png)
+
+$y$ kiszámolásának a műveletigénye $\Omicron(n^2)$
+
+<img src="assets/2024-06-09-13-10-10-image.png" title="" alt="" width="493">
+
+Mivel $R$ felső trianguláris ezért csak a visszafele helyettesítgetést kell végrehajtani, ami $\Omicron(n^2)$
+
+(ezt a részt:)
+
+<img src="assets/2024-06-09-13-11-52-image.png" title="" alt="" width="325">
+
+Összes műveletigény (HA már megvan a $QR$ felbontás): $\Omicron(n^2)$
+
+A $QR$ felbontás műveletigénye még mindig $\Omicron(n^3)$
+
+Ebből adódoan akkor hasznos, ha:
+
+- ha van egy csomó $Ax=b_j$, $j=1,...,k$ műveletem, ahol a bal oldal megegyezik
+
+- ilyenkor naív megoldás: $k*\Omicron(n^3)$
+
+- érdemes egy egységént tekinteni a feladatra
+
+- jobb megoldás $QR$ felbontás használatával: $1*\Omicron(n^3)+k*\Omicron(n^2)$
+  
+  - az $\Omicron(n^3)$ az $A=QR$ felbontás költsége
+
+#### Sajátérték számítás
+
+![](assets/2024-06-09-13-43-54-image.png)
+
+Azokat a $v$ vektorokat keressük, amelyeknek $A$ mátrix csak a hosszukat változtatja
+
+![](assets/2024-06-09-13-51-22-image.png)
+
+A sajátérték feladat egy $n$-ed fokú polinom gyökeinek meghatározásával ekvivalens.
+
+Ebből adódik hogy minden $n$ dimenziós mátrixnak $n$ darab sajátértéke van (lehetnek komplexek is).
+
+**Speciális esetek:**
+
+- felső (vagy alső) trianguláris mátrixban a sajátértékek a főátlóban lévő elemek
+
+**Spektrál sugár:** abszolút értékben a legnagyobb saajátérték
+
+**Mátrix nyoma:** a főátlóban lévő elemek összege
+
+**Spektrális norma (2-norma)**:
+$ \|A\|_2 = \sqrt{\rho(A^TA)}$
+
+- $\rho$: legnagyobb sajátérték
+
+Bármelyik mátrixnorma felső korlát a spektrálsugárra.
+
+**Hasonlóság:** 
+
+$A \sim B: \exist T^{-1}$  $T^{-1}AT=B$
+
+Hasonló mátrixok ugyanazt a lineáris leképezést reprezentálják különböző bázisokban
+
+Hasonló mátrixok sajátértékei megegyeznek.
+
+Ha $A \sim B$ és $A$ egy sajátvektorrendszere $\{u_1,u_2,...,u_n\}$, akkor $B$ sajátvekrorrendszere fölírható $\{v_1,v_2,...,v_n\}$ formában, ahol $v_j=T^{-1}u_j$ bármely $1 \le j \le n$ esetén.
+
+Ha $A$ és $B$ sajátértékei megegyeznek, abból még nem következik hogy hasonlóak. 
+
+**Triangularizálhatóság:**
+
+![](assets/2024-06-09-16-03-16-kép.png)
+
+- unitér mátrix: komplex ortogonális mátrix (kiterjesztve)
+
+- $U^H$: Hermit transzponált
+  
+  - transzponált+konjugált
+    
+    - konjugált: $\overline{a+ib}=a-ib$
+
+### $QR$ algoritmus
