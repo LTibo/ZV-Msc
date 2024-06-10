@@ -3777,7 +3777,7 @@ Azt a paraméter-értéket (értékeket, paraméter-vektort) választja, amely l
 - A változók átjelölésével a maximalizálandó paraméterek $ \theta = (\theta_1, \theta_2) = (\mu, \sigma^2) $.
 
 - Elvégezve az átjelölést, az optimalizálási feladat a következő lesz:
-
+  
   $\theta_{MLE} = \arg \max_{\theta} f(x | \theta) = \arg \max_{\theta} \left( \frac{1}{\sqrt{2\pi\theta_2}} e^{-\frac{(x - \theta_1)^2}{2\theta_2}} \right)
    $
 
@@ -3786,7 +3786,7 @@ Azt a paraméter-értéket (értékeket, paraméter-vektort) választja, amely l
 - MLE: maximum likelihood estimation
 
 - Mivel a valószínűségi függvény logaritmizált változatának optimuma ugyanott van mint a valószínűségi függvényé:
-
+  
   $\theta_{MLE} = \arg \max_{\theta} f(x | \theta) = \arg \max_{\theta} \ln f(x | \theta)
    $
 
@@ -4896,3 +4896,92 @@ Ha $A$ és $B$ sajátértékei megegyeznek, abból még nem következik hogy has
     - konjugált: $\overline{a+ib}=a-ib$
 
 ### $QR$ algoritmus
+
+A QR-algoritmus egy iteratív módszer, amelyet négyzetes mátrixok sajátértékeinek meghatározására használnak. Az algoritmus a QR-felbontáson alapul, és számos iteráció során közelíti az eredeti mátrix sajátértékeit. Az alábbiakban részletesen bemutatom a QR-algoritmus működését.
+
+![](assets/2024-06-10-22-55-19-image.png)
+
+#### QR-algoritmus Lépései
+
+1. **Kezdő Mátrix Kiválasztása**:
+   Kezdjük egy $ A $ mátrixszal, amelynek sajátértékeit keressük.
+   
+   ($A \in \R^{n*n}$)
+
+2. **QR Felbontás**:
+   Az $ A $ mátrix QR-felbontását végezzük el, azaz találjunk egy ortogonális $ Q $ mátrixot és egy felső háromszögmátrix $ R $-t, amelyekre teljesül, hogy:
+   $
+   A = QR
+   $
+
+3. **Új Mátrix Képzése**:
+   Határozzuk meg az új mátrixot $ A_1 $ a következő módon:
+   $
+   A_1 = RQ
+   $
+   Azaz cseréljük fel $ Q $ és $ R $ sorrendjét a szorzatban.
+
+4. **Iterációk**:
+   Ismételjük meg a 2. és 3. lépéseket az $ A_1 $-ből kiindulva:
+   $
+   A_{k+1} = Q_k^T A_k Q_k \quad (k \geq 0)
+   $
+   ahol $ A_k $ az aktuális mátrix az $ k $-adik iterációban, és $ Q_k, R_k $ a QR-felbontásban szereplő mátrixok.
+
+5. **Konvergencia**:
+   Folytassuk az iterációkat, amíg a mátrix $ A_k $ konvergál egy felső háromszögmátrixhoz. Az iterációk során a diagonális elemek egyre inkább a sajátértékekhez közelítenek. Nem biztos hogy konvergálni fog.
+
+![](assets/2024-06-10-22-59-39-image.png)
+
+#### Miért Működik a QR-algoritmus?
+
+A QR-algoritmus alapját az a tulajdonság adja, hogy a hasonló mátrixok ugyanazokkal a sajátértékekkel rendelkeznek. Az iterációk során a $ Q_k $ mátrixok ortogonalitása és az $ R_k $ mátrixok háromszög alakja biztosítja, hogy az új mátrixok $ A_{k+1} = R_k Q_k $ mindig hasonlóak maradnak az eredeti $ A $ mátrixhoz.
+
+#### Tulajdonságok, műveletigény
+
+- A kerekítési hibákkal szemben stabilan viselkedik.
+
+- Általános esetben az algoritmus egy lépésének műveletigénye $\Omicron(n^3)$
+
+- Megőrzi a szimmetriát
+
+- Megőrzi a Hessenberg alakot
+
+- Csak valós sajátértékű mátrixokra működik
+  
+  - $QR$ felbontás és $RQ$ szorzás sosem lép ki a valós számok halmazából
+
+#### A QR-algoritmus Javított Változatai
+
+A QR-algoritmusnak több módosított változata is létezik, amelyek a konvergencia sebességét javítják:
+
+1. **Shiftelt QR-algoritmus**:
+   A shiftelt QR-algoritmusban minden iteráció előtt egy $ \mu $ shiftet alkalmazunk, amely közelebb hozza a mátrixot a sajátértékeihez. Az iterációs lépés ekkor így néz ki:
+   $
+   A_k - \mu_k I = Q_k R_k
+   $
+   $
+   A_{k+1} = R_k Q_k + \mu_k I
+   $
+   ahol $ \mu_k $ egy jól megválasztott shift érték.
+
+2. **Hessenberg-formára hozás**:
+   A mátrixot először felső Hessenberg-formára hozzuk (ami majdnem felső háromszögmátrix, azzal a különbséggel hogy a fő átló alatti átló nem csupa 0), és ezután alkalmazzuk a QR-algoritmust. Ez jelentősen javítja a számítási hatékonyságot, mivel csak a mellékátló elemeit kell kinullázni mindig Givens mátrixokkal ($(n-1)*\Omicron(n)=\Omicron(n^2)$ mert a givens mátrixal való szorzás $\Omicron(n)$-es ). Nagyságrendileg még mindig $\Omicron(n^3)$, de praktikusan gyorsabb lesz. Diagonális mátrix esetén tridiagonálisra hozzuk, ami méggyorsabb.
+   
+   ![](assets/2024-06-10-22-50-22-image.png)
+   
+   - Householder mátrixok segítségével
+     
+     - nem elég balról, jobbról is szorozgatni kell a mátrixot mivel akkor marad hasonló végig
+     
+     - összesen $n-2$ hasonlósági művelet után már felső Hessenberg alakú
+     
+     - egy hasonlósági transzformáció $\Omicron(n^2)$ költségű, tehát az egész műveletigény  $\Omicron(n^3)$ 
+   
+   - Givens mátrixok segítségével
+     
+     - itt is $\Omicron(n^3)$ a műveletigény
+
+#### $QR$ algoritmus értelmezése
+
+![](assets/2024-06-10-23-19-27-image.png)
