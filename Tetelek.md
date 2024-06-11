@@ -4985,3 +4985,43 @@ A QR-algoritmusnak több módosított változata is létezik, amelyek a konverge
 #### $QR$ algoritmus értelmezése
 
 ![](assets/2024-06-10-23-19-27-image.png)
+
+# 14. Folytonos függvények közelítései (spline- és trigonometrikus interpoláció, négyzetes és egyenletesen legjobb közelítések).
+
+## Interpoláció
+
+A függvény interpoláció olyan matematikai eljárás, amely során egy adott ponthalmazhoz (adatpontokhoz) egy olyan függvényt határozunk meg, amely pontosan átmegy az összes adott ponton. Az interpoláció célja tehát, hogy egy függvény értékeit ismerjük néhány helyen, és ezek alapján becsüljük meg a függvény értékeit más helyeken.
+
+### Lagrange interpoláció
+
+![](assets/2024-06-11-22-00-30-image.png)
+
+![](assets/2024-06-11-22-01-13-image.png)
+
+## Trigonometrikus interpoláció
+
+![](assets/2024-06-11-23-33-18-image.png)
+
+Az $\{1,\sin{x},cos{x},\sin{2x},cos{2x},...,sin{(mx)}, cos{(mx)}\}$ elemeinek a lineáris kombinációja adja a trigonometrikus interpolációs függvényt
+
+### Azonosságok
+
+#### ![](assets/2024-06-11-21-39-54-image.png)
+
+![](assets/2024-06-11-23-32-04-image.png)
+
+![](assets/2024-06-11-23-35-11-image.png)
+
+Trigonometrikus interpoláció visszavezetve Lagrange interpolációra.
+
+![](assets/2024-06-11-23-37-59-image.png)
+
+![](assets/2024-06-11-23-44-31-image.png)
+
+## Köbös spline
+
+A Lagrange-féle interpolációs polinom „sok” alappont, vagy „gyorsan változó” $f (x)$ függvény esetén néha kellemetlen oszcillációs tulajdonságokat mutat. A jelenséget jól szemlélteti Runge alábbi klasszikus példája.
+
+![](assets/2024-06-12-00-25-47-image.png)
+
+Ennek kivédésére megtehetjük azt is, hogy az eredeti [a, b] intervallumot több kisebb részintervallumra osztjuk, s az egyes részintervallumokba eső alappontok segítségével külön-külön képezzük a hozzájuk tartozó (kisebb fokszámú) Lagrange-polinomokat.
