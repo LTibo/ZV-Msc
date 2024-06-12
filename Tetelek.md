@@ -5025,3 +5025,5 @@ A Lagrange-féle interpolációs polinom „sok” alappont, vagy „gyorsan vá
 ![](assets/2024-06-12-00-25-47-image.png)
 
 Ennek kivédésére megtehetjük azt is, hogy az eredeti [a, b] intervallumot több kisebb részintervallumra osztjuk, s az egyes részintervallumokba eső alappontok segítségével külön-külön képezzük a hozzájuk tartozó (kisebb fokszámú) Lagrange-polinomokat.
+
+Test
