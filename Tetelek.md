@@ -5050,4 +5050,4 @@ Továbbra is adottak az $x$-ek és a hozzájuk tartozó $f$ függvényértékek.
 
 Hogyan nézhet ki egy köbös spline interpoláció eredménye:
 
-![](C:\egyetem\ZV-Msc\assets\2024-06-12-17-22-51-image.png)
+![](assets\2024-06-12-17-22-51-image.png)
