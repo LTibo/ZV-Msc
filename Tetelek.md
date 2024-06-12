@@ -4567,6 +4567,16 @@ Néhány fontos mátrixnorma:
    
    - $\rho$: legnagyobb sajátérték
 
+### Lineáris tér (vagy vektortér)
+
+![](assets/2024-06-12-22-43-55-image.png)
+
+**span**: a vektortérben az elemek összes lehetséges lineáris kombinációja
+
+**bázis:** az elemek amiknek a lineáris kombinációjából a vektortér összes elemét ki lehet fejezni. Elemei lineárisan függetlenek.
+
+Az egyváltozós, folytonos függvények halmaza ($C$) is vektortér
+
 # 13. Ortogonális transzformációk használata a lineáris algebra numerikus módszereiben (ortogonális-trianguláris felbontások, speciális alakra transzformálás, QR-algoritmus)
 
 ## Ortogonális vektorok és mátrixok
@@ -5051,3 +5061,70 @@ Továbbra is adottak az $x$-ek és a hozzájuk tartozó $f$ függvényértékek.
 Hogyan nézhet ki egy köbös spline interpoláció eredménye:
 
 ![](assets\2024-06-12-17-22-51-image.png)
+
+A köbös splinefüggvényeket tudjuk kétszer deriválni. 
+
+![](assets/2024-06-12-22-27-15-image.png)
+
+![](assets/2024-06-12-22-27-57-image.png)
+
+$s''(x)=p_j''(x)$ az egyenes egyenlete.
+Levezetések után:
+
+![](assets/2024-06-12-22-31-46-image.png)
+
+$c$ és $d$ integrációs konstansok
+
+![](assets/2024-06-12-22-32-48-image.png)
+
+![](assets/2024-06-12-22-34-14-image.png)
+
+![](assets/2024-06-12-22-35-10-image.png)
+
+## Approximáció
+
+- $\R^n$: klasszikus vektortér
+
+- $C$: folytonos függvények halmaza
+
+- $P_n$: maximum n-ed fokú polinomok halmaza
+
+Vektortér szempontjából ezek lényegében ugyanazok (nem teljesen).
+
+![](assets/2024-06-13-00-03-29-image.png)
+
+![](assets/2024-06-13-00-04-11-image.png)
+
+![](assets/2024-06-13-00-04-46-image.png)
+
+![](assets/2024-06-13-00-05-20-image.png)
+
+![](assets/2024-06-13-00-05-46-image.png)
+
+Legjobban közelítő elem: unicitás
+
+
+
+![](assets/2024-06-13-00-09-09-image.png)
+
+<img title="" src="assets/2024-06-13-00-09-35-image.png" alt="" width="456">
+
+<img src="assets/2024-06-13-00-10-16-image.png" title="" alt="" width="459">
+
+<img src="assets/2024-06-13-00-10-58-image.png" title="" alt="" width="445">
+
+**Segédtétel.** Az adott $f$-et legjobban közelítő elemek a $G$ altér konvex részhalmazát alkotják.
+
+**Tétel.** (Legjobb közelítés – egyértelműség) Amennyiben a $V$ vektortér szigorúan konvex normált, akkor bármely $f ∈ V$ elemre legfeljebb egy $p^∗ ∈ G$ legjobban közelítő elem létezik.
+
+### Négyzetes közelítés
+
+![](assets/2024-06-13-00-41-55-image.png)
+
+![](assets/2024-06-13-00-42-15-image.png)
+
+![](assets/2024-06-13-00-42-39-image.png)
+
+![](assets/2024-06-13-00-43-18-image.png)
+
+![](assets/2024-06-13-00-43-48-image.png)
