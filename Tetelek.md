@@ -5026,4 +5026,28 @@ A Lagrange-féle interpolációs polinom „sok” alappont, vagy „gyorsan vá
 
 Ennek kivédésére megtehetjük azt is, hogy az eredeti [a, b] intervallumot több kisebb részintervallumra osztjuk, s az egyes részintervallumokba eső alappontok segítségével külön-külön képezzük a hozzájuk tartozó (kisebb fokszámú) Lagrange-polinomokat.
 
-Test
+Tegyük fel, hogy az alapponjaink nagyság szerint rendezettek, s adottak az $x_k$ alappontokban az $f_k$ (függvény)értékek. Tekintsük az $[a, b]$ intervallum
+
+$∆ = \{a = x_0 < x_1 < · · · < x_n = b\} $ beosztását.
+
+**Definíció.** A $∆$ beosztáshoz és a rögzített $1 ≤ m$ természetes számhoz tartozó $m$-ed
+rendű splinefüggvénynek (vagy rövidebben $m$-ed rendű spline-nak) nevezünk minden olyan $s(x) ∈ C^{m−1}[a, b]$ függvényt, amely a $∆$ beosztáshoz tartozó bármely $[x_k−1, x_k] $ részintervallumon legfeljebb $m$-ed fokú polinom.
+
+A $∆$ beosztáshoz tartozó összes $m$ -ed rendű splinefüggvény halmazát
+tehát így értelmezzük:
+
+$S_{∆,m} = \{s(x) ∈ C^{m−1}[a, b] \;\ | \;\ s(x) ≡ p_k(x) ∈ P_m \;\ \text{ha} \;\ x_{k−1} ≤ x ≤ x_k, \;\ k = 1, 2, . . . , n\}$
+
+- $C_{m−1} [a, b]$: az $[a, b]$ intervallumon $m − 1$-szer folytonosan differenciálható függvények halmaza.
+
+- $P_m$ az $m$-ed fokú polinomok halmaza
+
+Az $m = 1$ esetben lineáris, ha $m = 2$, kvadratikus, végül ha $m = 3$, köbös splinefüggvényekről szokás beszélni.
+
+Továbbra is interpolációs jellegű közelítéseket szeretnénk használni, ezért az eddigieken túl még kikötjük az $s(x_k) = f_k$ interpolációs feltételeket is
+
+Továbbra is adottak az $x$-ek és a hozzájuk tartozó $f$ függvényértékek.
+
+Hogyan nézhet ki egy köbös spline interpoláció eredménye:
+
+![](C:\Users\lanyitiborkristof\AppData\Roaming\marktext\images\2024-06-12-17-22-51-image.png)
