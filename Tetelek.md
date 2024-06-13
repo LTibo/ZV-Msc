@@ -4577,6 +4577,10 @@ Néhány fontos mátrixnorma:
 
 Az egyváltozós, folytonos függvények halmaza ($C$) is vektortér
 
+### Reguláris mátrix
+
+<img src="assets/2024-06-13-16-16-47-image.png" title="" alt="" width="575">
+
 # 13. Ortogonális transzformációk használata a lineáris algebra numerikus módszereiben (ortogonális-trianguláris felbontások, speciális alakra transzformálás, QR-algoritmus)
 
 ## Ortogonális vektorok és mátrixok
@@ -5083,6 +5087,8 @@ $c$ és $d$ integrációs konstansok
 
 ## Approximáció
 
+![](assets/2024-06-13-15-32-26-image.png)
+
 - $\R^n$: klasszikus vektortér
 
 - $C$: folytonos függvények halmaza
@@ -5102,8 +5108,6 @@ Vektortér szempontjából ezek lényegében ugyanazok (nem teljesen).
 ![](assets/2024-06-13-00-05-46-image.png)
 
 Legjobban közelítő elem: unicitás
-
-
 
 ![](assets/2024-06-13-00-09-09-image.png)
 
@@ -5128,3 +5132,35 @@ Legjobban közelítő elem: unicitás
 ![](assets/2024-06-13-00-43-18-image.png)
 
 ![](assets/2024-06-13-00-43-48-image.png)
+
+Jelentés:
+
+- ábrán: $f-p$ a szaggatott vonal
+
+- akkor lesz optimális, ha különbség vektor pontosan merőleges az asztallapra (az összes lehetséges vektorra $G$-ben)
+
+![](assets/2024-06-13-16-26-59-image.png)
+
+![](assets/2024-06-13-16-28-03-image.png)
+
+![](assets/2024-06-13-16-29-14-image.png)
+
+![](assets/2024-06-13-16-31-05-image.png)
+
+<img src="assets/2024-06-13-16-36-44-image.png" title="" alt="" width="345">
+
+Cél a valóságban:
+
+- $f(x) \in C$ folytonos függvények halmaza, végtelen dimenziós lineáris tér
+
+- $q(x) \in P_n$ legfeljebb $n$-ed fokú polinomok halmaza
+  
+  - egy véges bázis $\{1,x,x^2,...,x^n\}$ (monomok)
+
+- $P_n$ dimenziója: $n+1$ (ahány elem van a bázisban)
+
+- $P_n \sub C$ ($P_n$ altere $C$-nek)
+
+- ha $f(x) \in C$, keressük $q^* \in P_n$ legjobban közelítő elemet
+
+- eddig szemléltetés miatt beszéltünk vektorokról
