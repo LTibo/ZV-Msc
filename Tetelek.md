@@ -1,3 +1,7 @@
+### Diszkrét négyzetes közelítés polinomokkal
+
+### 
+
 # Tételek (Msc, 2024 június)
 
 ## Áfonya
@@ -5147,7 +5151,11 @@ Jelentés:
 
 ![](assets/2024-06-13-16-31-05-image.png)
 
-<img src="assets/2024-06-13-16-36-44-image.png" title="" alt="" width="345">
+<img title="" src="assets/2024-06-13-17-04-01-image.png" alt="" width="345">
+
+Ortogonális bázis esetén az $\alpha$-k lineáris időben számolhatók
+
+<img title="" src="assets/2024-06-13-17-05-40-image.png" alt="" width="312">
 
 Cél a valóságban:
 
@@ -5164,3 +5172,55 @@ Cél a valóságban:
 - ha $f(x) \in C$, keressük $q^* \in P_n$ legjobban közelítő elemet
 
 - eddig szemléltetés miatt beszéltünk vektorokról
+
+### Ortogonális polinomrendszerek
+
+![](assets/2024-06-13-17-51-57-image.png)
+
+![](assets/2024-06-13-17-53-18-image.png)
+
+<img src="assets/2024-06-13-17-54-16-image.png" title="" alt="" width="421">
+
+<img src="assets/2024-06-13-17-57-48-image.png" title="" alt="" width="417">
+
+![](assets/2024-06-13-18-03-47-image.png)
+
+![](assets/2024-06-13-21-00-17-image.png)
+
+![](assets/2024-06-13-18-04-59-image.png)
+
+### Diszkrét négyzetes közelítés polinomokkal
+
+Általában $f(x)$-et csak mérni tudjuk
+
+![](assets/2024-06-13-19-07-01-image.png)
+
+<img src="assets/2024-06-13-19-08-24-image.png" title="" alt="" width="404">
+
+3 $n$ adatpontra első fokú polinomot illeszt (mert $1 \le m \le n$)
+
+Itt nem feladat hogy belemenjen az adatpontokba (mint pl a Lagrange interpolációban)
+
+![](assets/2024-06-13-21-03-28-image.png)
+
+![](assets/2024-06-13-21-04-19-image.png)
+
+![](assets/2024-06-13-22-09-02-image.png)
+
+![](assets/2024-06-13-21-15-17-image.png)
+
+![](assets/2024-06-13-21-16-47-image.png)
+
+![](assets/2024-06-13-21-17-11-image.png)
+
+![](assets/2024-06-13-21-18-26-image.png)
+
+#### Példa
+
+![](assets/2024-06-13-21-52-25-image.png)
+
+![](assets/2024-06-13-22-05-43-image.png)
+
+![](assets/2024-06-13-22-07-02-image.png)
+
+![](assets/2024-06-13-22-07-32-image.png)
