@@ -5224,3 +5224,23 @@ Itt nem feladat hogy belemenjen az adatpontokba (mint pl a Lagrange interpoláci
 ![](assets/2024-06-13-22-07-02-image.png)
 
 ![](assets/2024-06-13-22-07-32-image.png)
+
+### Egyenletes közelítés
+
+![](assets/2024-06-13-23-22-06-image.png)
+
+![](assets/2024-06-13-23-23-02-image.png)
+
+![](assets/2024-06-13-23-24-20-image.png)
+
+![](assets/2024-06-13-23-26-02-image.png)
+
+$c_0$ az ugyanaz amit eddig $\alpha_0$-val jelöltünk.
+
+Csak a két végpont közül lehet a maximum ezért csak azokat vizsgáljuk.
+
+![](assets/2024-06-13-23-33-28-image.png)
+
+![](assets/2024-06-13-23-33-47-image.png)
+
+![](assets/2024-06-13-23-35-11-image.png)
