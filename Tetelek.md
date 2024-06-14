@@ -1,7 +1,3 @@
-### Diszkrét négyzetes közelítés polinomokkal
-
-### 
-
 # Tételek (Msc, 2024 június)
 
 ## Áfonya
@@ -5286,3 +5282,818 @@ Az optimális interpolációs pontok meghatározásához az a cél, hogy minimal
 ![](assets/2024-06-14-18-12-38-image.png)
 
 Az egyenletes közelítés lényege, hogy a maximális hibát minimalizáljuk egy polinom segítségével egy adott intervallumon. A Csebisev-tételek biztosítják, hogy létezik ilyen polinom és meghatározzák a szükséges feltételeket. Az optimális interpolációs pontok meghatározásával jelentősen csökkenthető a közelítési hiba, különösen, ha Csebisev-polinomokat használunk.
+
+# Programrendszerek fejlesztése
+
+# 15. Elosztott rendszerek ismérvei, problémák, metrikák, architektúrák.
+
+## CS - Kliens szerver
+
+A kliens-szerver architektúra egy olyan számítógépes hálózati modell, amelyben az erőforrások és szolgáltatások megosztása két fő szereplő között történik: a kliens és a szerver. Ez a modell az egyik legelterjedtebb és legfontosabb architektúra az informatikában. Nézzük meg részletesebben.
+
+Szerepkörök alapján határozza meg a rendszerben résztvevő entitások helyzetét.
+
+A szerver oldal birtokolja az erőforrásokat, kliens oldal használja azokat.
+
+Ezen elvek mentén működnek napjaink legnépeszerűbb protokolljai (HTTP, SMTP, DNS,
+stb.).
+
+### Kliens-szerver architektúra alapjai
+
+1. **Kliens:**
+   
+   - A kliens egy olyan eszköz vagy program, amely szolgáltatásokat kér a szervertől.
+   - A kliens felhasználói interakciókat kezel, adatokat gyűjt és továbbít a szerverhez.
+   - Példák kliensre: web böngészők, e-mail kliensek, mobilalkalmazások.
+
+2. **Szerver:**
+   
+   - A szerver egy olyan erőteljes számítógép vagy program, amely szolgáltatásokat nyújt a klienseknek.
+   - A szerver kezeli az adatokat, feldolgozza a kéréseket, és válaszokat küld a klienseknek.
+   - Példák szerverre: web szerverek, adatbázis szerverek, fájlszerverek.
+
+### Kliens-szerver kapcsolat folyamata
+
+1. **Kérés (Request):**
+   
+   - A kliens egy meghatározott szolgáltatás igényléséhez kérést küld a szervernek. Például, ha egy felhasználó egy weboldalt szeretne megtekinteni, a böngésző (kliens) HTTP kérést küld a web szervernek.
+
+2. **Feldolgozás:**
+   
+   - A szerver fogadja a kérést, feldolgozza azt, és elvégzi a szükséges műveleteket. Ez lehet adatkeresés, számítási feladatok, vagy más műveletek végrehajtása.
+
+3. **Válasz (Response):**
+   
+   - A szerver a feldolgozott információkat válaszként küldi vissza a kliensnek. A válasz tartalmazhat adatokat, weboldalakat, fájlokat stb.
+
+4. **Megjelenítés:**
+   
+   - A kliens fogadja a szerver válaszát, és a felhasználó számára megfelelő módon jeleníti meg azt.
+
+### Előnyök
+
+- **Központosított irányítás:** Az adatok és erőforrások központilag tárolhatók és kezelhetők a szerveren, ami megkönnyíti a karbantartást és a biztonságot.
+- **Skálázhatóság:** A szerver erőforrásai bővíthetők, hogy több kliens kéréseit is ki tudja szolgálni.
+- **Költséghatékonyság:** Kliens oldali eszközök lehetnek kevésbé erőforrás-igényesek, mivel a feldolgozási terheket a szerver viseli.
+
+### Hátrányok
+
+- **Szerver túlterheltsége:** Ha túl sok kliens próbál egyszerre hozzáférni a szerverhez, az túlterhelődhet, ami lassuláshoz vagy szolgáltatáskimaradáshoz vezethet.
+- **Hálózati függőség:** A kliens és a szerver közötti kapcsolat fennmaradása a hálózati kapcsolat minőségétől függ.
+
+### Példák a kliens-szerver architektúrára
+
+- **Webes alkalmazások:** A böngésző (kliens) kérést küld a web szervernek, amely visszaküldi a kért weboldalt.
+- **E-mail szolgáltatások:** Az e-mail kliens (pl. Outlook) kérést küld az e-mail szervernek (pl. Gmail), amely a felhasználó postafiókjából visszaküldi az üzeneteket.
+- **Adatbázis rendszerek:** Az alkalmazás (kliens) SQL kérést küld az adatbázis szervernek, amely a kért adatokat visszaküldi.
+
+A kliens-szerver architektúra az informatikai rendszerek egyik alapvető építőeleme, amely lehetővé teszi a különféle szolgáltatások hatékony és megbízható nyújtását.
+
+## Peer-to-peer
+
+A P2P (peer-to-peer) architektúra egy olyan hálózati modell, amelyben minden résztvevő egyenrangú félként (peer) működik, és képes szolgáltatásokat nyújtani és igénybe venni egyaránt. Ezzel szemben a hagyományos kliens-szerver modellel, ahol van egy központi szerver és több kliens, a P2P hálózatban nincs központi irányítás vagy szerver. Nézzük meg részletesebben a P2P architektúrát.
+
+### P2P architektúra alapjai
+
+1. **Peer:**
+   - A peer egy olyan eszköz vagy program, amely képes adatokat megosztani, letölteni, és feldolgozni más peerek között a hálózatban.
+   - Minden peer egyszerre lehet kliens és szerver is, azaz szolgáltatásokat kérhet és nyújthat egyaránt.
+
+### P2P kapcsolat folyamata
+
+1. **Csatlakozás a hálózathoz:**
+   
+   - Egy peer csatlakozik a P2P hálózathoz és felderíti a többi peert. Ez történhet központi nyilvántartáson keresztül vagy elosztott hash táblák (DHT) segítségével.
+
+2. **Adatok megosztása és kérése:**
+   
+   - A peer adatokat oszthat meg a hálózat többi tagjával, vagy adatokat kérhet tőlük. Az adatforgalom közvetlenül a peerek között zajlik, központi szerver nélkül.
+
+3. **Feldolgozás és továbbítás:**
+   
+   - A peerek feldolgozhatják a kapott adatokat, és ha szükséges, továbbíthatják azokat más peereknek. Ez különösen fontos a fájlmegosztás és a tartalom szórás (broadcast) esetén.
+
+### Előnyök
+
+- **Központi irányítás hiánya:** Nincs egyetlen pont, amely a hálózat működéséért felelős, ez növeli a rendszer rugalmasságát és csökkenti a sérülékenységet.
+- **Skálázhatóság:** A hálózat könnyen bővíthető új peerek hozzáadásával, mivel nincs szükség központi infrastruktúra bővítésére.
+- **Erőforrás-megosztás:** Minden peer hozzájárulhat a hálózat teljesítményéhez az erőforrásaival (pl. sávszélesség, tárhely), ami hatékonyabb erőforrás-felhasználást eredményezhet.
+
+### Hátrányok
+
+- **Biztonság:** A decentralizált természet miatt nehezebb biztosítani az adatok integritását és bizalmasságát, valamint védelmet nyújtani a rosszindulatú peerek ellen.
+- **Megbízhatóság:** Az adatok elérhetősége és a hálózat megbízhatósága függ a peerek aktivitásától és rendelkezésre állásától.
+- **Hálózati terhelés:** A hálózati forgalom kezelése és az adatforgalom optimalizálása nehezebb, mivel az adatok több útvonalon keresztül áramlanak.
+
+### Példák a P2P architektúrára
+
+- **Fájlmegosztás:** Olyan alkalmazások, mint a BitTorrent, ahol a felhasználók fájlokat osztanak meg egymással, és a fájlok letöltése több peer-től történik párhuzamosan.
+- **Közösségi hálózatok:** Néhány közösségi hálózati alkalmazás, mint például a retroshare, P2P alapon működnek, lehetővé téve a felhasználók közötti közvetlen kapcsolatot.
+- **Kriptovaluták:** A Bitcoin és más kriptovaluták blokklánc technológiája is P2P hálózatokon alapul, ahol minden peer részt vesz a tranzakciók ellenőrzésében és az új blokkok létrehozásában.
+
+A P2P architektúra rugalmasságot és skálázhatóságot kínál, ugyanakkor kihívásokat is jelent a biztonság és megbízhatóság terén. Ennek ellenére számos területen sikeresen alkalmazzák, különösen ott, ahol a központi irányítás elkerülése vagy a decentralizált adatmegosztás előnyt jelent.
+
+## Szorosan kapcsolt rendszerek
+
+A szorosan csatolt rendszerek (tightly coupled systems) olyan számítógépes rendszerek, amelyekben a komponensek szoros együttműködésben dolgoznak együtt, gyakran közös memóriát és erőforrásokat használva. Ezek a rendszerek jellemzően nagy teljesítményű számítógépek vagy szuperszámítógépek, amelyek több processzorral és közös memóriával rendelkeznek. Nézzük meg részletesebben a szorosan csatolt rendszerek jellemzőit, előnyeit, hátrányait és példáit.
+
+### Szorosan csatolt rendszerek jellemzői
+
+1. **Közös memória:**
+   
+   - A szorosan csatolt rendszerek közös memóriát használnak, ami azt jelenti, hogy az összes processzor hozzáférhet ugyanahhoz a memória területhez.
+   - Ez lehetővé teszi a gyors adatcserét és kommunikációt a processzorok között.
+
+2. **Többprocesszoros architektúra:**
+   
+   - Az ilyen rendszerekben több processzor dolgozik párhuzamosan, és közösen használják a rendszermemóriát és egyéb erőforrásokat.
+   - A processzorok gyakran egy közös buszon keresztül kapcsolódnak a memóriához és a perifériákhoz.
+
+3. **Alacsony késleltetés:**
+   
+   - A közös memória használata miatt az adatcsere és a szinkronizáció gyorsabb és hatékonyabb, ami alacsony késleltetést eredményez.
+
+### Előnyök
+
+1. **Magas teljesítmény:**
+   
+   - A többprocesszoros együttműködés és a közös memória használata lehetővé teszi a nagy teljesítményű számítási feladatok végrehajtását.
+   - Alkalmas párhuzamos feldolgozásra és nagy számítási igényű alkalmazásokra, például tudományos számításokra és szimulációkra.
+
+2. **Hatékony erőforrás-megosztás:**
+   
+   - A közös memória és erőforrások hatékony megosztása javítja az erőforrás-kihasználtságot és csökkenti a redundanciát.
+
+3. **Gyors adatcsere:**
+   
+   - A közös memória használata gyors adatcserét és szinkronizációt tesz lehetővé a processzorok között, ami különösen fontos a párhuzamos feldolgozás során.
+
+### Hátrányok
+
+1. **Skálázhatóság:**
+   
+   - A szorosan csatolt rendszerek skálázása nehézkes lehet, mivel a közös memória és a buszrendszer korlátai miatt a rendszer teljesítménye nem nő lineárisan a processzorok számával.
+   - A busz vagy memória szűk keresztmetszetté válhat, ha túl sok processzor próbál hozzáférni ugyanazokhoz az erőforrásokhoz.
+
+2. **Komplexitás és költség:**
+   
+   - Az ilyen rendszerek tervezése és megvalósítása bonyolult és költséges lehet, mivel speciális hardverre és szinkronizációs mechanizmusokra van szükség.
+
+3. **Hibakeresés és hibatűrés:**
+   
+   - A közös erőforrások miatt a hibák észlelése és kezelése nehezebb lehet, és egy hiba az egész rendszer működését befolyásolhatja.
+
+### Példák szorosan csatolt rendszerekre
+
+1. **Szuperszámítógépek:**
+   
+   - A szuperszámítógépek gyakran szorosan csatolt rendszerek, amelyek több ezer processzorral és közös memóriával rendelkeznek, hogy nagy számítási teljesítményt érjenek el.
+   - Példák: Cray szuperszámítógépek, IBM Blue Gene.
+
+2. **Multiprocesszoros rendszerek:**
+   
+   - Olyan rendszerek, amelyek több processzort használnak egyetlen számítógépes rendszerben, közös memóriával és buszrendszerrel.
+   - Példák: SMP (Symmetric Multiprocessing) rendszerek.
+
+3. **Mainframe számítógépek:**
+   
+   - A mainframe számítógépek is gyakran szorosan csatolt architektúrát használnak, hogy biztosítsák a magas rendelkezésre állást és teljesítményt.
+   - Példák: IBM zSeries mainframe-ek.
+
+A szorosan csatolt rendszerek rendkívül hatékonyak és nagy teljesítményűek, de a skálázhatóságuk és a költségek miatt speciális alkalmazási területeken használják őket, ahol ezek az előnyök kiemelten fontosak. 
+
+## Lazán kapcsolt rendszerek
+
+A lazán csatolt rendszerek, vagy más néven elosztott rendszerek (EDA - Event-Driven Architecture) olyan számítógépes rendszerek, amelyekben az összetevők (komponensek) egymástól függetlenül működnek, és gyakran üzenetküldési protokollokon keresztül kommunikálnak. Az ilyen rendszerekben nincs közös memória, és az egyes részek önállóan végezhetik a feladataikat. Nézzük meg részletesebben a lazán csatolt rendszerek jellemzőit, előnyeit, hátrányait és példáit.
+
+Egyszerű események feldolgozása: ez esetben egy atomi esemény beérkezése indít el egy feldolgozási folyamatot. Egy példa erre a különböző felhasználói interakciókat
+támogató keretrendszerek eseménykezelése (pl. SWING JSF, stb.)
+
+Eseményfolyamok feldolgozása (Event Stream Processing – ESP): ezesetben eseményfolyamokat szűrnek egyszerű feltételek alapján, és az érdekes eseményekre feliratkozott vevőknek küldik ki a szűrt eseményeket. Példa lehet erre, amikor a naplózásnál csak adott szintet elérő eseményeket továbbítunk.
+
+Komplex esemény feldolgozás (Complex Event Processing - CEP): ez esetben a valós idejű eseményfolyamon értékelünk ki olyan szabályokat, melyek figyelembe vehetik az
+események sorrendiségét, bekövetkeztét, számosságát és számos egyéb tulajdonságát. Erre a későbbiekben majd látunk példát a Drools-szal kapcsolatban.
+
+### Lazán csatolt rendszerek jellemzői
+
+1. **Függetlenség:**
+   
+   - Az egyes komponensek egymástól függetlenül működnek, és csak üzenetekkel vagy eseményekkel kommunikálnak egymással.
+   - Az egyes részek önállóan skálázhatók és frissíthetők, anélkül, hogy más komponensekre közvetlen hatást gyakorolnának.
+
+2. **Üzenetküldés:**
+   
+   - Az adatcsere és kommunikáció üzenetek vagy események formájában történik, gyakran aszinkron módon.
+   - Ez csökkenti a komponensek közötti szoros függőségeket és növeli a rendszer rugalmasságát.
+
+3. **Eseményvezérelt architektúra (EDA):**
+   
+   - Az eseményvezérelt architektúrában a komponensek eseményeket generálnak és fogadnak, ami lehetővé teszi a dinamikus és valós idejű reagálást.
+   - Az események különböző forrásokból származhatnak, például felhasználói műveletekből, időzített eseményekből vagy más rendszerektől érkező üzenetekből.
+
+### Előnyök
+
+1. **Skálázhatóság:**
+   
+   - Az egyes komponensek függetlensége lehetővé teszi a rendszer egyszerű skálázását, mivel új komponensek hozzáadása vagy meglévők bővítése kevésbé komplex folyamat.
+   - A komponensek külön-külön skálázhatók a terhelés növekedése esetén.
+
+2. **Rugalmasság:**
+   
+   - A rendszer könnyen adaptálható és módosítható, mivel az egyes komponensek egymástól függetlenül frissíthetők vagy cserélhetők.
+   - Ez különösen előnyös az agilis fejlesztési környezetekben.
+
+3. **Hibatűrés:**
+   
+   - A komponensek közötti laza csatolás csökkenti a kockázatot, hogy egy komponens hibája az egész rendszert leállítja.
+   - Az üzenet-alapú kommunikáció és a redundancia növelheti a rendszer megbízhatóságát.
+
+### Hátrányok
+
+1. **Komplexitás:**
+   
+   - Az üzenet-alapú kommunikáció és a független komponensek kezelése komplex rendszermenedzsmentet igényel.
+   - Az üzenetek nyomon követése, a hibatűrés és a tranzakciók kezelése bonyolultabb lehet.
+
+2. **Teljesítmény:**
+   
+   - Az üzenetek küldése és fogadása, valamint a kommunikáció késleltetései csökkenthetik a rendszer teljesítményét.
+   - A hálózati késleltetések és az aszinkron feldolgozás hatással lehet a válaszidőkre.
+
+3. **Üzenetkezelés:**
+   
+   - Az üzenetkezelés és az üzenetek konzisztenciájának fenntartása különleges kihívásokat jelenthet, különösen nagy terhelés esetén.
+
+### Példák lazán csatolt rendszerekre
+
+1. **Mikroszolgáltatások:**
+   
+   - A mikroszolgáltatás-architektúrában az alkalmazás különálló, független szolgáltatásokra bontva működik, amelyek külön-külön skálázhatók és fejleszthetők.
+   - Példák: Netflix, Amazon.
+
+2. **Felhőalapú rendszerek:**
+   
+   - A felhőalapú szolgáltatások, mint az Amazon Web Services (AWS) és a Microsoft Azure, lazán csatolt komponenseket használnak a szolgáltatások nyújtására és skálázására.
+   - Ezek a rendszerek gyakran üzenetközvetítő szolgáltatásokat használnak (pl. Amazon SQS, Azure Service Bus).
+
+3. **Eseményvezérelt alkalmazások:**
+   
+   - Az eseményvezérelt architektúrák olyan alkalmazásokban használatosak, ahol valós idejű reagálásra van szükség, például IoT rendszerekben vagy valós idejű analitikai rendszerekben.
+   - Példák: érzékelő hálózatok, valós idejű adatfeldolgozó rendszerek.
+
+A lazán csatolt rendszerek és az eseményvezérelt architektúrák nagy rugalmasságot, skálázhatóságot és hibatűrést biztosítanak, ami különösen előnyös a modern, dinamikus és nagy terhelésű alkalmazások számára. Azonban a komplexitás és a teljesítményoptimalizálás kihívásokat jelenthet, amelyeket megfelelő tervezéssel és menedzsmenttel kell kezelni.
+
+## SBA rendszerek
+
+Az SBA (Space-Based Architecture) egy elosztott rendszerarchitektúra, amelyet gyakran használnak nagy teljesítményű és skálázható alkalmazások fejlesztéséhez. Ez az architektúra különösen alkalmas azokra az esetekre, ahol az adatok nagy mennyiségű valós idejű feldolgozása és a magas rendelkezésre állás követelmény. Az SBA a PU (Processing Unit) alapú rendszerek egyik típusa, ahol a rendszer összetevői szorosan integrálva működnek együtt egy közös "tér" (space) segítségével. Nézzük meg részletesebben az SBA rendszereket.
+
+### Space-Based Architecture (SBA) jellemzői
+
+1. **Tér (Space):**
+   
+   - A "tér" egy központi adattár, amely az adatokat és az üzeneteket tárolja, és amelyhez az összes feldolgozó egység (PU) hozzáférhet.
+   - A tér szolgál központi kommunikációs közegként az alkalmazás összetevői között.
+
+2. **Feldolgozó egységek (PU - Processing Units):**
+   
+   - A feldolgozó egységek önálló komponensek, amelyek párhuzamosan dolgoznak és a térhez csatlakoznak, hogy adatokat olvassanak vagy írjanak.
+   - A PUk dinamikusan hozzáadhatók vagy eltávolíthatók a rendszerhez, lehetővé téve a skálázhatóságot.
+
+3. **Adatreplikáció és szinkronizáció:**
+   
+   - Az adatok replikációja és szinkronizációja a térben biztosítja az adatok elérhetőségét és konzisztenciáját, még akkor is, ha egyes PUk nem elérhetők.
+
+4. **Eseményvezérelt feldolgozás:**
+   
+   - Az SBA rendszerek gyakran eseményvezérelt architektúrát használnak, ahol a PUk az eseményekre reagálnak, és feldolgozzák azokat.
+
+### Típusok
+
+#### 1. Klaszter alapú (Cluster)
+
+**Jellemzők:**
+
+- A klaszter alapú architektúra a feldolgozásra koncentrál.
+- Az adattárolásra különböző tervezési minták alkalmazhatók.
+- Kifejezetten jól skálázódik olvasás-intenzív alkalmazások esetén, anélkül, hogy a CAP (Consistency, Availability, Partition Tolerance) kompromisszumait kellene megkötni.
+- Képes kezelni az írási ütközéseket is.
+
+**Előnyök:**
+
+- **Magas rendelkezésre állás és hibatűrés:** Az alkalmazás szerverek klaszterezése lehetővé teszi a rendszerek hibatűrővé tételét és a magas rendelkezésre állás biztosítását.
+- **Skálázhatóság:** A rendszer skálázható további szerverek hozzáadásával a klaszterhez.
+
+**Példák:**
+
+- JBoss Cluster, ahol az alkalmazás szerverek egy klasztert alkotnak, és közösen dolgoznak a feldolgozási feladatokon.
+
+#### 2. Felhő alapú (Cloud)
+
+**Jellemzők:**
+
+- A felhő alapú architektúra a CAP paradigma mentén működik, amely a skálázható adattárolást is biztosítja.
+- A skálázhatóságot gyakran a konzisztencia rovására éri el.
+
+**Előnyök:**
+
+- **Skálázhatóság:** Könnyen bővíthető új erőforrások hozzáadásával a felhőben.
+- **Rugalmasság:** Az erőforrások dinamikusan állíthatók be és szabadíthatók fel igény szerint.
+
+**Példák:**
+
+- Google App Engine, amely lehetővé teszi az alkalmazások automatikus skálázását és az erőforrások dinamikus kezelését.
+
+#### 3. Rács alapú (Grid)
+
+**Jellemzők:**
+
+- A rács alapú architektúra főleg a feldolgozásra koncentrál.
+- Nincs igazán írási ütközés, így a feldolgozás tetszőlegesen párhuzamosítható.
+- A feldolgozást munkafolyamatok (Job) formájában végzik.
+
+**Előnyök:**
+
+- **Párhuzamosság:** A feladatok párhuzamos végrehajtása nagy teljesítményt biztosít.
+- **Rugalmas erőforrás kezelés:** A munkafolyamatok könnyen eloszthatók a rendelkezésre álló erőforrások között.
+
+**Példák:**
+
+- Rács alapú számítástechnikai rendszerek, amelyek különböző számítási erőforrásokat összekapcsolva nagy mennyiségű adat párhuzamos feldolgozására képesek.
+
+#### 4. Elosztott objektum alapú (Distributed Objects)
+
+**Jellemzők:**
+
+- Az elosztott objektumok gyakran az SBA alapját képezik.
+- Egy objektum vagy annak replikái (replikált objektum) jelen vannak azon a helyen, ahol használják, és egy keretrendszer (köztes réteg) gondoskodik a konzisztenciáról.
+- Egyes esetekben az objektum egy helyen van tárolva (élő objektum), és proxy objektumok képviselik azt más helyeken.
+
+**Előnyök:**
+
+- **Konzisztencia és integritás:** A köztes réteg biztosítja az objektumok konzisztenciáját és integritását.
+- **Rugalmasság:** Az objektumok könnyen mozgathatók és elérhetők a hálózat különböző részein.
+
+**Példák:**
+
+- Java Spaces, ahol az objektumok egy közös térben vannak tárolva, és a rendszer gondoskodik az adatok szinkronizációjáról és konzisztenciájáról.
+
+### Előnyök
+
+1. **Skálázhatóság:**
+   
+   - Az SBA rendszerek könnyen skálázhatók azáltal, hogy további PUk adhatók a rendszerhez, amelyek hozzáférnek a térhez és megosztják a feldolgozási terheket.
+
+2. **Rugalmasság:**
+   
+   - A rendszer komponensei (PUk) függetlenül működhetnek és frissíthetők, anélkül, hogy más komponensekre közvetlen hatást gyakorolnának.
+   - A tér központi szerepe lehetővé teszi a rugalmas adatkezelést és a dinamikus konfigurációt.
+
+3. **Hibatűrés és magas rendelkezésre állás:**
+   
+   - Az adatreplikáció és a szinkronizáció biztosítja, hogy az adatok elérhetők maradjanak, még akkor is, ha egyes PUk meghibásodnak vagy leállnak.
+   - A rendszer automatikusan átrendeződhet és újra egyensúlyba kerülhet, ha változások történnek a PUk elérhetőségében.
+
+### Hátrányok
+
+1. **Komplexitás:**
+   
+   - Az SBA rendszerek tervezése és menedzselése komplex lehet, különösen az adatreplikáció, szinkronizáció és a PUk közötti kommunikáció kezelésében.
+   - Az eseményvezérelt feldolgozás és a tér használata bonyolultabb fejlesztést igényelhet.
+
+2. **Teljesítmény:**
+   
+   - A rendszer teljesítménye függhet a tér hatékonyságától és az adatok hozzáférésének sebességétől.
+   - Nagy mennyiségű párhuzamos feldolgozás esetén a tér elérhetősége és válaszideje korlátozó tényező lehet.
+
+3. **Adatkonzisztencia:**
+   
+   - Az adatok konzisztenciájának fenntartása kihívást jelenthet, különösen elosztott környezetben, ahol a PUk folyamatosan olvassák és írják az adatokat.
+
+### Példák SBA rendszerekre
+
+1. **In-memory Data Grid (IMDG):**
+   
+   - Olyan rendszerek, mint a GigaSpaces XAP és a Hazelcast, amelyek memóriában tárolt adatokat használnak a nagy teljesítményű, elosztott számításokhoz.
+   - Ezek a rendszerek központi teret biztosítanak, amelyhez a PUk hozzáférhetnek az adatok gyors elérése érdekében.
+
+2. **Elosztott gyorsítótárak:**
+   
+   - Olyan megoldások, mint a Apache Ignite és a Coherence, amelyek elosztott gyorsítótárként működnek, lehetővé téve az adatok gyors hozzáférését és feldolgozását.
+
+3. **Eseményvezérelt architektúrák:**
+   
+   - Olyan rendszerek, amelyek valós idejű adatfeldolgozást és eseményvezérelt reagálást igényelnek, például az IoT platformok és a valós idejű analitikai rendszerek.
+
+Az SBA rendszerek kiválóan alkalmasak nagy teljesítményű, skálázható és rugalmas elosztott rendszerek kialakítására. Bár a komplexitás és a teljesítményoptimalizálás kihívásokat jelenthet, a megfelelő tervezés és implementáció révén ezek a rendszerek hatékonyan szolgálhatják ki a modern, dinamikus alkalmazások igényeit.
+
+## Nem funkcionális követelmények
+
+- Rendelkezésre állás: azon idő amely alatt a komponens képes kielégíteni a funkcionális követelményekben meghatározott funkciókat azon időhöz viszonyítva amikor ezt nem tudja megtenni.
+
+- Kapacitás/Skálázhatóság: A komponens a terhelés növekedésével is képes ellátni a
+  funkcionális követelményekben megfogalmazott feladatokat.
+
+- Párhuzamosság: A komponens a több egymással párhuzamos terhelés hatására is
+  képes ellátni a funkcionális követelményekben megfogalmazott feladatokat.
+
+- Fejleszthetőség: A komponens új funkcionális követelményeket is el tud látni viszonylag szerény fejlesztési ráfordítással.
+
+- Együttműködési képesség: A komponens képes környezetével és a szükséges
+  komponensekkel aránytalan plusz terhelés okozása nélkül is együttműködni.
+
+- Késleltetés: A komponens az adott funkcionális követelményben szereplő szolgáltatását adott terhelés mellett adott időtartamon belül kiszolgálja.
+
+- Karbantarthatóság: A komponensnek támogatnia kell az adott szervezetben definiált karbantartási feladatokat (pl.: backup)
+
+- Menedzselhetőség: A komponensnek támogatnia kell a megfelelő konfigurálhatósági szintet.
+
+- Monitorozhatóság: A komponensnek monitorozhatónak kell lennie.
+
+- Visszaállíthatóság: Hibás adat esetén a komponensnek támogatnia kell a megfelelő
+  állapot visszaállítását
+
+- Biztonság: A komponensnek a helyi biztonsági előírásoknak megfelelően kell működnie.
+
+- Konzisztencia: A komponens az adatot konzisztens állapotban tartja.
+
+## Szolgáltatás szint megállapodás (SLA)
+
+A Szolgáltatás Szint Megállapodás (SLA, Service Level Agreement) egy formális szerződés, amely meghatározza a szolgáltató és az ügyfél közötti elvárásokat a szolgáltatás szintjét illetően. Az SLA részletezi a szolgáltatások minőségi és teljesítményi paramétereit, amelyeket a szolgáltatónak teljesítenie kell, valamint azokat a következményeket, amelyek a szolgáltatási szint be nem tartása esetén lépnek életbe. Az SLA-k kulcsfontosságúak a szolgáltatások menedzsmentjében, mivel biztosítják, hogy mindkét fél tisztában legyen a kötelezettségekkel és az elvárásokkal.
+
+### Az SLA fő elemei
+
+1. **Szolgáltatás leírása:**
+   
+   - Pontosan meghatározza a nyújtott szolgáltatást vagy szolgáltatásokat, beleértve azok hatókörét és specifikációit.
+
+2. **Teljesítménymutatók (KPIs - Key Performance Indicators):**
+   
+   - Olyan mérhető értékek, amelyek alapján a szolgáltatás teljesítménye értékelhető.
+   - Példák: rendelkezésre állás (uptime), válaszidő, hibaelhárítási idő.
+
+3. **Szolgáltatási szint célok:**
+   
+   - Konkrét célok, amelyeket a szolgáltatónak teljesítenie kell.
+   - Példák: 99.9%-os rendelkezésre állás, 1 órás válaszidő kritikus problémák esetén.
+
+4. **Szankciók és kompenzációk:**
+   
+   - Meghatározza azokat a büntetéseket vagy kompenzációkat, amelyek a szolgáltatási szint nem teljesítése esetén lépnek életbe.
+   - Példák: szolgáltatási díj visszatérítése, pénzbírságok.
+
+5. **Monitoring és jelentések:**
+   
+   - Az SLA-k monitoringjának és jelentésének módjai, hogy mindkét fél folyamatosan nyomon követhesse a szolgáltatás teljesítményét.
+   - Példák: havi teljesítményjelentések, valós idejű monitoring eszközök.
+
+6. **Hibakezelés és eskalációs eljárások:**
+   
+   - Az SLA meghatározza, hogyan kell kezelni a hibákat és problémákat, valamint az eskalációs lépéseket, ha a problémák nem oldódnak meg időben.
+   - Példák: első szintű támogatás válaszideje, második szintű eskalációs eljárás.
+
+7. **Karbantartási és frissítési tervek:**
+   
+   - Részletezi a karbantartási ablakokat és a rendszerfrissítések ütemezését, valamint az ügyfelek értesítésének módját.
+   - Példák: havi tervezett karbantartások, 24 órás előzetes értesítés.
+
+8. **Felülvizsgálat és módosítás:**
+   
+   - Az SLA rendszeres felülvizsgálatának és módosításának eljárásai, hogy biztosítsák az elvárások és követelmények változásának kezelését.
+   - Példák: éves felülvizsgálati megbeszélések, közös jóváhagyás szükséges minden módosításhoz.
+
+### Az SLA előnyei
+
+1. **Elvárások tisztázása:**
+   
+   - Az SLA-k segítenek tisztázni az ügyfél és a szolgáltató elvárásait, csökkentve a félreértések kockázatát.
+
+2. **Teljesítmény mérés:**
+   
+   - Az SLA-k lehetővé teszik a szolgáltatás teljesítményének objektív mérését és értékelését, biztosítva, hogy a szolgáltatások megfeleljenek a megállapított szabványoknak.
+
+3. **Problémamegoldás:**
+   
+   - Az SLA-k meghatározzák a problémák kezelésének és megoldásának módját, elősegítve a gyors és hatékony hibaelhárítást.
+
+4. **Jogosultságok és felelősségek:**
+   
+   - Az SLA-k világosan meghatározzák a szolgáltató és az ügyfél jogait és felelősségeit, segítve a szolgáltatási kapcsolat kezelését.
+
+### Példa egy SLA-ra
+
+Egy tipikus webhoszting szolgáltatás SLA-ja tartalmazhatja a következő elemeket:
+
+1. **Szolgáltatás leírása:**
+   
+   - Weboldal hoszting 24/7 elérhetőséggel.
+
+2. **Teljesítménymutatók:**
+   
+   - 99.9% rendelkezésre állás.
+   - 500 ms alatti átlagos válaszidő.
+
+3. **Szolgáltatási szint célok:**
+   
+   - 99.9% rendelkezésre állás havonta.
+   - 1 órás válaszidő kritikus incidensek esetén.
+
+4. **Szankciók és kompenzációk:**
+   
+   - Ha a rendelkezésre állás 99.9% alá esik, az ügyfél jogosult a havi díj 10%-ának visszatérítésére.
+
+5. **Monitoring és jelentések:**
+   
+   - Havi rendelkezésre állási jelentés e-mailben.
+
+6. **Hibakezelés és eskalációs eljárások:**
+   
+   - Első szintű támogatás válaszideje 30 perc.
+   - Második szintű eskalációs idő 1 óra.
+
+Az SLA-k kritikusak a szolgáltatások minőségének és megbízhatóságának biztosításában, és segítenek fenntartani a szolgáltató és az ügyfél közötti bizalmat és együttműködést.
+
+## Site Reliability Engineering (SRE)
+
+A Site Reliability Engineering (SRE) egy olyan mérnöki megközelítés, amelynek célja a nagy méretű rendszerek megbízhatóságának, rendelkezésre állásának és teljesítményének biztosítása. Az SRE-t először a Google vezette be, és azóta széles körben elfogadott és alkalmazott módszertan lett a technológiai iparágban.
+
+### Az SRE alapjai
+
+1. **Definíció:**
+   
+   - Az SRE az operációs és a szoftvermérnöki gyakorlatok kombinációja, amely automatizálja és optimalizálja a rendszerüzemeltetést és a megbízhatóságot.
+   - Az SRE mérnökök felelősek a szolgáltatások rendelkezésre állásának, teljesítményének, változásmenedzsmentjének, vészhelyzeti reagálásának és kapacitástervezésének kezeléséért.
+
+2. **Fő célok:**
+   
+   - **Rendelkezésre állás:** A rendszerek folyamatos működésének biztosítása minimális leállásokkal.
+   - **Teljesítmény:** A rendszerek optimális működésének és gyors válaszidejének fenntartása.
+   - **Skálázhatóság:** A rendszerek képessége a növekvő terhelés hatékony kezelésére.
+   - **Hibatűrés:** A rendszerek robusztusságának biztosítása hibák és meghibásodások esetén.
+
+### Kulcsfontosságú fogalmak és gyakorlatok
+
+1. **Service Level Indicators (SLI):**
+   
+   - Olyan mérőszámok, amelyek a rendszer teljesítményének különböző aspektusait mérik.
+   - Példák: válaszidő, hibaarány, rendelkezésre állási idő.
+
+2. **Service Level Objectives (SLO):**
+   
+   - Konkrét célok, amelyeket az SLI-k alapján határoznak meg.
+   - Példák: 99.9% rendelkezésre állás egy hónapban, 100 ms alatti válaszidő 95%-ban.
+
+3. **Service Level Agreements (SLA):**
+   
+   - Formális szerződések, amelyek az SLO-k teljesítésére vonatkozó kötelezettségeket rögzítik.
+   - Ha az SLO-k nem teljesülnek, az SLA-k szankciókat vagy kompenzációkat írhatnak elő.
+
+4. **Error Budget:**
+   
+   - Az SLO-k teljesítése során megengedett hibák vagy eltérések mértéke.
+   - Az error budget segít egyensúlyt teremteni az új funkciók kiadása és a rendszer stabilitásának fenntartása között.
+
+5. **Automatizáció és Eszközök:**
+   
+   - Az SRE mérnökök erőteljesen támaszkodnak az automatizációra a rendszerek kezelésében és üzemeltetésében.
+   - Példák: automatikus telepítések, skálázás, monitorozás és hibakezelés.
+
+6. **Incident Response:**
+   
+   - Gyors és hatékony reagálás a rendszerhibákra és incidensekre.
+   - Az SRE csapatok gyakran tartanak post-mortem elemzéseket, hogy tanuljanak az incidensekből és javítsák a rendszert.
+
+7. **Capacity Planning:**
+   
+   - A rendszer erőforrásainak tervezése a jövőbeni igények alapján.
+   - Célja, hogy biztosítsa a rendszer megfelelő működését és teljesítményét a növekvő terhelés mellett is.
+
+### Az SRE előnyei
+
+1. **Megbízhatóság:**
+   
+   - Az SRE módszertan biztosítja, hogy a rendszerek magas szintű megbízhatósággal és rendelkezésre állással működjenek.
+
+2. **Hatékonyság:**
+   
+   - Az automatizáció és a folyamatos monitorozás révén az SRE csapatok gyorsan és hatékonyan kezelik a rendszerek működését és a hibákat.
+
+3. **Skálázhatóság:**
+   
+   - Az SRE megközelítés lehetővé teszi a rendszerek dinamikus skálázását, hogy azok megfeleljenek a változó terhelési igényeknek.
+
+4. **Innováció és Fejlesztés:**
+   
+   - Az error budget használata segít egyensúlyt teremteni az új funkciók kiadása és a rendszer stabilitásának fenntartása között.
+
+### Példa egy SRE csapat feladataira
+
+- **Monitorozás és Riportálás:**
+  
+  - Rendszer teljesítményének és megbízhatóságának folyamatos monitorozása.
+  - Problémák azonosítása és jelentése.
+
+- **Incident Management:**
+  
+  - Gyors reagálás és hibaelhárítás.
+  - Incidensek dokumentálása és elemzése.
+
+- **Automatizáció és Eszközfejlesztés:**
+  
+  - Szkriptek és eszközök fejlesztése a rutin feladatok automatizálására.
+  - Deployment pipeline-ok és CI/CD rendszerek karbantartása.
+
+- **Capacity Planning:**
+  
+  - A jövőbeni erőforrásigények előrejelzése és tervezése.
+  - Skálázási stratégiák kidolgozása és implementálása.
+
+Az SRE egy modern és hatékony megközelítés a nagy méretű rendszerek kezelésére, amely lehetővé teszi a megbízhatóság és a skálázhatóság optimalizálását, miközben támogatja az innovációt és a folyamatos fejlesztést.
+
+## Rendelkezésre állás paraméterei
+
+A rendelkezésre állás egy rendszer esetében az alábbi paraméterektől függ:
+
+1. **Megbízhatóság (Reliability):**
+   
+   - Megbízhatóság azt jelenti, hogy egy rendszer adott ideig hibamentesen működik. Ez az időtartam alatt nem következik be meghibásodás.
+   - Matematikai formulával kifejezve:
+     $
+     R(t) = e^{-\lambda t}
+     $
+     ahol $ \lambda $ a meghibásodási ráta, $ t $ pedig az idő.
+   - Ez az egyenlet azt jelenti, hogy a megbízhatóság exponenciálisan csökken az idővel, a meghibásodási rátától függően.
+
+2. **Karbantarthatóság (Maintainability):**
+   
+   - Karbantarthatóság annak az esélye, hogy egy meghibásodás után a rendszer adott időtartam alatt visszaáll működőképes állapotba.
+   - Matematikai formulával kifejezve:
+     $
+     M(t) = 1 - e^{-\mu t}
+     $
+     ahol $ \mu $ a megjavítási ráta, $ t $ pedig az idő.
+   - Ez az egyenlet azt jelenti, hogy a karbantarthatóság növekszik az idővel, mivel a javítási esélyek idővel nőnek.
+
+### Rendelkezésre állás (Availability)
+
+- A rendelkezésre állás azt mutatja meg, hogy egy rendszer milyen mértékben képes működőképes állapotban lenni egy adott időszak alatt.
+- Az elérhető idő és a teljes idő hányadosaként számolható ki:
+  $
+  A = \frac{\text{Up-Time}}{\text{Up-Time} + \text{Down-Time}}
+  $
+  ahol az "Up-Time" a működőképes idő, a "Down-Time" pedig a nem működőképes idő.
+
+### Fogalmak
+
+1. **MTTF (Mean Time To Failure - Átlagos meghibásodásig eltelt idő):**
+   
+   - Ez az időátlag azt mutatja meg, hogy egy rendszer vagy komponens mennyi időt működik hibamentesen, mielőtt meghibásodna.
+   - Képlet: 
+     $
+     \text{MTTF} = \frac{B1 + B2 + B3}{3}
+     $
+     ahol $ B1, B2, B3 $ az egyes komponensek meghibásodásáig eltelt idők.
+
+2. **MTBF (Mean Time Between Failures - Átlagos meghibásodások közötti idő):**
+   
+   - Ez az időátlag azt mutatja meg, hogy mennyi idő telik el két egymást követő meghibásodás között. Ide tartozik az átlagos működési idő és az átlagos javítási idő összege is.
+   - Képlet:
+     $
+     \text{MTBF} = \frac{(A1 + B1) + (A2 + B2) + (A3 + B3)}{3}
+     $
+     ahol $ A1, A2, A3 $ a javítási idők, $ B1, B2, B3 $ pedig a működési idők a meghibásodások előtt.
+
+3. **MTTR (Mean Time To Repair - Átlagos javítási idő):**
+   
+   - Ez az időátlag azt mutatja meg, hogy egy meghibásodott rendszer vagy komponens mennyi idő alatt javítható meg.
+   - Képlet:
+     $
+     \text{MTTR} = \frac{A1 + A2 + A3}{3}
+     $
+     ahol $ A1, A2, A3 $ az egyes javítási idők.
+
+![](assets/2024-06-15-00-34-41-image.png)
+
+## A fürdőkád görbe
+
+1. **Burn-In (Bejáratási szakasz):**
+   
+   - **Jellemzők:** A görbe első szakaszában, a bejáratási időszakban, a meghibásodási ráta kezdetben magas, de gyorsan csökken.
+   - **Oka:** Ez a szakasz gyakran tartalmazza a gyártási hibák vagy az összeszerelési hibák következményeit, amelyek a rendszer korai élettartamában jelentkeznek.
+   - **Megoldás:** Ezt a szakaszt néha előzetes teszteléssel vagy bejáratási időszak alkalmazásával lehet csökkenteni, hogy a kezdeti hibák a termék tényleges használata előtt jelentkezzenek és javíthatók legyenek.
+
+2. **Useful Life (Hasznos élettartam):**
+   
+   - **Jellemzők:** A görbe középső szakasza, ahol a meghibásodási ráta viszonylag alacsony és állandó.
+   - **Oka:** Ebben a szakaszban a rendszer stabilan és megbízhatóan működik. A meghibásodások véletlenszerűen fordulnak elő és nem specifikus időszakhoz köthetők.
+   - **Megoldás:** A rendszeres karbantartás és a megfelelő üzemeltetési gyakorlatok fenntartása segít ezen a szakaszon a meghibásodási ráta alacsonyan tartásában.
+
+3. **Wear-Out (Elhasználódási szakasz):**
+   
+   - **Jellemzők:** A görbe utolsó szakasza, ahol a meghibásodási ráta ismét növekedni kezd.
+   - **Oka:** Ez a szakasz a rendszer alkatrészeinek elhasználódása és öregedése miatt következik be. Az anyagok fáradása, a mechanikai kopás és egyéb tényezők meghibásodásokhoz vezetnek.
+   - **Megoldás:** Az elhasználódás időszakában a rendszer rendszeres karbantartása, az alkatrészek cseréje és a felújítás segíthet meghosszabbítani a rendszer élettartamát.
+
+<img src="assets/2024-06-15-00-38-19-image.png" title="" alt="" width="544">
+
+**<mark>Megoldás a rendelkezésre állásra</mark>: redundancia.** Duplikáljuk a komponenseket, vagy az egész rendszert akár.
+
+Típusai:
+
+- Aktív redundancia: Mindkét rendszer folyamatosan működik
+  
+  - Az elosztó továbbra is egy pont
+    
+    <img src="assets/2024-06-15-00-41-40-image.png" title="" alt="" width="246">
+
+- Passzív redundancia: Csak egy rendszer működik
+  
+  - A kapcsoló A vagy B rendszert aktiválja
+    
+    <img title="" src="assets/2024-06-15-00-42-25-image.png" alt="" width="259">
+
+- Kimenet kapcsolás: Az A és B rendszer párhuzamosan fut a C
+  rendszer egyesíti a jelüket
+  
+  - A C igen komplex lehet
+    
+    <img src="assets/2024-06-15-00-45-48-image.png" title="" alt="" width="265">
+
+- Elem/Komponens duplikálás
+  
+  <img src="assets/2024-06-15-00-48-18-image.png" title="" alt="" width="298">
+
+- Rendszer duplikálás
+  
+  <img src="assets/2024-06-15-00-49-11-image.png" title="" alt="" width="382">
+
+## Amdahl törvénye
+
+Amdahl törvénye kimondja, hogy a párhuzamos feldolgozásból származó teljesítményjavulás mértéke korlátozott a párhuzamosítható rész arányától. Más szóval, ha egy program csak egy részét lehet párhuzamosítani, akkor a teljes program futási idejének csökkenése korlátozott lesz.
+
+### Amdahl törvényének képlete
+
+A törvény képlet formájában így írható le:
+
+$
+S(N) = \frac{1}{(1 - P) + \frac{P}{N}}
+$
+
+ahol:
+
+- $ S(N) $: A program gyorsulása $ N $ processzor használatával.
+- $ P $: A program azon része, amely párhuzamosítható.
+- $ 1 - P $: A program azon része, amely nem párhuzamosítható és sorosan kell végrehajtani.
+- $ N $: A párhuzamos feldolgozáshoz használt processzorok száma.
+
+### Magyarázat
+
+1. **Párhuzamosítható rész ($P$):**
+   
+   - Ez az a része a programnak, amely párhuzamosan futtatható több processzoron. Ha $ P $ közel van 1-hez, akkor a program nagy része párhuzamosítható, ami nagyobb gyorsulást tesz lehetővé.
+
+2. **Sorosan futó rész ($1 - P$):**
+   
+   - Ez az a része a programnak, amelyet nem lehet párhuzamosítani, és amely egy processzoron fut. Ha ez az arány nagy, a párhuzamosítás előnyei korlátozottak lesznek.
+
+3. **Processzorok száma ($N$):**
+   
+   - Minél több processzort használunk, annál nagyobb a potenciális gyorsulás, de csak a párhuzamosítható rész arányának függvényében.
+
+## Skálázási kocka
+
+A Skálázás kocka (Scalability Cube) egy népszerű koncepció, amelyet Martin L. Abbott és Michael T. Fisher vezettek be "The Art of Scalability" című könyvükben. Ez a modell három dimenzióban írja le a rendszerek skálázásának módjait, és segít megérteni, hogyan lehet egy alkalmazást hatékonyan skálázni a különböző igények kielégítésére.
+
+### A Skálázás kocka három dimenziója
+
+1. **X-tengely - Klónok hozzáadása (Cloning)**
+   
+   - **Definíció:** Az X-tengely mentén történő skálázás (más néven horizontális skálázás) azt jelenti, hogy további példányokat (klónokat) adunk a rendszerhez.
+   - **Példa:** Web szerverek esetén több szervert állítunk be, amelyek mindegyike ugyanazokat a feladatokat látja el. A terheléselosztó (load balancer) segít elosztani a kéréseket a különböző szerverek között.
+   - **Előnyök:** Egyszerű megvalósítás és gyors skálázhatóság.
+   - **Hátrányok:** Adatkonzisztencia fenntartása lehet kihívás, és a rendszer komplexitása növekedhet.
+
+2. **Y-tengely - Funkcionalitás szerinti felosztás (Functional Decomposition)**
+   
+   - **Definíció:** Az Y-tengely mentén történő skálázás azt jelenti, hogy a rendszert különböző funkcionális szolgáltatásokra bontjuk.
+   - **Példa:** Egy webes alkalmazás esetén külön szervereket használhatunk az alkalmazás különböző részeihez, például egy szerver csak a felhasználói hitelesítést kezeli, míg egy másik a keresési funkciókat.
+   - **Előnyök:** A szolgáltatások elkülönítése növeli a rugalmasságot és lehetővé teszi a különböző komponensek független skálázását.
+   - **Hátrányok:** A rendszer komplexitása növekedhet, és szükség lehet a különböző szolgáltatások közötti kommunikáció hatékony kezelésére.
+
+3. **Z-tengely - Adatok felosztása (Data Partitioning)**
+   
+   - **Definíció:** A Z-tengely mentén történő skálázás azt jelenti, hogy az adatokat különböző partíciókra osztjuk, amelyek függetlenül kezelhetők.
+   - **Példa:** Egy adatbázis esetén az adatokat földrajzi hely, ügyfél típusa vagy más logikai kritérium alapján osztjuk fel, és külön adatbázis-példányokban tároljuk őket.
+   - **Előnyök:** Csökkenti az egyes adatbázis-példányok terhelését és lehetővé teszi a párhuzamos adatkezelést.
+   - **Hátrányok:** Bonyolultabb adatkezelést és adatkonzisztencia biztosítását igényli.
+
+### Gyakorlati alkalmazás
+
+A három dimenzió kombinálása lehetőséget ad a komplex rendszerek hatékony skálázására. Például egy nagy webes alkalmazás esetén:
+
+- **X-tengely:** Több webszerver (frontend) indítása és terheléselosztás alkalmazása.
+- **Y-tengely:** Az alkalmazás különböző szolgáltatásait (pl. hitelesítés, keresés, fizetés) külön szervereken futtatni.
+- **Z-tengely:** Az adatbázis partícionálása földrajzi régiók vagy ügyfél típusok szerint.
+
+Ez a megközelítés lehetővé teszi, hogy a rendszer különböző részeit függetlenül skálázzuk, optimalizálva a teljesítményt és a megbízhatóságot.
+
+![](assets/2024-06-15-00-56-18-image.png)
