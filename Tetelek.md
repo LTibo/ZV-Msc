@@ -5244,3 +5244,45 @@ Csak a két végpont közül lehet a maximum ezért csak azokat vizsgáljuk.
 ![](assets/2024-06-13-23-33-47-image.png)
 
 ![](assets/2024-06-13-23-35-11-image.png)
+
+![](assets/2024-06-14-15-39-07-image.png)
+
+Ez a tétel tehát egy alsó korlátot ad a függvény és a legjobb polinom közelítés közötti hiba maximális értékére vonatkozóan. Ez azt jelenti, hogy a hibafüggvény váltakozó előjelű szélsőértékei meghatározzák a legjobb közelítés hibájának alsó korlátját.
+
+![](assets/2024-06-14-15-51-32-image.png)
+
+<img src="assets/2024-06-14-16-15-06-image.png" title="" alt="" width="349">
+
+Ez azt jelenti, hogy a legjobb közelítés esetén a függvény és a polinom közötti különbség, vagyis a hiba, váltakozva éri el a maximális értékét az n+2 pontban, és ezek az értékek azonos nagyságúak, de ellentétes előjelűek.
+
+**Előző tétel (alsó korlát):** Az előző tétel megadta, hogy a legjobb közelítés hibája nem lehet kisebb, mint bizonyos értékek minimuma.
+
+**Csebisev tétele (létezés és egyértelműség):** Csebisev tétele biztosítja, hogy mindig létezik egy polinom, amely ezt a legjobb közelítést megvalósítja, és ez a polinom egyértelmű.
+
+![](assets/2024-06-14-16-16-35-image.png)
+
+Az alappontokat mi választjuk
+
+![](assets/2024-06-14-17-44-25-image.png)
+
+Az optimális interpolációs pontok meghatározásához az a cél, hogy minimalizáljuk az interpolációs hiba maximumát az [a,b] intervallumon. Ezt azzal érjük el, hogy minimalizáljuk a (x−x0​)(x−x1​)⋯(x−xn​) kifejezés maximumát, amely az interpolációs pontok eloszlásától függ.
+
+![](assets/2024-06-14-17-53-03-image.png)
+
+![](assets/2024-06-14-18-07-45-image.png)
+
+![](assets/2024-06-14-18-08-23-image.png)
+
+![](assets/2024-06-14-18-09-17-image.png)
+
+![](assets/2024-06-14-18-10-37-image.png)
+
+![](assets/2024-06-14-18-11-14-image.png)
+
+![](assets/2024-06-14-18-11-42-image.png)
+
+![](assets/2024-06-14-18-12-08-image.png)
+
+![](assets/2024-06-14-18-12-38-image.png)
+
+Az egyenletes közelítés lényege, hogy a maximális hibát minimalizáljuk egy polinom segítségével egy adott intervallumon. A Csebisev-tételek biztosítják, hogy létezik ilyen polinom és meghatározzák a szükséges feltételeket. Az optimális interpolációs pontok meghatározásával jelentősen csökkenthető a közelítési hiba, különösen, ha Csebisev-polinomokat használunk.
