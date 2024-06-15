@@ -5543,6 +5543,83 @@ események sorrendiségét, bekövetkeztét, számosságát és számos egyéb t
 
 A lazán csatolt rendszerek és az eseményvezérelt architektúrák nagy rugalmasságot, skálázhatóságot és hibatűrést biztosítanak, ami különösen előnyös a modern, dinamikus és nagy terhelésű alkalmazások számára. Azonban a komplexitás és a teljesítményoptimalizálás kihívásokat jelenthet, amelyeket megfelelő tervezéssel és menedzsmenttel kell kezelni.
 
+## N-rétegű architektúra
+
+Az N rétegű architektúra (N-tier architecture) egy szoftver architektúra modell, amelyben a rendszer különböző rétegekre van bontva, mindegyik réteg egy adott funkciót vagy felelősségi kört lát el. Az "N" az egyes rétegek számát jelöli, és jellemzően három- vagy több rétegből áll. Az N rétegű architektúra célja a szoftverfejlesztés, karbantartás és skálázhatóság megkönnyítése azáltal, hogy a különböző funkciókat külön rétegekbe szervezi.
+
+### Az N rétegű architektúra rétegei
+
+1. **Prezentációs réteg (Presentation Layer):**
+   
+   - Ez a réteg felelős a felhasználói interfészért és a felhasználóval való interakcióért.
+   - Tartalmazhat weboldalakat, mobil alkalmazásokat, vagy asztali alkalmazásokat.
+   - Fő funkciója, hogy bemutassa az adatokat a felhasználónak, és begyűjtse a felhasználói inputokat.
+
+2. **Alkalmazás logikai réteg (Application Logic Layer) vagy Üzleti logika réteg (Business Logic Layer):**
+   
+   - Ez a réteg tartalmazza az üzleti logikát és a szabályokat, amelyek meghatározzák a rendszer működését.
+   - Feldolgozza a bemeneteket, döntéseket hoz és kommunikál az adatbázissal.
+   - Gyakran tartalmaz szolgáltatásokat és üzleti objektumokat.
+
+3. **Adat hozzáférési réteg (Data Access Layer):**
+   
+   - Ez a réteg kezeli az adatbázissal való kommunikációt.
+   - Tartalmazza az adatbázis-kapcsolatokat, adatlekérdezéseket, és az adatok mentését.
+   - Biztosítja az adatbázis elérését és elvonja az adatkezelési logikát az üzleti logikától.
+
+4. **Adatbázis réteg (Database Layer):**
+   
+   - Ez a réteg magát az adatbázist tartalmazza, ahol az adatok ténylegesen tárolódnak.
+   - Lehet relációs adatbázis (pl. MySQL, PostgreSQL), NoSQL adatbázis (pl. MongoDB), vagy egyéb adattár.
+
+### Az N rétegű architektúra előnyei
+
+1. **Modularitás:**
+   
+   - Az egyes rétegek különálló modulokként működnek, amelyeket külön-külön lehet fejleszteni, tesztelni és karbantartani.
+   - Ez csökkenti a kód redundanciát és növeli a kód újrafelhasználhatóságát.
+
+2. **Karbantarthatóság:**
+   
+   - A rétegek közötti világos elválasztás lehetővé teszi az egyes részek független fejlesztését és hibajavítását.
+   - A karbantartás egyszerűbb, mivel a változások csak az érintett rétegre vannak hatással.
+
+3. **Skálázhatóság:**
+   
+   - Az egyes rétegek különböző szerverekre telepíthetők és külön-külön skálázhatók.
+   - A rendszer teljesítménye növelhető a különböző rétegek skálázásával az igényeknek megfelelően.
+
+4. **Biztonság:**
+   
+   - A rétegek elválasztása javítja a rendszer biztonságát, mivel az egyes rétegek külön védelmi szinteket használhatnak.
+   - Az érzékeny adatok kezelése és védelme külön rétegben történik, így csökkentve a támadási felületet.
+
+### Példa egy 3 rétegű architektúrára
+
+1. **Prezentációs réteg:**
+   
+   - HTML, CSS, JavaScript alapú webes felület vagy mobil alkalmazás, amely kapcsolatba lép a felhasználóval.
+
+2. **Alkalmazás logikai réteg:**
+   
+   - Egy köztes szerver vagy szolgáltatás (pl. RESTful API), amely feldolgozza a felhasználói kéréseket, végrehajtja az üzleti logikát és adatokat kér le vagy küld az adatbázis réteg felé.
+
+3. **Adatbázis réteg:**
+   
+   - Egy relációs adatbázis szerver, mint például MySQL vagy PostgreSQL, amely az adatokat tárolja és kezeli.
+
+### További rétegek egy N rétegű architektúrában
+
+- **Szolgáltatási réteg (Service Layer):**
+  
+  - Bizonyos esetekben a szolgáltatási réteg elválasztja az üzleti logikát és a prezentációs réteget, amely szolgáltatásokat nyújt más alkalmazásoknak vagy rendszereknek.
+
+- **Integrációs réteg (Integration Layer):**
+  
+  - Olyan réteg, amely különféle rendszerek és szolgáltatások közötti adatcserét és integrációt biztosít, például üzenetközvetítők (message brokers) vagy API átjárók (API gateways) segítségével.
+
+Az N rétegű architektúra lehetőséget nyújt a bonyolult rendszerek hatékony és rugalmas fejlesztésére, karbantartására és skálázására, amely a modern szoftverfejlesztési gyakorlatokban elterjedt megközelítés.
+
 ## SBA rendszerek
 
 Az SBA (Space-Based Architecture) egy elosztott rendszerarchitektúra, amelyet gyakran használnak nagy teljesítményű és skálázható alkalmazások fejlesztéséhez. Ez az architektúra különösen alkalmas azokra az esetekre, ahol az adatok nagy mennyiségű valós idejű feldolgozása és a magas rendelkezésre állás követelmény. Az SBA a PU (Processing Unit) alapú rendszerek egyik típusa, ahol a rendszer összetevői szorosan integrálva működnek együtt egy közös "tér" (space) segítségével. Nézzük meg részletesebben az SBA rendszereket.
@@ -6097,3 +6174,433 @@ A három dimenzió kombinálása lehetőséget ad a komplex rendszerek hatékony
 Ez a megközelítés lehetővé teszi, hogy a rendszer különböző részeit függetlenül skálázzuk, optimalizálva a teljesítményt és a megbízhatóságot.
 
 ![](assets/2024-06-15-00-56-18-image.png)
+
+# 16. Adat perzisztencia megoldások ORM. (JDBC, Hibernate).
+
+Az adat perzisztencia az a folyamat, amely során az alkalmazás adatokat ment és tárol tartósan, így azok elérhetők maradnak az alkalmazás leállítása vagy újraindítása után is. Az objektum-relációs leképezés (ORM - Object-Relational Mapping) egy olyan technológia, amely lehetővé teszi, hogy objektumorientált programozási nyelvekben (pl. Java) írt alkalmazások relációs adatbázisokkal kommunikáljanak. Az ORM eszközök automatizálják a relációs adatbázisok és az objektumorientált programok közötti adatátvitelt.
+
+### Perzisztencia
+
+- Perzisztens objektum: a létrehozó program állapotától függetlenül is létezik
+
+- Az objektumhierarchia egy részének kimentése/betöltése transzparens módon
+  
+  - Fájlba (Object Serialization API)
+    
+    - Kevésbé típusos (bájtsorozat)
+    
+    - Objektum referenciák?Keresések?Biztonság?
+  
+  - Objektum orientált adatbázisba
+    
+    - Nem kellene átkonvertálni(objektum -> relációk)
+    
+    - Még nem elég hatékony az adatkezelés
+    
+    - Nem népszerűek, kiforratlanok, nincs komplett implementáció
+  
+  - Relációs adatbázisba
+    
+    - Nagyon macerás a leképezés/átkonvertálás
+
+### JDBC (Java Database Connectivity)
+
+- Platform és szállító független
+
+- Egy egyszerű Java API a programozók számára
+
+- JDBC meghajtó menedzser
+
+- Gyártó specifikus meghajtók mellyel az egyes gyártók optimalizálhatják a kapcsolatot
+
+- Hasonló megoldás mint a Microsoft igen sikeres ODBC megoldása (C nyelv)
+
+- Az adatok titkosítása az szállító meghajtó feladata
+
+<img src="assets/2024-06-15-14-07-13-image.png" title="" alt="" width="412">
+
+**1. Java alkalmazás**
+
+Ez a legfelső réteg, amely a Java alkalmazást jelenti, amely adatbázis műveleteket szeretne végrehajtani. A Java alkalmazás a JDBC API-n keresztül kommunikál az adatbázissal.
+
+**2. JDBC API**
+
+A JDBC API biztosítja a Java alkalmazások számára a relációs adatbázisokhoz való hozzáférés lehetőségét. Az API lehetővé teszi az adatbázisok elérését, SQL lekérdezések futtatását, adatbevitelt és adatok olvasását.
+
+**3. JDBC menedzser**
+
+A JDBC menedzser felelős a különböző JDBC meghajtók kezeléséért és az alkalmazás kéréseinek továbbításáért a megfelelő meghajtóhoz. A JDBC menedzser biztosítja, hogy az alkalmazás megfelelően tudjon kommunikálni az adatbázis meghajtóval.
+
+**4. JDBC meghajtó API**
+
+A JDBC meghajtó API az a réteg, amely a JDBC API kéréseit továbbítja a specifikus adatbázis meghajtókhoz. Ez az interfész biztosítja, hogy a JDBC API kérései megfelelően legyenek továbbítva az adott adatbázis meghajtókhoz.
+
+##### Meghajtók típusai
+
+A diagram különböző meghajtókat mutat be, amelyeket a JDBC menedzser kezelhet:
+
+1. **JDBC hálózati protokoll meghajtó**
+   
+   - Ezek a meghajtók közvetlenül kommunikálnak az adatbázis szerverrel nyilvános protokollok segítségével (pl. SQL protokoll).
+   - Ez a legközvetlenebb módja az adatbázisok elérésének, ahol a Java alkalmazás közvetlenül kommunikál az adatbázissal.
+
+2. **JDBC-ODBC meghajtó**
+   
+   - Ezek a meghajtók egy ODBC (Open Database Connectivity) meghajtón keresztül kapcsolódnak az adatbázishoz.
+   - Az ODBC meghajtó egy köztes szoftverréteg, amely lehetővé teszi a különböző adatbázisok elérését egy általános interfészen keresztül.
+   - A JDBC-ODBC meghajtó az ODBC meghajtó segítségével biztosít hozzáférést az adatbázisokhoz.
+
+3. **Specifikus meghajtó**
+   
+   - Ezek a meghajtók közvetlenül kommunikálnak az adott adatbázis specifikus protokollján keresztül.
+   - Ezeket a meghajtókat az adott adatbázis gyártója biztosítja, és optimalizálva vannak az adott adatbázishoz való hozzáféréshez.
+
+##### Kommunikációs Protokollok
+
+- **Nyilvános protokoll:** Ezek a szabványos protokollok, amelyeket a különböző adatbázisok támogatnak és használnak az adatbázis szerverrel való kommunikációhoz.
+- **Speciális adatbázis hozzáférési protokoll:** Ezek olyan egyedi protokollok, amelyeket az adott adatbázis gyártója fejlesztett ki a hatékony és biztonságos kommunikáció érdekében.
+
+**Kapcsolat létrehozásának folyamata**
+
+1. **Kapcsolat Igénylése:**
+   
+   - Amikor a JDBC alkalmazás egy új adatbázis-kapcsolatot igényel, a DataSource API-n keresztül kapcsolatot kér az alkalmazás szervertől.
+
+2. **Kapcsolat Pool Ellenőrzése:**
+   
+   - Az alkalmazás szerver ellenőrzi a kapcsolat pool-t (Cache of PooledConnection objects), hogy van-e elérhető fizikai PooledConnection objektum.
+   - Ha van szabad kapcsolat, a poolból egy fizikai kapcsolat kerül kiosztásra az alkalmazás számára logikai kapcsolat objektum formájában.
+
+3. **Új Kapcsolat Létrehozása:**
+   
+   - Ha a poolban nincs szabad kapcsolat, az alkalmazás szerver a ConnectionPoolDataSource API segítségével új fizikai PooledConnection objektumot hoz létre a JDBC meghajtón keresztül.
+
+4. **Kapcsolat Használata:**
+   
+   - Az alkalmazás használja a logikai kapcsolat objektumot az adatbázis műveletek végrehajtásához.
+   - A fizikai kapcsolat a háttérben kezeli az adatbázis-kommunikációt.
+
+5. **Kapcsolat Visszaadása:**
+   
+   - Amikor az alkalmazás befejezi a kapcsolat használatát, a logikai kapcsolat objektum visszakerül a poolba, így később újra felhasználható lesz.
+   
+   <img src="assets/2024-06-15-14-17-37-image.png" title="" alt="" width="335">
+
+**Prepared statement**
+
+- a Statement alosztálya
+
+- előre fordított SQL kifejezések
+
+- egy-vagy több paramétere lehet (IN)
+
+- több metódust használhatunk az IN paraméterek beállítására
+
+- sokkal hatékonyabb lehet mint a Statement objektum (előre fordított)
+
+- gyakran használt kifejezések létrehozására használandó
+
+- többször futtatható, a beállított paraméterek megmaradnak
+
+### Java Persistence API (JPA)
+
+A Java Persistence API (JPA) egy Java specifikáció, amely objektum-relációs leképezést (ORM - Object-Relational Mapping) biztosít Java alkalmazások számára. A JPA lehetővé teszi, hogy Java objektumokat (POJO - Plain Old Java Objects) perzisztens módon tároljunk relációs adatbázisokban anélkül, hogy közvetlenül SQL kódot kellene írni. A JPA szabványos interfészeket és annotációkat biztosít az adatbázis műveletek végrehajtásához és a perzisztencia kezeléséhez.
+
+### JPA fő elemei
+
+1. **Entitások (Entities):**
+   
+   - Az entitások Java osztályok, amelyek relációs adatbázis táblákat reprezentálnak. Ezek az osztályok általában annotációkkal vannak ellátva, hogy meghatározzák a táblák és oszlopok közötti leképezést.
+   
+   - Példa egy entitásra:
+     
+     ```java
+     @Entity
+     @Table(name = "employees")
+     public class Employee {
+         @Id
+         @GeneratedValue(strategy = GenerationType.IDENTITY)
+         private Long id;
+     
+         @Column(name = "name")
+         private String name;
+     
+         @Column(name = "position")
+         private String position;
+     
+         // Getters and setters
+     }
+     ```
+
+2. **Entitáskezelő (Entity Manager):**
+   
+   - Az entitáskezelő (EntityManager) az a központi interfész, amelyen keresztül az alkalmazás az entitásokkal kapcsolatos perzisztens műveleteket végzi (például mentés, frissítés, törlés és lekérdezés).
+   - Az EntityManager példányosításához használják az EntityManagerFactory-t.
+   - Példa:
+     
+     ```java
+     EntityManagerFactory emf = Persistence.createEntityManagerFactory("my-persistence-unit");
+     EntityManager em = emf.createEntityManager();
+     ```
+
+3. **Perzisztencia kontextus (Persistence Context):**
+   
+   - A perzisztencia kontextus az entitások halmaza, amelyeket az entitáskezelő kezel. Ez a kontextus biztosítja, hogy az entitások azonosak legyenek egy adott tranzakció során.
+   - A perzisztencia kontextus kezeléséhez az EntityTransaction interfészt használják.
+
+4. **Perzisztencia egység (Persistence Unit):**
+   
+   - A perzisztencia egység a konfigurációs egység, amely meghatározza az entitások és a perzisztencia szolgáltatások kapcsolatát. A konfigurációkat a `persistence.xml` fájlban definiálják.
+
+### JPA főbb funkciói
+
+1. **CRUD műveletek:**
+   
+   - A JPA lehetővé teszi az alapvető CRUD (Create, Read, Update, Delete) műveletek egyszerű végrehajtását az entitásokon keresztül.
+   - Példa egy új entitás mentésére:
+     
+     ```java
+     em.getTransaction().begin();
+     Employee employee = new Employee();
+     employee.setName("John Doe");
+     employee.setPosition("Developer");
+     em.persist(employee);
+     em.getTransaction().commit();
+     ```
+
+2. **Lekérdezések:**
+   
+   - A JPA támogatja a JPQL (Java Persistence Query Language) használatát, amely egy SQL-szerű nyelv az entitások lekérdezéséhez.
+   - Példa egy lekérdezésre:
+
+3. **Kapcsolatok kezelése:**
+   
+   - A JPA támogatja a különböző adatbázisbeli kapcsolatok (egy-az-egyhez, egy-a-többhöz, több-a-többhöz) kezelését annotációk segítségével.
+   - Példa egy egy-a-többhöz kapcsolatra:
+     
+     ```java
+     @OneToMany(mappedBy = "department")
+     private List<Employee> employees;
+     ```
+
+### JPA előnyei
+
+1. **Absztrakció:** A JPA elrejti a relációs adatbázisok alacsony szintű részleteit, lehetővé téve a fejlesztők számára, hogy objektumokkal dolgozzanak, és az üzleti logikára koncentráljanak.
+2. **Platform függetlenség:** A JPA specifikáció támogatja a különböző ORM implementációkat (pl. Hibernate, EclipseLink), amelyek különböző adatbázisokkal működnek együtt.
+3. **Kód újrafelhasználhatóság:** Az entitások és a perzisztencia logika újrafelhasználhatók különböző projektekben és alkalmazásokban.
+
+### JPA implementációk
+
+- **Hibernate:** Az egyik legnépszerűbb JPA implementáció, amely számos extra funkcióval bővíti a JPA specifikációt.
+- **EclipseLink:** Az Eclipse alapítvány által karbantartott JPA implementáció.
+- **OpenJPA:** Az Apache által karbantartott JPA implementáció.
+
+Összefoglalva, a JPA egy erőteljes eszköz a Java alkalmazások perzisztencia kezelésére, amely egyszerűsíti az adatbázis műveleteket és növeli a kód karbantarthatóságát és újrafelhasználhatóságát.
+
+### Hibernate
+
+A Hibernate egy népszerű objektum-relációs leképező (ORM) keretrendszer a Java nyelvhez, amely lehetővé teszi a fejlesztők számára, hogy Java objektumokat perzisztens módon tároljanak relációs adatbázisokban anélkül, hogy közvetlenül SQL kódot kellene írniuk. A Hibernate az egyik legszélesebb körben használt JPA (Java Persistence API) implementáció, de önállóan is használható JPA-tól függetlenül.
+
+### Hibernate fő jellemzői
+
+1. **Objektum-relációs leképezés (ORM):**
+   
+   - A Hibernate automatikusan leképezi a Java osztályokat relációs adatbázis táblákra. Az osztályok mezőit (fieldjeit) az adatbázis oszlopaira (columns) képezi le.
+
+2. **HQL (Hibernate Query Language):**
+   
+   - A Hibernate saját lekérdező nyelvvel rendelkezik, amely hasonló az SQL-hez, de objektumorientált. A HQL lehetővé teszi a fejlesztők számára, hogy az adatbázis lekérdezéseket Java objektumokon keresztül írják meg.
+
+3. **Transzparens perzisztencia:**
+   
+   - A Hibernate kezeli az adatbázis műveletek nagy részét automatikusan, beleértve a beszúrást, frissítést, törlést és lekérdezést.
+
+4. **Lazy Loading és Eager Loading:**
+   
+   - A Hibernate támogatja a lazy loading-ot, amely csak akkor tölti be az asszociált entitásokat, amikor azok szükségesek. Az eager loading pedig azonnal betölti az összes kapcsolódó entitást.
+
+5. **Cache:**
+   
+   - A Hibernate első szintű és második szintű gyorsítótárazást (caching) is biztosít a teljesítmény javítása érdekében. Az első szintű cache az egyes Session objektumokhoz kapcsolódik, míg a második szintű cache az alkalmazás szintjén működik.
+
+### Hibernate főbb elemei
+
+1. **Konfiguráció (Configuration):**
+   
+   - A Hibernate konfigurációs fájlban (hibernate.cfg.xml) határozzák meg az adatbázis kapcsolatokat, az ORM beállításokat és egyéb Hibernate-specifikus paramétereket.
+
+2. **Entitás osztályok (Entity Classes):**
+   
+   - Az entitás osztályok Java objektumok, amelyeket perzisztens módon tárolnak az adatbázisban. Ezeket az osztályokat Hibernate annotációkkal jelölik meg.
+   
+   - Példa egy entitás osztályra:
+     
+     ```java
+     @Entity
+     @Table(name = "employees")
+     public class Employee {
+         @Id
+         @GeneratedValue(strategy = GenerationType.IDENTITY)
+         private Long id;
+     
+         @Column(name = "name")
+         private String name;
+     
+         @Column(name = "position")
+         private String position;
+     
+         // Getters and setters
+     }
+     ```
+
+3. **Session és SessionFactory:**
+   
+   - A Session az a Hibernate interfész, amelyen keresztül a perzisztens műveleteket végrehajtják (pl. mentés, frissítés, törlés).
+   - A SessionFactory egy konfigurált Session objektumokat előállító gyár, amelyet általában az alkalmazás indulásakor hoznak létre és egyetlen példányban használnak.
+   - Példa Session létrehozására:
+     
+     ```java
+     SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+     Session session = sessionFactory.openSession();
+     ```
+
+4. **Tranzakciók (Transactions):**
+   
+   - A Hibernate tranzakciókezelést is biztosít, amely lehetővé teszi, hogy a perzisztens műveletek egyetlen egységben (transaction) hajtódjanak végre, biztosítva az adatbázis integritását.
+   - Példa tranzakció használatára:
+     
+     ```java
+     session.beginTransaction();
+     Employee employee = new Employee();
+     employee.setName("John Doe");
+     employee.setPosition("Developer");
+     session.save(employee);
+     session.getTransaction().commit();
+     ```
+
+### Hibernate előnyei
+
+1. **Időmegtakarítás és termelékenység:**
+   
+   - A Hibernate automatizálja az adatbázis műveleteket, ami csökkenti a fejlesztési időt és növeli a termelékenységet.
+
+2. **Platform függetlenség:**
+   
+   - A Hibernate támogatja több adatbázis típust is, így az alkalmazások könnyen áthelyezhetők egyik adatbázisról a másikra minimális módosítással.
+
+3. **Karbantarthatóság:**
+   
+   - Az objektumorientált megközelítés tiszta és karbantartható kódot eredményez, amely könnyen kezelhető és bővíthető.
+
+4. **Képességek és rugalmasság:**
+   
+   - A Hibernate számos fejlett funkciót kínál, mint például a cache, a lazy loading, a fetch stratégia, és a tranzakciókezelés, amelyek növelik az alkalmazások teljesítményét és rugalmasságát.
+
+### Hibernate hátrányai
+
+1. **Komplexitás:**
+   
+   - A Hibernate konfigurálása és finomhangolása összetett lehet, különösen nagy és összetett adatmodellek esetén.
+
+2. **Teljesítmény:**
+   
+   - Bár a Hibernate cache mechanizmusokat kínál, az ORM réteg hozzáadott komplexitása és az automatikusan generált SQL lekérdezések néha teljesítménybeli többletköltséget eredményezhetnek.
+
+Összefoglalva, a Hibernate egy erőteljes ORM keretrendszer, amely egyszerűsíti az adatbázis műveletek kezelését Java alkalmazásokban. Az automatizált perzisztencia, a gazdag funkciókészlet és a platformfüggetlenség miatt a Hibernate széles körben használt és elismert eszköz a Java fejlesztők körében.
+
+## Összefoglalás
+
+### JDBC (Java Database Connectivity)
+
+**JDBC jellemzői:**
+
+- **Alacsony szintű API:** A JDBC egy alacsony szintű API, amely közvetlen hozzáférést biztosít a relációs adatbázisokhoz. Ez magában foglalja az SQL parancsok közvetlen végrehajtását az adatbázisban.
+- **Közvetlen adatbázis-hozzáférés:** A fejlesztők közvetlenül írják meg az SQL lekérdezéseket, és kezelik az adatbázis kapcsolatok részleteit.
+- **Platform függetlenség:** A JDBC lehetővé teszi az adatbázis-hozzáférést egyetlen API-n keresztül, függetlenül az adatbázis-szállítótól (pl. MySQL, PostgreSQL, Oracle).
+
+**JDBC előnyei:**
+
+- **Rugalmasság:** Teljes kontrollt biztosít az adatbázis műveletek felett, mivel a fejlesztők közvetlenül írják meg az SQL lekérdezéseket.
+- **Egyszerűség:** Egyszerű és egyértelmű, ha csak alapvető adatbázis műveletekre van szükség.
+
+**JDBC hátrányai:**
+
+- **Bonyolultság:** Nagy mennyiségű kódot igényel az adatbázis kapcsolatok és lekérdezések kezeléséhez, különösen összetett lekérdezések és tranzakciók esetén.
+- **Karbantarthatóság:** Az SQL kód és a Java kód összekeverése nehezíti a karbantartást és a hibakeresést.
+
+### Hibernate
+
+**Hibernate jellemzői:**
+
+- **ORM eszköz:** A Hibernate egy népszerű ORM keretrendszer, amely lehetővé teszi, hogy a fejlesztők objektumokkal dolgozzanak, és automatikusan kezelje a relációs adatbázis műveleteket.
+- **Objektumok és táblák leképezése:** A Hibernate lehetővé teszi a Java osztályok és adatbázis táblák közötti leképezést. Az adatbázis műveleteket objektumokon keresztül végzik el, anélkül hogy közvetlenül SQL-t kellene írni.
+- **Transzparens perzisztencia:** Az ORM eszköz automatikusan kezeli az adatbázis műveleteket a háttérben, így a fejlesztők az üzleti logikára koncentrálhatnak.
+
+**Hibernate előnyei:**
+
+- **Egyszerűsített adatbázis hozzáférés:** Az objektumokkal való munka egyszerűbb és tisztább kódot eredményez, mivel a fejlesztőknek nem kell közvetlenül SQL-t írniuk.
+- **Transzparens perzisztencia:** Az ORM eszköz automatikusan kezeli az adatbázis műveleteket, beleértve a lekérdezéseket, beszúrásokat, frissítéseket és törléseket.
+- **Keresztezett platform támogatás:** A Hibernate támogatja a különböző adatbázisokat, és automatikusan generálja a megfelelő SQL kódot.
+
+**Hibernate hátrányai:**
+
+- **Teljesítmény:** Az ORM eszközök, mint a Hibernate, bizonyos teljesítménybeli többletköltséget eredményezhetnek az SQL lekérdezésekhez képest, mivel a lekérdezések optimalizálása nem mindig egyértelmű.
+- **Komplexitás:** Az ORM konfiguráció és a leképezési szabályok kezelése bonyolultabb lehet, különösen nagy és összetett adatmodellek esetén.
+
+### JDBC és Hibernate összehasonlítása
+
+- **Alacsony szint vs. Magas szint:** A JDBC alacsony szintű API, amely közvetlen hozzáférést biztosít az adatbázishoz, míg a Hibernate egy magas szintű ORM keretrendszer, amely az objektumokkal való munkát egyszerűsíti.
+- **SQL kód:** A JDBC használata során a fejlesztők közvetlenül írják meg az SQL lekérdezéseket, míg a Hibernate automatikusan generálja az SQL kódot az objektumok alapján.
+- **Fejlesztési idő:** A Hibernate csökkentheti a fejlesztési időt és a kód mennyiségét, mivel az adatbázis műveletek automatizálásra kerülnek. Ezzel szemben a JDBC több kézi kódolást igényel.
+- **Teljesítmény:** A JDBC nagyobb teljesítményt nyújthat, mivel közvetlenül az SQL kódot használja, míg a Hibernate egyes esetekben teljesítménybeli többletköltséget jelenthet az automatikus generálás miatt.
+
+### Példák
+
+**JDBC példa:**
+
+```java
+String url = "jdbc:mysql://localhost:3306/mydatabase";
+String username = "root";
+String password = "password";
+
+Connection connection = DriverManager.getConnection(url, username, password);
+Statement statement = connection.createStatement();
+ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
+
+while (resultSet.next()) {
+    System.out.println(resultSet.getString("username"));
+}
+
+resultSet.close();
+statement.close();
+connection.close();
+```
+
+**Hibernate példa:**
+
+```java
+@Entity
+@Table(name = "users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String username;
+    // getters and setters
+}
+
+SessionFactory sessionFactory = new Configuration().configure()
+                                    .buildSessionFactory();
+Session session = sessionFactory.openSession();
+session.beginTransaction();
+
+List<User> users = session.createQuery("from User", User.class).list();
+for (User user : users) {
+    System.out.println(user.getUsername());
+}
+
+session.getTransaction().commit();
+session.close();
+```
+
+Összefoglalva, a JDBC és a Hibernate két különböző megközelítést kínál az adat perzisztencia kezelésére. A JDBC közvetlen és alacsony szintű hozzáférést biztosít az adatbázisokhoz, míg a Hibernate egy magas szintű ORM keretrendszer, amely az objektumokkal való munkát egyszerűsíti és automatizálja. Mindkét eszköznek megvannak a maga előnyei és hátrányai, és a választás a konkrét alkalmazási környezet és követelmények függvényében történik.
