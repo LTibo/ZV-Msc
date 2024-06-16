@@ -26,7 +26,19 @@ Jelölések:
   
   2. **Összefüggő Automata**: Egy automata összefüggő, ha minden állapota elérhető a kezdőállapotból (q<sub>0</sub>​) valamely bemeneti szó hatására, amely a Σ<sup>∗</sup>-ból származik. Ez biztosítja, hogy az automata minden része hasznosul a nyelv felismerésében.
   
-  3. **Homomorf Kép**: Egy M′ automata M homomorf képe, ha létezik egy homomorfizmus (azaz egy állapot-leképező függvény) ϕ az M automata és M′ között, amely a tranzíciók és az elfogadó állapotok között is megfelelő kapcsolatot tart fenn. A homomorfizmus garantálja, hogy ha M egy szót elfogad, akkor M′ is elfogadja azt, és fordítva, tehát L(M)=L(M′).
+  3. **Homomorf Kép**: Egy M′ automata M homomorf képe, ha létezik egy homomorfizmus (azaz egy állapot-leképező függvény) ϕ (fí) az M automata és M′ között, amely a tranzíciók és az elfogadó állapotok között is megfelelő kapcsolatot tart fenn. A homomorfizmus garantálja, hogy ha M egy szót elfogad, akkor M′ is elfogadja azt, és fordítva, tehát L(M)=L(M′).
+
+- 
+
+- 
+
+- ![](assets/2024-06-15-22-48-17-image.png)
+  
+  ![](assets/2024-06-15-22-48-39-image.png)
+  
+  ![](assets/2024-06-15-22-49-16-image.png)
+  
+  ![](assets/2024-06-15-23-15-39-image.png)
   
   ![](assets/2024-05-11-17-34-10-image.png)
   ![](assets/2024-05-11-17-34-34-image.png)
@@ -75,6 +87,8 @@ Jelölések:
 
 Egy M automatát minimálisnak nevezünk, ha bármely vele ekvivalens M ′ automata esetén M -nek legfeljebb annyi állapota van, mint M ′-nek.
 
+ϕ = fí
+
 **<u>Minimális automata egyértelműségének bizonyítása</u>**
 
 1. **Automata Definíciója és δ∗ Jelölés**:
@@ -98,15 +112,40 @@ Egy M automatát minimálisnak nevezünk, ha bármely vele ekvivalens M ′ auto
         ![](assets/2024-05-10-23-36-08-image.png)
         Ha az M automata q állapotából a a szimbólum hatására egy új állapotba (δ(q,a)) lép, és ezt az állapotot leképezzük a ϕ függvénnyel, akkor az eredményül kapott állapotnak meg kell egyeznie azzal az állapottal, amibe az M′ automata az M automata q állapotának képe (ϕ(q)) és az a szimbólum alkalmazása után lép.
      2. ϕ(q<sub>0​</sub>)=q<sub>0</sub>′​, azaz a kezdőállapotok megfelelnek egymásnak.
-     3. ϕ<sup>−1</sup>(F′)=F, az elfogadó állapotok megőrzése.
+     3. ϕ<sup>−1</sup>(F′)=F, az elfogadó állapotok megőrzése. (Végállapotot végállapotba, kezdőállapotot kezdőállapotba visz)
         ![](assets/2024-05-10-23-34-45-image.png)
    - Ha ϕ ráképezés, akkor azt mondjuk, hogy M ′ az M homomorf képe. Ha ϕ bijekció, akkor izomorfizmusnak hívjuk és azt mondjuk, hogy M és M′ izomorfak, jele M ∼= M ′
    - Bizonyítható, hogy ha ϕ homomorfizmus, akkor az (1) tulajdon-
      ság nemcsak egy a ∈ Σ input szimbólumra, hanem tetszőleges x ∈ Σ∗ szóra is teljesül: minden q ∈ Q állapot esetén ϕ(δ∗(q, x)) = δ′∗(ϕ(q), x).
+   
+   **Ha van M és M' között homomorfizmus akkor egy van (ha összefüggőek).**
+   
+   **Homomorfizmus M és M' között csak akkor van ha ugyanazt a nyelvet ismerik fel.**
 - **Lemma**: Legyenek M = (Q, Σ, δ, q<sub>0</sub>, F ) és M′=(Q′, Σ, δ′, q′<sub>0</sub>, F ′) automaták. Ha van homomorfizmus M -ből M ′-be, akkor L(M ) = L(M ′).
   
-  - A lemma kijelentése szerint ha van egy L⊆Σ<sup>∗</sup> felismerhető nyelv, és egy 
-    M=(Q,Σ,δ,q<sub>0</sub>​,F) összefüggő automata, amely ezt a nyelvet felismeri, akkor létezik egy M′ automata, amely M homomorf képe, és ez az M′ is felismeri L-t.
+  - ebből sejtehtő már hogy az $M_L$ lesz az $L$-et felsimerő minimális automata
+  
+  $M_L=(\Sigma^*/\rho_L, \Sigma, \delta_L, \epsilon/\rho_L, L/\rho_L)$
+  
+  - Nerode Myhill tétel: ha $L$ véges indexű akkor $\rho_L$ szintaktikus jobbkongruencia véges indexű
+  
+  - ($\rho$: ró)
+  
+  - $M_L$ állapotai $\rho_L$ osztályai (a $\Sigma^*$-ot $\rho_L$ véges sok osztályra bontja)
+  
+  - $\Sigma$ az inputhalmaz
+  
+  - $\delta_L$ az átmenetfüggvény
+  
+  - $\epsilon/\rho_L$ $\rho_L$-nek az az osztálya amelyik az üres szót tartalmazza
+  
+  - $L/\rho_L$ azon osztályok halmaza amelyek egyesítéseként az $L$ előáll (részhalmaza $\Sigma^*/\rho_L$-nek)
+  
+  - $\rho_L$ szaturálja $L$-et
+  
+  ![](assets/2024-06-15-18-11-38-image.png)
+  
+  ![](assets/2024-06-15-18-21-38-image.png)
 
 - Legyen L ⊆ Σ∗ egy tetszőleges felismerhető nyelv és tekintsük az
   ML = (Σ<sup>∗</sup>/ρ<sub>L</sub>, Σ, δ<sub>L</sub>, ε/ρ<sub>L</sub>, L/ρ<sub>L</sub>) automatát, ahol ρ<sub>L</sub> az L szintaktikus jobbkongruenciája és minden x ∈ Σ∗ esetén δL(x/ρ<sub>L</sub>, a) = xa/ρ<sub>L</sub>.
@@ -125,29 +164,87 @@ ha minden K<sub>L</sub>-beli automata összefüggő részének homomorf képe.
 
 #### A minimális állapotszámú automata algoritmikus meghatározása
 
-##### Kongruencia Definíciója Automatákon
+#### Kongruencia automatákon
 
-- **Kongruencia (ρ):** Egy reláció, ami biztosítja, hogy ha két állapot (p és q) között fennáll a reláció, akkor minden bemeneti szimbólum (a ∈ Σ) esetén az állapotokból kiinduló átmenetek eredménye is ezen relációban áll. Emellett a kongruencia azt is megköveteli, hogy ha két állapot ekvivalens, akkor vagy mindkettő elfogadó állapot, vagy egyik sem az.
+#### Definíció (2.19)
 
-- **Faktorautomata (M/ρ):** Az eredeti automata (M) egy olyan változata, amely az ekvivalenciaosztályokat egyesítve kezeli az állapotokat. Az új automata állapotai az eredeti állapotok ekvivalenciaosztályai, az átmenetifüggvényt és az elfogadó állapotokat az ekvivalenciaosztályoknak megfelelően definiálják újra.
+**(a) Legyen $ M = (Q, \Sigma, \delta, q_0, F) $** egy automata és **$ \rho \subseteq Q \times Q $** egy ekvivalenciareláció $ Q $-n.
 
-##### Kongruencia Alapú Minimalizálás
+A $ \rho $ egy kongruencia $ M $-en, ha:
 
-A minimalizálás folyamata arra épül, hogy az eredeti automata (M) egy megfelelő kongruenciája alapján készítik el a faktorautomatát (M/ρ). Ezáltal az eredeti nyelvet felismerő, de kevesebb állapotú automata jön létre.
+1. **Átmeneti feltétel:**
+   
+   - $\forall p, q \in Q, \forall a \in \Sigma$-ra, ha $ p \rho q $, akkor $\delta(p, a) \rho \delta(q, a) $.
+   - Ez azt jelenti, hogy ha két állapot $ p $ és $ q $ ekvivalens $ \rho $ szerint, akkor az $ a $ szimbólumra történő átmenet után is ekvivalensek maradnak.
+   
+   ![](assets/2024-06-15-21-10-43-image.png)
 
-##### Homomorfizmus és Kongruencia
+2. **Szaturálási feltétel:**
+   
+   - $ \rho $ szaturálja $ F $-et, azaz $\forall p, q \in Q$-ra ha $ p \rho q $, akkor $ p \in F \iff q \in F $.
+   - Ez azt jelenti, hogy ha két állapot $ p $ és $ q $ ekvivalens $ \rho $ szerint, akkor mindkettő benne van vagy mindkettő nincs a végállapotok halmazában ($ F $).
+   
+   ![](assets/2024-06-15-21-11-22-image.png)
 
-- **Homomorfizmus Tétel (Lemma 2.20):** Ha ρ egy kongruenciareláció az M automata felett, akkor az M/ρ faktorautomata homomorf képe az M automatának, ami azt jelenti, hogy struktúrájában és működésében megegyezik az eredetivel, de egyszerűsített formában.
-- **Fordított Állítás:** Ha egy M' automata az M automata homomorf képe, akkor létezik egy olyan ρ kongruencia az M-en, amelyre M/ρ izomorf M'-vel.
+#### (b) Faktorautomata
 
-##### ρM Kongruencia
+Legyen $ M = (Q, \Sigma, \delta, q_0, F) $ egy automata, és $ \rho $ pedig egy kongruenciareláció $ M $-en. $ M $-nek a $ \rho $ által meghatározott faktorautomatája a következő automata: 
 
-- **Definíció (2.22):** Egy kongruencia a Q állapothalmazon, amelyet úgy határozunk meg, hogy két állapot ekvivalens, ha minden lehetséges bemeneti szóra ugyanazokat az elfogadó vagy nem elfogadó állapotokba vezető átmeneteket produkálják.
-- **Ekvivalencia más megközelítésből:** Meghatározható úgy is, hogy két állapot ekvivalens, ha azokból kiindulva azonos nyelvet ismernek fel.
+$ M / \rho = (Q / \rho, \Sigma, \delta_\rho, q_0 / \rho, F / \rho) $
 
-##### Minimális Automata
+- **Állapothalmaz ($ Q / \rho $)**: Az eredeti automata állapotainak ekvivalencia osztályai a $ \rho $ reláció szerint.
+- **Ábécé ($ \Sigma $)**: Ugyanaz a bemeneti szimbólumkészlet, mint az eredeti automatáé.
+- **Átmenetfüggvény ($ \delta_\rho $)**: Az új átmenetfüggvény, ahol $\delta_\rho([q], a) = [\delta(q, a)]$. Azaz az átmenet az ekvivalencia osztályok között történik.
+- **Kezdőállapot ($ q_0 / \rho $)**: Az eredeti kezdőállapot ekvivalencia osztálya.
+- **Végállapotok ($ F / \rho $)**: Az eredeti végállapotok ekvivalencia osztályai.
 
-- **Tétel (2.24):** Ha az L nyelvet felismerő M automata összefüggő (azaz minden állapot elérhető a kezdőállapottól), akkor az M/ρM faktorautomata az L nyelvet felismerő minimális állapotszámú automata. Ez az automata a lehető legkisebb számú állapottal képes felismerni az L nyelvet.
+### Magyarázat
+
+1. **Kongruencia $ M $-en:**
+   
+   - Egy ekvivalenciareláció $ Q $ halmazon akkor kongruencia az automatán, ha az átmenetek megőrzik az ekvivalenciát, és az ekvivalens állapotok vagy mindketten végállapotok, vagy egyikük sem.
+
+2. **Faktorautomata:**
+   
+   - Az eredeti automata egyszerűsített változata, ahol az állapotok az eredeti automata állapotainak ekvivalencia osztályai. Ez az új automata ugyanúgy viselkedik, mint az eredeti, de kevesebb állapottal rendelkezik.
+
+**Következmény:** Legyen $ M = (Q, \Sigma, \delta, q_0, F) $ egy automata, $ \rho $ pedig egy kongruenciareláció $ M $-en. Akkor $ L(M) = L(M / \rho) $.
+
+#### 2.20. Lemma
+
+Legyen $ M = (Q, \Sigma, \delta, q_0, F) $ egy automata.
+
+#### (a) Állítás:
+
+**Ha $ \rho $ kongruenciareláció $ M $-en, akkor $ M / \rho $ az $ M $ homomorf képe.**
+
+#### (b) Állítás:
+
+**Ha $ M' = (Q', \Sigma, \delta', q'_0, F') $ az $ M $ homomorf képe, akkor az $ M $ automatán van olyan $ \rho $ kongruencia, hogy $ M / \rho \cong M' $.** ($\cong$ : izomorf)
+
+A kongruencia relációt $ker(\phi)$-vel jelölöm (fí)
+
+#### Magyarázat
+
+#### Homomorfizmus fogalma automaták között:
+
+Egy homomorfizmus két automata között egy olyan leképezés, amely megőrzi az automata struktúráját, vagyis az állapotokat, átmeneteket, és a kezdő- és végállapotokat úgy képezi le, hogy az automata viselkedése megmarad.
+
+#### (a) Állítás magyarázata:
+
+- Ha $ \rho $ egy kongruenciareláció $ M $ automatán, akkor az $ M $ automata ekvivalenciaosztályok szerint való faktorizálása, $ M / \rho $, egy olyan automata, amely homomorf képe az $ M $ automatának.
+- Ez azt jelenti, hogy van egy struktúramegőrző leképezés $ M $ és $ M / \rho $ között, amely megtartja az átmeneteket és az állapotok viselkedését.
+
+#### (b) Állítás magyarázata:
+
+- Ha van egy $ M' $ automata, amely homomorf képe az $ M $ automatának, akkor létezik egy $ \rho $ kongruenciareláció $ M $-n, amely alapján $ M $ faktorizálható úgy, hogy az $ M / \rho $ izomorf $ M' $-vel (azaz strukturálisan azonos vele).
+- Más szavakkal, ha egy egyszerűsített verziója az $ M $ automatának homomorf képe, akkor létezik egy megfelelő kongruencia, amely ezt az egyszerűsítést pontosan létrehozza.
+
+![](assets/2024-06-15-22-01-43-image.png)
+
+Van egy módszerünk arra, hogy egy automata minimális faktorautomatáját előállítsuk a homomorfizmus magja (kernel) alapján. Ez a faktorautomata minimális lesz, és felismeri az eredeti automata által elfogadott nyelvet. Az algoritmikus megközelítés lehetővé teszi a minimális automata hatékony kiszámítását.
+
+![](assets/2024-06-15-21-50-05-image.png)
 
 #### Algoritmus (egyszerűen leírva)
 
@@ -196,10 +293,16 @@ Példa: [Minimization of DFA (Example 2) - YouTube](https://www.youtube.com/watc
 
 3. **Konvergencia Vizsgálata:** Az algoritmus akkor áll le, amikor a ρi reláció nem változik tovább, azaz ρ<sub>i</sub> = ρ<sub>i</sub>+1. Ez azt jelenti, hogy további finomítás már nem lehetséges, és a reláció stabilizálódott.
 
+![](assets/2024-06-15-22-15-02-image.png)
+
+![](assets/2024-06-15-23-01-58-image.png)
+
 ##### Terminálás és Korrektség
 
 - **Terminálás:** Az algoritmus mindig megáll, mivel a relációk száma véges, és minden iterációban a reláció szigorodik vagy változatlan marad.
 - **Korrektség:** A Lemma 2.26 biztosítja, hogy az algoritmus a megfelelő ρ<sub>M</sub> relációt számolja ki, azaz megtalálja azon állapotekvivalenciákat, amelyek fenntartása mellett az automata ugyanazt a nyelvet ismeri fel.
+
+![](assets/2024-06-15-22-17-49-image.png)
 
 ## 2. Parikh tétele és következményei.
 
@@ -208,6 +311,8 @@ Példa: [Minimization of DFA (Example 2) - YouTube](https://www.youtube.com/watc
 ![](assets/2024-05-17-23-08-56-image.png)
 
 ![](assets/2024-05-17-23-09-17-image.png)
+
+![](assets/2024-06-15-22-53-32-image.png)
 
 ![](assets/2024-05-17-23-09-46-image.png)
 
@@ -481,7 +586,7 @@ $
 
 ![](assets/2024-05-18-22-03-59-image.png)
 
-Magyarázat a $+9/2$-re a jobb oldalon: $-((2/2)*-(7/2))$. Minden lépésnél a jobb oldalt is figyelembe kell venni!
+Magyarázat a $+9/2$-re a jobb oldalon: $0-(\frac{-3}{2}*3)$. Minden lépésnél a jobb oldalt is figyelembe kell venni! (Még fentebb számolódott)
 
 ![](assets/2024-05-18-22-04-27-image.png)
 
@@ -511,6 +616,8 @@ $ yb = w(y) \to \min $
 - **Gyenge dualitási tétel:** Ha $ x$ a prímál feladat lehetséges megoldása és $ y $ a duális feladat lehetséges megoldása, akkor $ z(x) \leq w(y) $.
 - **Erős dualitási tétel:** Ha bármelyik feladatnak (prímál vagy duál) létezik optimális megoldása, akkor mindkettőnek létezik, és az optimumértékek megegyeznek.
 - **Komplementaritási tétel:** $ x $ és $ y $ akkor és csak akkor optimális megoldások, ha $ y_i (b_i - \sum a_{it}x_t) = 0 $ minden $ i $-re és $ x_t (\sum a_{it} y_i - c_t) = 0 $ minden $ t $-re.
+  
+  (alternatívan: $y^T(b-Ax)=0$ és $x^T(A^Ty-c)=0$)
 
 ##### Következmények
 
@@ -523,7 +630,7 @@ A prímál feladat:
 $ x_1 + x_2 \leq 5 $
 $ x_1 + 3x_2 \leq 7 $
 $ x \geq 0 $
-$ 2x_1 + x_2 \to \max \]
+$ 2x_1 + x_2 \to \max $
 
 A duális feladat:
 $ y_1 + y_2 \geq 2 $
@@ -547,7 +654,7 @@ $\begin{aligned}
 5(2) + 2(4) - 3(0) + 6(0) - 2(7) - 1(0) &= 10 + 8 - 0 + 0 - 14 - 0 = 4 \quad (*) \\
 \end{aligned}$
 
-Megjegyzés: a primál feladat 1., 2. és 3. sorai lettek transzponálva a duális feladathoz, mivel az $x$ vektorban (a tippelt megoldásban) azok az értékek nem nullák
+Megjegyzés: a primál feladat 1., 2. és 5. sorai lettek transzponálva a duális feladathoz, mivel az $x$ vektorban (a tippelt megoldásban) azok az értékek nem nullák
 
 ![](assets/2024-05-19-17-41-26-image.png)
 
@@ -646,6 +753,12 @@ Az egészértékű programozás (ILP - Integer Linear Programming) lineáris pro
 
 Feltételezzük, hogy $\mathbf{A}$, $\mathbf{b}$, $\mathbf{c}$, és $\alpha$ egész számok, $\mathbf{b} \geq 0$, és a lehetséges megoldások halmaza korlátos.
 
+#### Branch and Bound
+
+![](assets/2024-06-16-18-45-38-image.png)
+
+![](assets/2024-06-16-18-53-34-image.png)
+
 #### Gomory-módszer
 
 A Gomory-módszer egy metszési eljárás, amelynek célja az ILP feladat megoldása a következő módon:
@@ -668,6 +781,18 @@ $
 
 Az iteráció során ezeket a feltételeket bevezetve és a duális szimplex algoritmust alkalmazva végül egy egész megoldáshoz jutunk.
 
+
+
+![](assets/2024-06-16-20-15-53-image.png)
+
+![](assets/2024-06-16-20-17-43-image.png)
+
+![](assets/2024-06-16-19-54-36-image.png)
+
+![](assets/2024-06-16-19-54-57-image.png)
+
+![](assets/2024-06-16-19-55-31-image.png)
+
 #### Hátrányok:
 
 - Nagy iterációs lépésszám, amely a feladat méreteitől függően növekszik.
@@ -675,6 +800,20 @@ Az iteráció során ezeket a feltételeket bevezetve és a duális szimplex alg
 - Számítástechnikai nehézségek, mint például a kerekítési hibák, amelyek az együtthatók egész vagy nem egész voltának eldöntését komplikálják.
 
 A Gomory-módszer jelentős hozzájárulás az egészértékű programozás területén, különösen a metszési síkok módszerének kidolgozása révén.
+
+#### Dual all-integer algorithm
+
+![](assets/2024-06-16-20-40-07-image.png)
+
+![](assets/2024-06-16-20-40-55-image.png)
+
+![](assets/2024-06-16-20-43-36-image.png)
+
+![](assets/2024-06-16-20-44-37-image.png)
+
+![](assets/2024-06-16-20-45-24-image.png)
+
+![](assets/2024-06-16-20-46-23-image.png)
 
 # 4. Hozzárendelési és szállítási feladat
 
@@ -6335,7 +6474,9 @@ A Java Persistence API (JPA) egy Java specifikáció, amely objektum-relációs 
 2. **Entitáskezelő (Entity Manager):**
    
    - Az entitáskezelő (EntityManager) az a központi interfész, amelyen keresztül az alkalmazás az entitásokkal kapcsolatos perzisztens műveleteket végzi (például mentés, frissítés, törlés és lekérdezés).
+   
    - Az EntityManager példányosításához használják az EntityManagerFactory-t.
+   
    - Példa:
      
      ```java
@@ -6357,6 +6498,7 @@ A Java Persistence API (JPA) egy Java specifikáció, amely objektum-relációs 
 1. **CRUD műveletek:**
    
    - A JPA lehetővé teszi az alapvető CRUD (Create, Read, Update, Delete) műveletek egyszerű végrehajtását az entitásokon keresztül.
+   
    - Példa egy új entitás mentésére:
      
      ```java
@@ -6376,6 +6518,7 @@ A Java Persistence API (JPA) egy Java specifikáció, amely objektum-relációs 
 3. **Kapcsolatok kezelése:**
    
    - A JPA támogatja a különböző adatbázisbeli kapcsolatok (egy-az-egyhez, egy-a-többhöz, több-a-többhöz) kezelését annotációk segítségével.
+   
    - Példa egy egy-a-többhöz kapcsolatra:
      
      ```java
@@ -6456,7 +6599,9 @@ A Hibernate egy népszerű objektum-relációs leképező (ORM) keretrendszer a 
 3. **Session és SessionFactory:**
    
    - A Session az a Hibernate interfész, amelyen keresztül a perzisztens műveleteket végrehajtják (pl. mentés, frissítés, törlés).
+   
    - A SessionFactory egy konfigurált Session objektumokat előállító gyár, amelyet általában az alkalmazás indulásakor hoznak létre és egyetlen példányban használnak.
+   
    - Példa Session létrehozására:
      
      ```java
@@ -6467,6 +6612,7 @@ A Hibernate egy népszerű objektum-relációs leképező (ORM) keretrendszer a 
 4. **Tranzakciók (Transactions):**
    
    - A Hibernate tranzakciókezelést is biztosít, amely lehetővé teszi, hogy a perzisztens műveletek egyetlen egységben (transaction) hajtódjanak végre, biztosítva az adatbázis integritását.
+   
    - Példa tranzakció használatára:
      
      ```java
