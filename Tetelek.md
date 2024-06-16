@@ -874,6 +874,8 @@ Ez azt jelenti, hogy a $\mathbf{C}$ mátrix elemei az $\mathbf{D}$ mátrix eleme
 
 Az ekvivalencia reláció $( \mathbf{C} \sim \mathbf{D} )$ használata lehetővé teszi, hogy a hozzárendelési feladat különböző költségmátrixokkal is megoldható legyen, ugyanazon eljárás alapján. Az ekvivalencia segít az optimalizálási folyamatban, mivel egyszerűsíthetjük a mátrixot anélkül, hogy megváltoztatnánk az eredeti probléma megoldását.
 
+![](assets/2024-06-16-21-10-31-image.png)
+
 #### Lépések
 
 1. Előkészítés: Minden sorból és oszlopból vonjuk ki a minimum értéket, hogy $ C(0) $-t kapjuk.
@@ -1060,6 +1062,10 @@ A disztribúciós módszer segítségével tehát megtalálhatjuk a legolcsóbb 
 ![](assets/2024-05-22-21-07-10-image.png)
 
 ![](assets/2024-05-22-21-08-34-image.png)
+
+![](assets/2024-06-17-00-45-34-image.png)
+
+![](assets/2024-06-17-00-46-12-image.png)
 
 # 5. Generikus programozás, sablonok, kifejezés sablonok, metaprogramozás.
 
