@@ -614,7 +614,9 @@ $ yb = w(y) \to \min $
 ##### Dualitási Tételek
 
 - **Gyenge dualitási tétel:** Ha $ x$ a prímál feladat lehetséges megoldása és $ y $ a duális feladat lehetséges megoldása, akkor $ z(x) \leq w(y) $.
+
 - **Erős dualitási tétel:** Ha bármelyik feladatnak (prímál vagy duál) létezik optimális megoldása, akkor mindkettőnek létezik, és az optimumértékek megegyeznek.
+
 - **Komplementaritási tétel:** $ x $ és $ y $ akkor és csak akkor optimális megoldások, ha $ y_i (b_i - \sum a_{it}x_t) = 0 $ minden $ i $-re és $ x_t (\sum a_{it} y_i - c_t) = 0 $ minden $ t $-re.
   
   (alternatívan: $y^T(b-Ax)=0$ és $x^T(A^Ty-c)=0$)
@@ -780,8 +782,6 @@ $x_2 - \frac{1}{2}u_1 + \frac{1}{2}y_2 \geq \frac{1}{2}
 $
 
 Az iteráció során ezeket a feltételeket bevezetve és a duális szimplex algoritmust alkalmazva végül egy egész megoldáshoz jutunk.
-
-
 
 ![](assets/2024-06-16-20-15-53-image.png)
 
@@ -2106,6 +2106,18 @@ Az STL tartalmaz néhány speciális iterátort is, amelyek különleges feladat
 
 Az iterátorok az STL egyik legfontosabb komponensei, amelyek lehetővé teszik a konténerek elemeinek egységes kezelését és bejárását. Az iterátorok különböző típusai és műveletei rugalmasságot biztosítanak a programozóknak, hogy hatékonyan és biztonságosan dolgozhassanak különböző adatstruktúrákkal. Az iterátorok használata az STL algoritmusokkal együtt erőteljes eszközt biztosít a C++ programozásban.
 
+## Adatfolyamok
+
+![](assets/2024-06-17-15-45-45-image.png)
+
+![](assets/2024-06-17-15-49-30-image.png)
+
+![](assets/2024-06-17-15-50-03-image.png)
+
+![](assets/2024-06-17-16-17-54-image.png)
+
+
+
 # Képfeldolgozás haladóknak
 
 # 7. Morfológiai műveletek többszintű képekre; Vázkijelölés: távolság-transzformáció, vékonyítás, Voronoi-váz.
@@ -2500,7 +2512,8 @@ A morfológiai szűrés eredménye egy tisztább és strukturáltabb kép lesz, 
 - **$ A $**: Eredeti kép vagy halmaz.
 - **$ S $**: Szerkesztőelem (structuring element).
 - **$ A^C $**: Az $ A $ halmaz komplementere, amely tartalmazza az összes olyan pontot, amely nem része $ A $-nak.
-- **$ \hat{S} $**: Az $ S $ szerkesztőelem tükrözött változata, amely tartalmazza az összes $ (u, v) $ pontot, ahol $ (-u, -v) \in S $.
+  - a kép inverze (255-ből ki kell vonni az aktuális értéket)
+- **$ \hat{S} $**: Az $ S $ szerkesztőelem tükrözött változata, amely tartalmazza az összes $ (u, v) $ pontot, ahol $ (-u, -v) \in S $. (gyakorlatilag origóra tükrözés)
 
 #### Morfológiai Műveletek
 
@@ -2770,9 +2783,13 @@ A távolság-transzformáció (distance transform) egy fontos módszer a képfel
 
 A távolság-transzformáció tehát egy hatékony eszköz a bináris képek elemzésére és az objektumok általános formájának leírására, különösen a vázkijelölés során.
 
+![](assets/2024-06-17-17-40-39-image.png)
+
 ![](assets/2024-05-26-19-05-44-image.png)
 
 ![](assets/2024-05-26-18-12-02-image.png)
+
+![](assets/2024-06-17-17-41-42-image.png)
 
 ### <u>Voronoi-váz</u>
 
@@ -2782,7 +2799,7 @@ A Voronoi-diagram egy hatékony módszer a vázkijelöléshez, amelyet a térbel
 
 1. **Definíció**: 
    
-   - A Voronoi-diagram az m-dimenziós euklideszi tér egy felosztása n generálópont (vagy seed point) körül. Az egyes régiók, vagy cellák, azokból a pontokból állnak, amelyek közelebb vannak az adott generálópontjukhoz, mint bármely más generálópont.
+   - A Voronoi-diagram az m-dimenziós euklideszi tér egy felosztása n generálópont (vagy seed point) körül. Az egyes régiók, vagy cellák, azokból a pontokból állnak, amelyek közelebb vannak az adott generálópontjukhoz, mint bármely más generálóponthoz.
 
 2. **Tulajdonságok**:
    
@@ -2859,6 +2876,8 @@ A Voronoi-diagram tehát egy hatékony és sokoldalú módszer a vázkijelölés
 
 ![](assets/2024-05-26-18-22-22-image.png)
 
+![](assets/2024-06-17-17-52-04-image.png)
+
 ### Vékonyítás
 
 A vékonyítás (thinning) egy iteratív képfeldolgozási technika, amely a bináris képeket redukálja egy vékonyabb, egyszerűsített vázszerű struktúrává, miközben megőrzi az eredeti objektum topológiai és geometriai jellemzőit. A vékonyítás célja az objektumok csontvázának (vázának) meghatározása.
@@ -2876,6 +2895,8 @@ A vékonyítás (thinning) egy iteratív képfeldolgozási technika, amely a bin
    - Elérni egy pont vékony struktúrát.
 
 ### Vékonyítási eljárások:
+
+![](assets/2024-06-17-17-58-58-image.png)
 
 1. **Iteratív redukció**:
    
@@ -2953,6 +2974,8 @@ A vékonyítás hatékony módszer a vázkijelölésre, amely az objektumok egys
 
 ![](assets/2024-05-26-19-00-52-image.png)
 
+![](assets/2024-06-17-17-59-25-image.png)
+
 # On-line algorimtusok
 
 # 8. A versenyképességi elemzés alapfogalmai. Az on-line lapozás (paging) és ládapakolás (bin packing) problémák.
@@ -2965,7 +2988,7 @@ A vékonyítás hatékony módszer a vázkijelölésre, amely az objektumok egys
 
 3. **Formális definíció**:
    
-   - **Bemenet**: A probléma bemenete általában egy $\sigma = (\sigma_1, \ldots, \sigma_n)$ kéréssorozat.
+   - **Bemenet**: A probléma bemenete általában egy $\sigma = (\sigma_1, \ldots, \sigma_n)$ kéréssorozat. ($\sigma$= sigma)
    - **Megoldások halmaza**: Minden egyes $\sigma$ esetén van egy $S(\sigma)$ megoldáshalmaz, ahol minden megoldásnak van egy nem negatív valós költsége $C(\tau)$, ahol $\tau \in S(\sigma)$.
    - **Offline optimális költség**: Az offline optimális költség $\text{Opt}(\sigma)$ az $\sigma$ bemenet minimális költségű megoldása: $\text{Opt}(\sigma) = \min \{ C(\tau) : \tau \in S(\sigma) \}$.
 
