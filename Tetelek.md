@@ -2989,10 +2989,10 @@ A vékonyítás hatékony módszer a vázkijelölésre, amely az objektumok egys
 3. **Formális definíció**:
    
    - **Bemenet**: A probléma bemenete általában egy $\sigma = (\sigma_1, \ldots, \sigma_n)$ kéréssorozat. ($\sigma$= sigma)
-   - **Megoldások halmaza**: Minden egyes $\sigma$ esetén van egy $S(\sigma)$ megoldáshalmaz, ahol minden megoldásnak van egy nem negatív valós költsége $C(\tau)$, ahol $\tau \in S(\sigma)$.
+   - **Megoldások halmaza**: Minden egyes $\sigma$ esetén van egy $S(\sigma)$ megoldáshalmaz, ahol minden megoldásnak van egy nem negatív valós költsége $C(\tau)$, ahol $\tau \in S(\sigma)$. $\tau$ = tau
    - **Offline optimális költség**: Az offline optimális költség $\text{Opt}(\sigma)$ az $\sigma$ bemenet minimális költségű megoldása: $\text{Opt}(\sigma) = \min \{ C(\tau) : \tau \in S(\sigma) \}$.
 
-4. **Deterministic online algoritmus**: Egy determinisztikus online algoritmus $A$ nem látja a jövőt, és minden egyes bemeneti darab után ($\sigma_1, \ldots, \sigma_{i+1}$) egy új lépést ($\tau_{i+1}$) kell számítania úgy, hogy az $\tau_{i+1} = A(\sigma_1, \ldots, \sigma_{i+1})$ legyen, ahol $A(\sigma)$ az $A$ algoritmus által generált akciósorozat a $\sigma$ bemenetre. Minden $\sigma$ esetén $A(\sigma) \in S(\sigma)$ kell, hogy legyen (azaz az $A$ mindig érvényes megoldást kell, hogy generáljon).
+4. **Determinisztikus online algoritmus**: Egy determinisztikus online algoritmus $A$ nem látja a jövőt, és minden egyes bemeneti darab után ($\sigma_1, \ldots, \sigma_{i+1}$) egy új lépést ($\tau_{i+1}$) kell számítania úgy, hogy az $\tau_{i+1} = A(\sigma_1, \ldots, \sigma_{i+1})$ legyen, ahol $A(\sigma)$ az $A$ algoritmus által generált akciósorozat a $\sigma$ bemenetre. Minden $\sigma$ esetén $A(\sigma) \in S(\sigma)$ kell, hogy legyen (azaz az $A$ mindig érvényes megoldást kell, hogy generáljon).
 
 5. **Versenyképességi arány**: Az algoritmus $A$ c-versenyképes, ha minden lehetséges bemeneti sorozatra $\sigma$ teljesül, hogy $\frac{C(A(\sigma))}{\text{Opt}(\sigma)} \leq c$.
 
@@ -3022,7 +3022,7 @@ problémára k-versenyképesnél nem lehetnek jobbak.
 
 Az *LRU* és a *FIFO* + a "marking" algoritmusok k-versenyképesek.
 
-**Marking algoritmus:**
+**Marking algoritmus (k versenyképes):**
 
 - Először csak simán feltöltjük a cache-t
 
@@ -3036,6 +3036,8 @@ Az *LRU* és a *FIFO* + a "marking" algoritmusok k-versenyképesek.
     jelölést, és mivel van legalább egy nem jelölt oldal, valamelyiket
     kiválasztjuk valamilyen algoritmus alapján, kidobjuk, betöltjük p-t, és
     megjelöljük.
+  
+  - ha betöltéskor ki kell dobni valamit és van megjelöletlen elem, azt dobjuk el
 
 ![](assets/2024-05-26-23-16-51-image.png)
 
@@ -3046,6 +3048,8 @@ A ládapakolási algoritmus inputja az a1, … , an sorozat, ahol 0 < ai < 1. Ez
 Ennél a problémánál az aszimptotikus versenyképességi hányadost vizsgáljuk, vagyis az
 érdekel minket, hogy ha az optimum költsége a végtelenbe tart, akkor mennyi lesz a
 versenyképességi hányados.
+
+![](assets/2024-06-17-18-20-17-image.png)
 
 - Abszolút versenyképesség
   
@@ -3077,7 +3081,7 @@ Nincs olyan online algoritmus, aminek az aszimptotikus versenyképességi hánya
 
 - **BF** (best fit): sosem csukunk be egy ládát, abba a ládába rakjuk az érkező itemet, amelyikben a legkisebb maradék helyet hagyja, ez 1.7-versenyképes,
 
-- **FF** (first fit): az érkező itemet az első olyan ládába rakjuk, amelyikbe belefér.
+- **FF** (first fit): az érkező itemet az első olyan ládába rakjuk, amelyikbe belefér. Aszimptotikus versenyképességi hányados 1.7 (abszolút is).
 
 A ládapakolásnak van 2d-s változata, a strip packing.
 
@@ -3240,7 +3244,7 @@ Egy algoritmus "lusta" ha minden lépésben legfeljebb egy szervert mozgat.
 
 Állítás: minden algoritmus lustává tehető.
 
-A lapozás (paging) majdnem ugyanaz mint a k-szerver probléma uniform téren (maximum távolság egy, minimum távolság 0 ha ugyabba megy).
+A lapozás (paging) majdnem ugyanaz mint a k-szerver probléma uniform téren (maximum távolság elemek között egy, minimum távolság 0 ha ugyanabba megy).
 
 - ebből következik, hogy az uniform térre nincs k kompetitívnél jobb online algoritmus (ha $|M| \ge k+1$) 
 
@@ -3703,7 +3707,7 @@ A dián lévő megjegyzés szerint, ha minden $ x $-re minimalizáljuk a kockáz
   - A többváltozós normális eloszlás sűrűségfüggvénye egy általánosítás, 
     amely lehetővé teszi a normális eloszlás kiterjesztését több dimenzióra.
      A várható értékek vektora (μ) és a kovarianciamátrix (Σ) határozza meg az eloszlás középpontját és alakját. Az exponenciális komponens az x pont és a várható érték közötti eltérést méri a kovarianciamátrix által
-     normalizált módon, míg a normálási tényező biztosítja, hogy a 
+    normalizált módon, míg a normálási tényező biztosítja, hogy a 
     sűrűségfüggvény integrálja az egész térben 1 legyen.
     ![](assets/2024-05-30-00-13-04-image.png)
 
@@ -4098,6 +4102,10 @@ Sajnos a GMM esetén a deriválás nem fog menni. Sima egyenlettel nem lehet meg
 
 #### EM Algoritmus Lépései
 
+![](assets/2024-06-17-21-28-57-image.png)
+
+![](assets/2024-06-17-21-20-38-image.png)
+
 https://youtu.be/EWd1xRkyEog?si=DVhvdG4bI4fR6Ccx
 
 ##### 1. Kezdeti Paraméterek
@@ -4108,7 +4116,7 @@ A paramétereket gyakran K-means klaszterezéssel inicializáljuk
 
 ##### 2. E lépés (Expectation)
 
-Ebben a lépésben a rejtett változókat becsüljük meg a jelenlegi paraméterek alapján. Ez a lépés a valószínűségeket számítja ki, hogy melyik komponenshez tartozik egy adott adatpont.
+Ebben a lépésben a rejtett változókat becsüljük meg a jelenlegi paraméterek alapján. Ez a lépés a valószínűségeket számítja ki, hogy melyik komponenshez tartozik egy adott adatpont. ($\gamma$=gamma)
 
 - Számoljuk ki a felelősségeket ($ \gamma(z_{ik}) $):
   $
@@ -4988,7 +4996,7 @@ Az $A=QR$ mindig létezik
 
 Unicitás
 
-- a $QR$ felbontás nem egyértelmű, az előjelek miatt (abszolút értékbenugyanazok a számok)
+- a $QR$ felbontás nem egyértelmű, az előjelek miatt (abszolút értékben ugyanazok a számok)
 
 ### $QR$ felbontás alkalmazásai
 
@@ -5137,20 +5145,12 @@ A QR-algoritmus alapját az a tulajdonság adja, hogy a hasonló mátrixok ugyan
 
 A QR-algoritmusnak több módosított változata is létezik, amelyek a konvergencia sebességét javítják:
 
-1. **Shiftelt QR-algoritmus**:
-   A shiftelt QR-algoritmusban minden iteráció előtt egy $ \mu $ shiftet alkalmazunk, amely közelebb hozza a mátrixot a sajátértékeihez. Az iterációs lépés ekkor így néz ki:
-   $
-   A_k - \mu_k I = Q_k R_k
-   $
-   $
-   A_{k+1} = R_k Q_k + \mu_k I
-   $
-   ahol $ \mu_k $ egy jól megválasztott shift érték.
-
-2. **Hessenberg-formára hozás**:
+1. **Hessenberg-formára hozás**:
    A mátrixot először felső Hessenberg-formára hozzuk (ami majdnem felső háromszögmátrix, azzal a különbséggel hogy a fő átló alatti átló nem csupa 0), és ezután alkalmazzuk a QR-algoritmust. Ez jelentősen javítja a számítási hatékonyságot, mivel csak a mellékátló elemeit kell kinullázni mindig Givens mátrixokkal ($(n-1)*\Omicron(n)=\Omicron(n^2)$ mert a givens mátrixal való szorzás $\Omicron(n)$-es ). Nagyságrendileg még mindig $\Omicron(n^3)$, de praktikusan gyorsabb lesz. Diagonális mátrix esetén tridiagonálisra hozzuk, ami méggyorsabb.
    
    ![](assets/2024-06-10-22-50-22-image.png)
+   
+   ![](assets/2024-06-17-22-34-29-image.png)
    
    - Householder mátrixok segítségével
      
@@ -5200,6 +5200,68 @@ Trigonometrikus interpoláció visszavezetve Lagrange interpolációra.
 
 ![](assets/2024-06-11-23-44-31-image.png)
 
+### Trigonometrikus interpoláció részletes összefoglaló
+
+#### Alapfogalmak és előzmények
+
+A trigonometrikus interpoláció olyan függvényközelítési módszer, amelyet különösen periodikus függvények esetében alkalmazunk. Alapja a [0, 2π) intervallumon végzett interpoláció, ahol a cél egy olyan függvény meghatározása, amely a megadott alappontokban megegyezik az eredeti függvény értékeivel.
+
+#### Trigonometrikus interpolációs polinom
+
+Tegyük fel, hogy $ f(x) $ egy 2π-periódikus függvény, és keresünk egy trigonometrikus interpolációs polinomot a [0, 2π) intervallumon. Az interpoláció során a következő függvényrendszert használjuk:
+$ \{1, \sin x, \cos x, \sin 2x, \cos 2x, \ldots, \sin mx, \cos mx\} $
+
+Ez a függvényrendszer Chebyshev-féle bázisként szolgál az intervallumon, így egyértelműen létezik az ezzel felírt trigonometrikus interpolációs polinom.
+
+#### Polinom meghatározása
+
+Legyen $ n = 2m+1 $ egy természetes szám, és legyenek $ \{x_0, x_1, \ldots, x_{n-1}\} $ az interpolációs alappontok a [0, 2π) intervallumon, valamint $ \{f(x_0), f(x_1), \ldots, f(x_{n-1})\} $ a függvényértékek az alappontokban.
+
+Az interpolációs polinom alakja:
+$ T_n(x) = \frac{a_0}{2} + \sum_{l=1}^{m} (a_l \cos(lx) + b_l \sin(lx)) $
+
+Ez a polinom eleget tesz az alábbi feltételeknek:
+$ T_n(x_i) = f_i, \quad i = 0, 1, \ldots, n-1 $
+
+#### Fázispolinom átalakítás
+
+A trigonometrikus interpolációs polinom meghatározása visszavezethető egy fázispolinom keresésére:
+$ p_n(x) = \beta_0 + \beta_1 e^{ix} + \beta_2 e^{2ix} + \ldots + \beta_{n-1} e^{(n-1)ix} $
+
+A $ T_n(x) $ polinom és a $ p_n(x) $ fázispolinom az alappontokban megegyeznek:
+$ T_n(x_k) = p_n(x_k) = f_k, \quad k = 0, 1, \ldots, n-1 $
+
+#### Együtthatók kapcsolata
+
+Az együtthatók közötti kapcsolat az alábbi:
+$ \beta_0 = \frac{a_0}{2} $
+$ \beta_j = \frac{1}{2} (a_j - ib_j), \quad \beta_{n-j} = \frac{1}{2} (a_j + ib_j), \quad j = 1, 2, \ldots, m $
+
+Fordítva:
+$ a_0 = 2\beta_0 $
+$ a_l = \beta_l + \beta_{n-l}, \quad b_l = i (\beta_l - \beta_{n-l}), \quad l = 1, 2, \ldots, m $
+
+#### Interpolációs feladat
+
+Az $ p_n(x_k) = f_k $ feltételek teljesítése érdekében meghatározandó polinom:
+$ P_n(\omega) = \beta_0 + \beta_1 \omega + \ldots + \beta_{n-1} \omega^{n-1} $
+ahol $ \omega_k = e^{ix_k} $.
+
+Ez az egyenletrendszer felírható mátrix-vektor formában:
+$ \Omega \beta = f $
+ahol $\Omega$ egy komplex együtthatómátrix.
+
+#### Fourier-transzformáció és megoldás
+
+A diszkrét Fourier-transzformáció (DFT) lehetővé teszi az együtthatók gyors meghatározását:
+$ \beta = \frac{1}{n} \Omega^H f $
+
+Itt $\Omega^H$ az $\Omega$ mátrix Hermit-féle transzponáltja.
+
+#### Összegzés
+
+A trigonometrikus interpoláció egy hatékony módszer periodikus függvények közelítésére, ahol az interpolációs polinom egy adott alappontokban megegyezik az eredeti függvény értékeivel. Az együtthatók meghatározásához szükséges diszkrét Fourier-transzformáció biztosítja a gyors és pontos számítást.
+
 ## Köbös spline
 
 A Lagrange-féle interpolációs polinom „sok” alappont, vagy „gyorsan változó” $f (x)$ függvény esetén néha kellemetlen oszcillációs tulajdonságokat mutat. A jelenséget jól szemlélteti Runge alábbi klasszikus példája.
@@ -5220,7 +5282,7 @@ tehát így értelmezzük:
 
 $S_{∆,m} = \{s(x) ∈ C^{m−1}[a, b] \;\ | \;\ s(x) ≡ p_k(x) ∈ P_m \;\ \text{ha} \;\ x_{k−1} ≤ x ≤ x_k, \;\ k = 1, 2, . . . , n\}$
 
-- $C_{m−1} [a, b]$: az $[a, b]$ intervallumon $m − 1$-szer folytonosan differenciálható függvények halmaza.
+- $C^{m−1} [a, b]$: az $[a, b]$ intervallumon $m − 1$-szer folytonosan differenciálható függvények halmaza.
 
 - $P_m$ az $m$-ed fokú polinomok halmaza
 
